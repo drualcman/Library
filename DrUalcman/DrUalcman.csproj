@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>drualcman</RootNamespace>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
 </Project>
