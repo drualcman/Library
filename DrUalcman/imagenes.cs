@@ -57,6 +57,7 @@ namespace drualcman
         public string InsertaTexto(string file, string folder, string Str_TextOnImage, Color StringColor,
             Font fuente, Point posicion, StringAlignment horizontal, StringAlignment vertical)
         {
+                
             return imagenes.InsertarTexto(file, folder, Str_TextOnImage, StringColor, fuente, posicion, horizontal, vertical);
         }
 
