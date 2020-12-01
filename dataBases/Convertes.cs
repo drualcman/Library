@@ -744,7 +744,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(Int32))
@@ -755,7 +755,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(Int64))
@@ -766,7 +766,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(int))
@@ -777,7 +777,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(Double))
@@ -788,7 +788,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(Decimal))
@@ -799,7 +799,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(float))
@@ -810,7 +810,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(long))
@@ -821,7 +821,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(short))
@@ -832,7 +832,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(Single))
@@ -843,7 +843,7 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else if (dt.Columns[cols].DataType == typeof(Byte))
@@ -854,12 +854,12 @@ namespace drualcman
                     }
                     catch
                     {
-                        jsonString.Append(dt.Rows[rows][cols] + addComma);
+                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                     }
                 }
                 else
                 {
-                    jsonString.Append(dt.Rows[rows][cols] + addComma);
+                    jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
                 }
                 n = null;
                 return true;
