@@ -64,8 +64,23 @@ namespace drualcman
         /// </returns>
         public string ObtenerDato(string querySQL, int colSQL)
         {
+            return ObtenerDato(querySQL, colSQL, 30);
+        }
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <param name="timeOut">Execution timeout</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public string ObtenerDato(string querySQL, int colSQL, int timeOut)
+        {
             defLog log = new defLog(this.FolderLog);
-            log.start("ObtenerDato(querySQL, colSQL)", querySQL, colSQL.ToString());
+            log.start("ObtenerDato(querySQL, colSQL, timeOut)", querySQL, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
             if (string.IsNullOrWhiteSpace(querySQL))
             {
@@ -114,6 +129,7 @@ namespace drualcman
                             try
                             {
                                 SqlCommand cmd = new SqlCommand(querySQL, con);
+                                cmd.CommandTimeout = timeOut;
                                 con.Open();
 
                                 try
@@ -172,8 +188,23 @@ namespace drualcman
         /// </returns>
         public string ObtenerDato(string querySQL, string colSQL)
         {
+            return ObtenerDato(querySQL, colSQL, 30);
+        }
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <param name="timeOut">Execution timeout</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public string ObtenerDato(string querySQL, string colSQL, int timeOut)
+        {
             defLog log = new defLog(this.FolderLog);
-            log.start("ObtenerDato(querySQL, colSQL)", querySQL, colSQL);
+            log.start("ObtenerDato(querySQL, colSQL)", querySQL, colSQL + ", " + timeOut.ToString());
             string datoRetorno;
             try
             {

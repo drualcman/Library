@@ -58,6 +58,17 @@ namespace drualcman
         /// <returns></returns>
         public bool ExecuteCommand(SqlCommand cmd)
         {
+            return ExecuteCommand(cmd, 30);
+        }
+
+        /// <summary>
+        /// Execute a command. Only return false if exception.
+        /// </summary>
+        /// <param name="cmd">command with the data</param>
+        /// <param name="timeout">max seconds to execute the command</param>
+        /// <returns></returns>
+        public bool ExecuteCommand(SqlCommand cmd, int timeout)
+        {
             defLog log = new defLog(this.FolderLog);
             bool result;
 
@@ -68,6 +79,7 @@ namespace drualcman
                 {
                     if (cmd.Connection == null) cmd.Connection = this.cnnDDBB();
                     cmd.Connection.Open();
+                    cmd.CommandTimeout = timeout;
                     cmd.ExecuteNonQuery();
                     result = true;
                     if (this.LogError) log.end(result.ToString());
@@ -100,6 +112,17 @@ namespace drualcman
         /// <returns></returns>
         public object Execute(SqlCommand cmd)
         {
+            return Execute(cmd, 30);
+        }
+
+        /// <summary>
+        /// Execute a command and return the value
+        /// </summary>
+        /// <param name="cmd">command with the data</param>
+        /// <param name="timeout">max seconds to execute the command</param>
+        /// <returns></returns>
+        public object Execute(SqlCommand cmd, int timeout)
+        {
             defLog log = new defLog(this.FolderLog);
             object result;
 
@@ -110,6 +133,7 @@ namespace drualcman
                 {
                     if (cmd.Connection == null) cmd.Connection = this.cnnDDBB();
                     cmd.Connection.Open();
+                    cmd.CommandTimeout = timeout;
                     result = cmd.ExecuteScalar();
                     if (this.LogError) log.end(result.ToString());
                 }
@@ -133,13 +157,25 @@ namespace drualcman
 
             return result;
         }
-         
+
         /// <summary>
         /// Execute a command and return the value
         /// </summary>
         /// <param name="sql">Query to execute</param>
         /// <returns></returns>
         public object Execute(string sql)
+        {
+            return Execute(sql, 30);
+        }
+
+
+        /// <summary>
+        /// Execute a command and return the value
+        /// </summary>
+        /// <param name="sql">Query to execute</param>
+        /// <param name="timeout">seconds to get a timeout</param>
+        /// <returns></returns>
+        public object Execute(string sql, int timeout)
         {
             object result;
             if (!string.IsNullOrEmpty(sql))
@@ -155,19 +191,32 @@ namespace drualcman
             }
             return result;
         }
+
+
         /// <summary>
         /// Execute a command. Only return false if exception.
         /// </summary>
-        /// <param name="cmd">comand with the data</param>
+        /// <param name="sql">Query to execute</param>
         /// <returns></returns>
         public bool ExecuteCommand(string sql)
+        {
+            return ExecuteCommand(sql, 30);
+        }
+
+        /// <summary>
+        /// Execute a command. Only return false if exception.
+        /// </summary>
+        /// <param name="sql">command with the data</param>
+        /// <param name="timeout">seconds to get a timeout</param>
+        /// <returns></returns>
+        public bool ExecuteCommand(string sql, int timeout)
         {
             bool result;
             if (!string.IsNullOrEmpty(sql))
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = sql;
-                result = ExecuteCommand(cmd);
+                result = ExecuteCommand(cmd, timeout);
                 cmd.Dispose();
             }
             else

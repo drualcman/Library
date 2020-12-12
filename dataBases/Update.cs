@@ -17,9 +17,37 @@ namespace drualcman
         /// <param name="indexColumn">name of Column to match on WHERE clause</param>
         /// <param name="index">Value for index</param>
         /// <returns></returns>
+        public bool UpdateColumn(string table, string colName, object colValue, string indexColumn, int index)
+        {
+            return UpdateColumn(table, new string[] { colName }, new object[] { colValue }, new string[] { indexColumn }, new object[] { index });
+        }
+
+        /// <summary>
+        /// Update specific column
+        /// </summary>
+        /// <param name="table">Table name in DB</param>
+        /// <param name="colName">Column name in DB to be updated</param>
+        /// <param name="colValue">Value to insert in DB</param>
+        /// <param name="indexColumn">name of Column to match on WHERE clause</param>
+        /// <param name="index">Value for index</param>
+        /// <returns></returns>
         public bool UpdateColumn(string table, string colName, object colValue, string indexColumn, object index)
         {
             return UpdateColumn(table, new string[] { colName }, new object[] { colValue }, new string[] { indexColumn }, new object[] { index });
+        }
+
+        /// <summary>
+        /// Update specific column
+        /// </summary>
+        /// <param name="table">Table name in DB</param>
+        /// <param name="colName">Columns name in DB to be updated</param>
+        /// <param name="colValue">Values to insert in DB</param>
+        /// <param name="indexColumn">name of Column to match on WHERE clause</param>
+        /// <param name="index">Value for index</param>
+        /// <returns></returns>
+        public bool UpdateColumn(string table, string[] colName, object[] colValue, string indexColumn, int index)
+        {
+            return UpdateColumn(table, colName, colValue, new string[] { indexColumn }, new object[] { index });
         }
 
         /// <summary>

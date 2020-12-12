@@ -122,7 +122,7 @@ namespace drualcman
                     clearText = Convert.ToBase64String(ms.ToArray());
                 }
             }
-            clearText = clearText.Replace("+", " ");
+            clearText = clearText.Replace("+", " ").Replace("/", "~");
             return clearText;
         }
 
@@ -132,7 +132,7 @@ namespace drualcman
             {
                 if (string.IsNullOrEmpty(EncryptionKey) || string.IsNullOrWhiteSpace(EncryptionKey)) EncryptionKey = "!@#$%^&*()";
                 //EncryptionKey = Encriptacion.GetMD5(EncryptionKey);
-                cipherText = cipherText.Replace(" ", "+");
+                cipherText = cipherText.Replace(" ", "+").Replace("~", "/");
                 byte[] cipherBytes = Convert.FromBase64String(cipherText);
                 using (Aes encryptor = Aes.Create())
                 {
