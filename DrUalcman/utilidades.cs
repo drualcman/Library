@@ -23,7 +23,7 @@ namespace drualcman
         public static string CleanHTML(string text)
         {
             string result = text;
-            result = System.Text.RegularExpressions.Regex.Replace(result, "<((.|\n)*?)>", "");
+            result = Regex.Replace(result, "<((.|\n)*?)>", "");
             return result;
         }
 
