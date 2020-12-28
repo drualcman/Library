@@ -427,6 +427,20 @@ namespace drualcman
         /// </returns>
         public DataSet ConsultarConDataSet(string querySQL)
         {
+            return ConsultarConDataSet(querySQL, 30);
+        }
+
+        /// <summary>
+        /// Devuelve datos de la consulta
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un DataSet
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public DataSet ConsultarConDataSet(string querySQL, int timeout)
+        {
             defLog log = new defLog(this.FolderLog);
             log.start("ConsultarConDataSet", querySQL, "");
             // Que no sea una cadena vacía
@@ -489,6 +503,7 @@ namespace drualcman
                     }
                     SqlConnection con = new SqlConnection(this.rutaDDBB);
                     SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
+                    da.SelectCommand.CommandTimeout = timeout;
                     DataSet ds = new DataSet();
                     try
                     {
@@ -534,11 +549,24 @@ namespace drualcman
         /// </returns>
         public DataTable ConsultarConDataTable(string querySQL)
         {
-            defLog log = new defLog(this.FolderLog);
-            log.start("ConsultarConDataTable", querySQL, "");
-            return ConsultarConDataSet(querySQL).Tables[0];
+            return ConsultarConDataTable(querySQL, 30);
         }
 
+        /// <summary>
+        /// Devuelve datos de la consulta
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un DataSet
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public DataTable ConsultarConDataTable(string querySQL, int timeout)
+        {
+            defLog log = new defLog(this.FolderLog);
+            log.start("ConsultarConDataTable", querySQL, "");
+            return ConsultarConDataSet(querySQL, timeout).Tables[0];
+        }
 
         /// <summary>
         /// Devuelve datos de la consulta
@@ -550,9 +578,23 @@ namespace drualcman
         /// </returns>
         public DataView ConsultarConDataView(string querySQL)
         {
+            return ConsultarConDataView(querySQL, 30);
+        }
+
+        /// <summary>
+        /// Devuelve datos de la consulta
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un DataSet
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public DataView ConsultarConDataView(string querySQL, int timeout)
+        {
             defLog log = new defLog(this.FolderLog);
             log.start("ConsultarConDataView", querySQL, "");
-            return ConsultarConDataTable(querySQL).DefaultView;
+            return ConsultarConDataTable(querySQL, timeout).DefaultView;
         }
 
         /// <summary>
@@ -561,6 +603,17 @@ namespace drualcman
         /// <param name="querySQL">Consulta SQL a ejecutar</param>
         /// <returns>Devuelve los datos en formato XML, Si hay error devuelve el texto del error</returns>
         public string ConsultarConXML(string querySQL)
+        {
+            return ConsultarConXML(querySQL, 30);
+        }
+
+        /// <summary>
+        /// Devuelve datos de la consulta en formato XML
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>Devuelve los datos en formato XML, Si hay error devuelve el texto del error</returns>
+        public string ConsultarConXML(string querySQL, int timeout)
         {
             defLog log = new defLog(this.FolderLog);
             log.start("ConsultarConXML", querySQL, "");
@@ -627,9 +680,8 @@ namespace drualcman
                 {
                     SqlConnection con = new SqlConnection(rutaDDBB);
                     SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
-
+                    da.SelectCommand.CommandTimeout = timeout;
                     DataSet ds = new DataSet();
-
                     try
                     {
                         da.Fill(ds);
@@ -820,10 +872,22 @@ namespace drualcman
         /// </returns>
         public DataSet spConDataset(string querySQL)
         {
+            return spConDataset(querySQL, 30);
+        }
+
+        /// <summary>
+        /// Ejecutar un SP en el servidor y devolver un DataSet
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// </returns>
+        public DataSet spConDataset(string querySQL, int timeout)
+        {
             if ((querySQL.ToUpper().IndexOf("EXEC ") < 0))
                 querySQL = "EXEC " + querySQL;
 
-            return ConsultarConDataSet(querySQL);
+            return ConsultarConDataSet(querySQL, timeout);
         }
 
         /// <summary>
@@ -835,6 +899,19 @@ namespace drualcman
         /// </returns>
         public DataSet spConDataset(string querySQL, string param)
         {
+            return spConDataset(querySQL, param, 30);
+        }
+
+        /// <summary>
+        /// Ejecutar un SP en el servidor y devolver un DataSet
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="param">Parametros del proceso separados por</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// </returns>
+        public DataSet spConDataset(string querySQL, string param, int timeout)
+        {
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
@@ -844,7 +921,7 @@ namespace drualcman
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
 
-            return spConDataset(querySQL + " " + param);
+            return spConDataset(querySQL + " " + param, timeout);
         }
 
         /// <summary>
@@ -856,6 +933,19 @@ namespace drualcman
         /// </returns>
         public DataSet spConDataset(string querySQL, string[] param)
         {
+            return spConDataset(querySQL, param, 30);
+        }
+
+        /// <summary>
+        /// Ejecutar un SP en el servidor y devolver un DataSet
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="param">Parametros del proceso separados en array string</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// </returns>
+        public DataSet spConDataset(string querySQL, string[] param, int timeout)
+        {
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
@@ -874,7 +964,7 @@ namespace drualcman
 
             doParam = doParam.TrimEnd().Remove(doParam.Length - 2, 1);
 
-            return spConDataset(querySQL + " " + doParam);
+            return spConDataset(querySQL + " " + doParam, timeout);
         }
 
         /// <summary>
@@ -885,10 +975,22 @@ namespace drualcman
         /// </returns>
         public DataTable spConDataTable(string querySQL)
         {
+            return spConDataTable(querySQL, 30);
+        }
+
+        /// <summary>
+        /// Ejecutar un SP en el servidor y devolver la primera tabla como DataTable
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// </returns>
+        public DataTable spConDataTable(string querySQL, int timeout)
+        {
             if ((querySQL.ToUpper().IndexOf("EXEC ") < 0))
                 querySQL = "EXEC " + querySQL;
 
-            return ConsultarConDataTable(querySQL);
+            return ConsultarConDataTable(querySQL, timeout);
         }
 
         /// <summary>
@@ -900,7 +1002,20 @@ namespace drualcman
         /// </returns>
         public DataTable spConDataTable(string querySQL, string param)
         {
-            return spConDataTable(querySQL + " " + param);
+            return spConDataTable(querySQL, param, 30);
+        }
+
+        /// <summary>
+        ///  Ejecutar un SP en el servidor y devolver la primera tabla como DataTable
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="param">Parametros del proceso separados por</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// </returns>
+        public DataTable spConDataTable(string querySQL, string param, int timeout)
+        {
+            return spConDataTable(querySQL + " " + param, timeout);
         }
 
         /// <summary>
@@ -911,6 +1026,19 @@ namespace drualcman
         /// <returns>
         /// </returns>
         public DataTable spConDataTable(string querySQL, string[] param)
+        {
+            return spConDataTable(querySQL, param, 30);
+        }
+
+        /// <summary>
+        ///  Ejecutar un SP en el servidor y devolver la primera tabla como DataTable
+        /// </summary>
+        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="param">Parametros del proceso separados en array string</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// </returns>
+        public DataTable spConDataTable(string querySQL, string[] param, int timeout)
         {
             //
             // Comprobar que están indicando valores correctos (o casi)
@@ -930,7 +1058,7 @@ namespace drualcman
 
             doParam = doParam.TrimEnd().Remove(doParam.Length - 2, 1);
 
-            return spConDataTable(querySQL + " " + doParam);
+            return spConDataTable(querySQL + " " + doParam, timeout);
         }
 
         /// <summary>
