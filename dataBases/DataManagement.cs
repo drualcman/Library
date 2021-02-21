@@ -570,7 +570,7 @@ namespace drualcman
             }
 
             /// <summary>
-            /// Check don't have a , between " on teh text.
+            /// Check don't have a , between " on the text.
             /// </summary>
             /// <param name="text"></param>
             /// <returns></returns>
@@ -634,7 +634,7 @@ namespace drualcman
                                 }
                                 else
                                 {
-                                    //if found more than one column with same name add the id to diference the column name
+                                    //if found more than one column with same name add the id to difference the column name
                                     ColumnsName.Add(ColumnsNameString + (ColumnsName.Count() - 1).ToString());
                                 }
                             }
@@ -659,11 +659,9 @@ namespace drualcman
                             try
                             {
                                 int idx = rowData.IndexOf(":");
-                                string RowColumns = rowData.Substring(0, idx - 1).Replace("\"", "").Trim();
                                 string RowDataString = rowData.Substring(idx + 1).Replace("\"", "").Trim();
                                 nr[columnNumber] = RowDataString;       //because the columns always come in same order use the index not the name
                                 columnNumber++;
-                                //nr[RowColumns] = RowDataString;
                             }
                             catch
                             {
@@ -675,6 +673,68 @@ namespace drualcman
                 }
                 return dt;
             }
+
+            public static List<Dictionary<string, string>> JsonStringToListDictionary(string jsonString)
+            {
+                List<Dictionary<string, string>> dt = new List<Dictionary<string, string>>();
+                if (!string.IsNullOrEmpty(jsonString) && jsonString.ToLower() != "undefined")
+                {
+                    jsonString = jsonString.Replace("}, {", "},{");
+                    jsonString = CheckComa(jsonString);
+                    string[] jsonStringArray = System.Text.RegularExpressions.Regex.Split(jsonString.Replace("[", "").Replace("]", ""), "},{");
+                    List<string> ColumnsName = new List<string>();
+                    foreach (string jSA in jsonStringArray)
+                    {
+                        string[] jsonStringData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");
+                        foreach (string rowData in jsonStringData)
+                        {
+                            try
+                            {
+                                int idx = rowData.IndexOf(":");
+                                string ColumnsNameString = rowData.Substring(0, idx - 1).Replace("\"", "").Trim();
+                                if (!ColumnsName.Contains(ColumnsNameString))
+                                {
+                                    ColumnsName.Add(ColumnsNameString);
+                                }
+                                else
+                                {
+                                    //if found more than one column with same name add the id to difference the column name                                    
+                                    ColumnsName.Add(ColumnsNameString = ColumnsNameString + (ColumnsName.Count() - 1).ToString());
+                                }
+                            }
+                            catch
+                            {
+                                throw new Exception(string.Format("Error Parsing Column Name : {0}", rowData));
+                            }
+                        }
+                        break;
+                    }
+                    foreach (string jSA in jsonStringArray)
+                    {
+                        
+                        string[] RowData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");                        
+                        int columnNumber = 0;       //reset index of the column per each element
+                        Dictionary<string, string> valuePairs = new Dictionary<string, string>();
+                        foreach (string rowData in RowData)
+                        {
+                            try
+                            {
+                                int idx = rowData.IndexOf(":");
+                                string RowDataString = rowData.Substring(idx + 1).Replace("\"", "").Trim();
+                                valuePairs.Add(ColumnsName[columnNumber], RowDataString);
+                                columnNumber++;
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+                        }
+                        dt.Add(valuePairs);
+                    }
+                }
+                return dt;
+            }
+
 
             // function that creates an object from the given data row
             private static T CreateItemFromRow<T>(DataRow row) where T : new()
