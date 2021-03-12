@@ -117,8 +117,7 @@ namespace drualcman
             bool result;
             if (!string.IsNullOrEmpty(image))
             {
-                byte[] photo = null;
-                photo = Convert.FromBase64String(image);
+                byte[] photo = Convert.FromBase64String(image);
                 result = InsertImage(table, indexColumn, index, imageColumn, photo);
             }
             else result = false;

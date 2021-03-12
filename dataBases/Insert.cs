@@ -58,7 +58,7 @@ namespace drualcman
                     values += "@value_" + i.ToString() + ",";
                     if (colValue[i] != null) logValues += colValue[i].ToString() + ",";
                     else logValues += "NULL,";
-                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i]);
+                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
                 }
                 columns = columns.Remove(columns.Length - 1, 1);
                 values = values.Remove(values.Length - 1, 1);

@@ -89,7 +89,7 @@ namespace drualcman
                 {
                     columns += colName[i] + ",";
                     values += colValue[i] + ",";
-                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i]);
+                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
                     sql += colName[i] + " = @value_" + i.ToString() + ",";
                 }
                 sql = sql.Remove(sql.Length - 1, 1);
