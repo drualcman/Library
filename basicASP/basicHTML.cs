@@ -346,7 +346,7 @@ namespace drualcman
                 try
                 {
                     string sourceText = matches[0].Value;
-                    var imgSrcMatches = System.Text.RegularExpressions.Regex.Matches(sourceText,
+                    var imgSrcMatches = Regex.Matches(sourceText,
                                 string.Format(@"<\s*img\s*src\s*=\s*{0}\s*([^{0}]+)\s*{0}", "\""),
                                 RegexOptions.CultureInvariant | RegexOptions.IgnoreCase |
                                 RegexOptions.Multiline);
@@ -358,7 +358,7 @@ namespace drualcman
                 catch (Exception)
                 {
 
-                    imgSrcs.Add("imgs/no_image.jpg");
+                    imgSrcs.Add("img/nopicture.jpg");
                 }
 
                 return imgSrcs;
