@@ -315,6 +315,38 @@ namespace drualcman
                 string userPass, int numDestinatarios = 10, bool IsBodyHtml = false,
                 string filename = "", string folder = "~/", bool temp = false, bool enableSsl = false)
             {
+                bool bResutado = EnviarMail(eMail, Asunto, cuerpoTexto, empresaRemitente, mailRemitente, hostSMTP,
+                    userName, userPass, "/", numDestinatarios, IsBodyHtml, filename, folder, temp, enableSsl);
+
+                return bResutado;
+            }
+
+            /// <summary>
+            /// Función genérica de envío de correo electrónico
+            /// </summary>
+            /// <param name="eMail">Mail del destinatario. Se admiten varias direccion separadas por ; La ultima tiene que tener ; para saber que esta formateado</param>
+            /// <param name="Asunto">Asunto del envio del correo</param>    
+            /// <param name="cuerpoTexto">Texto que aparecera en el mensaje. Se admite HTML</param>
+            /// <param name="empresaRemitente">Nombre de la empresa o persona que envia el mail</param>
+            /// <param name="mailRemitente">Mail del remitente (opcional)</param>
+            /// <param name="hostSMTP">Servidor de envio</param>
+            /// <param name="userName">Nombre de usuario</param>
+            /// <param name="userPass">Password de la cuenta</param>
+            /// <param name="numDestinatarios">Numero de destinatarios en cada envio. Defecto 50</param>
+            /// <param name="IsBodyHtml">Indica si el texto tiene formato HTML</param>
+            /// <param name="filename">Nombre del archivo a enviar</param>
+            /// <param name="folder">Carpeta para almacenar el archivo. Adminte ; para separar nombres de archivo</param>
+            /// <param name="temp">Indicar si el archiv es temporal o debe ser borrado</param>
+            /// <param name="enableSsl">Habilitar la seguridad del servidor</param>
+            /// <param name="urlFiles">URI que antecede a la carpeta folder para descargar el link del archivo adjunto</param>
+            /// <returns>
+            /// Devuelve true si el envío ha sido satisfactorio
+            /// </returns>
+            public bool EnviarMail(string eMail, string Asunto, string cuerpoTexto,
+                string empresaRemitente, string mailRemitente, string hostSMTP, string userName,
+                string userPass, string urlFiles, int numDestinatarios = 10, bool IsBodyHtml = false,
+                string filename = "", string folder = "~/", bool temp = false, bool enableSsl = false)
+            {
                 bool bResutado = true;
                 // preparar el correo en fotmato HTML   
                 if (eMail != "")
@@ -359,23 +391,6 @@ namespace drualcman
 
                     cuerpoTexto += Environment.NewLine;
 
-                    if (!string.IsNullOrEmpty(fileHTML))
-                    {
-                        if (IsBodyHtml == true)
-                        {
-                            //insert link
-                            cuerpoTexto += basicHTML.a(knowServerURL() + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
-                        }
-                        else
-                        {
-                            //inser texto where is it the file
-                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
-                        }
-                    }
-
-                    // cuerpo del mail
-                    correo.Body = cuerpoTexto;
-
                     //comprobar que no tiene un fichero adjunto
                     if (filename != "")
                     {
@@ -402,6 +417,7 @@ namespace drualcman
                                     //
                                     if (temp == true) f.borrarArchivo(file.Trim(), folder);
                                 }
+                                else cuerpoTexto += basicHTML.a(urlFiles + folder.Replace("~", ""), file.Trim()) + Environment.NewLine;
                             }
                         }
                         else
@@ -416,10 +432,33 @@ namespace drualcman
                                 //
                                 if (temp == true) f.borrarArchivo(filename.Trim(), folder);
                             }
+                            else
+                            {
+                                cuerpoTexto += basicHTML.a(urlFiles + folder.Replace("~", ""), filename.Trim());
+                            }
                         }
                         a = null;
                     }
-                    f = null;
+
+
+                    cuerpoTexto += Environment.NewLine;
+
+                    if (!string.IsNullOrEmpty(fileHTML))
+                    {
+                        if (IsBodyHtml == true)
+                        {
+                            //insert link
+                            cuerpoTexto += basicHTML.a(knowServerURL() + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
+                        }
+                        else
+                        {
+                            //inser texto where is it the file
+                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
+                        }
+                    }
+
+                    // cuerpo del mail
+                    correo.Body = cuerpoTexto;
 
                     //hacer el envio a todas las direcciones encontradas
                     if (eMail.IndexOf(";") > 0)
