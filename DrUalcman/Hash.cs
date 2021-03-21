@@ -128,7 +128,13 @@ namespace drualcman
         public static string Base64Decode(string word)
         {
             byte[] b = Convert.FromBase64String(word);
-            return System.Text.Encoding.UTF8.GetString(b);
+            return Encoding.UTF8.GetString(b);
+        }
+
+
+        public static string Base64Decode(byte[] word)
+        {
+            return Encoding.UTF8.GetString(word);
         }
 
         public static string Base64UrlEncode(byte[] arg)
