@@ -6,7 +6,6 @@ using System.IO;
 
 namespace drualcman
 {
-
     public class Encriptacion : Hash
     {
         /// <summary>
@@ -16,13 +15,7 @@ namespace drualcman
         /// <returns></returns>
         public static string GetMD5(string str)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] stream = null;
-            StringBuilder sb = new StringBuilder();
-            stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
-            return sb.ToString();
+            return MD5(str);
         }
 
         /// <summary>
@@ -32,16 +25,7 @@ namespace drualcman
         /// <returns></returns>
         public static string GetMD5(int number)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] stream = null;
-            StringBuilder sb = new StringBuilder();
-            numeros n = new numeros();
-            string str = n.number2String(number);
-            n = null;
-            stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
-            return sb.ToString();
+            return MD5(number);
         }
 
         /// <summary>
@@ -51,16 +35,7 @@ namespace drualcman
         /// <returns></returns>
         public static string GetMD5(long number)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] stream = null;
-            StringBuilder sb = new StringBuilder();
-            numeros n = new numeros();
-            string str = n.number2String(number);
-            n = null;
-            stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
-            return sb.ToString();
+            return MD5(number);
         }
 
         /// <summary>
@@ -70,16 +45,7 @@ namespace drualcman
         /// <returns></returns>
         public static string GetMD5(double number)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] stream = null;
-            StringBuilder sb = new StringBuilder();
-            numeros n = new numeros();
-            string str = n.number2String(number);
-            n = null;
-            stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
-            return sb.ToString();
+            return MD5(number);
         }
 
         /// <summary>
@@ -89,16 +55,7 @@ namespace drualcman
         /// <returns></returns>
         public static string GetMD5(decimal number)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] stream = null;
-            StringBuilder sb = new StringBuilder();
-            numeros n = new numeros();
-            string str = n.number2String(number);
-            n = null;
-            stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
-            return sb.ToString();
+            return MD5(number);
         }
 
         public string Encrypt(string clearText, string EncryptionKey)
