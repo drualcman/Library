@@ -14,7 +14,21 @@ namespace drualcman
         public List<T> Data<T>(string query) where T: new ()
         {   
             DataTable dt = DataTable(query);                //execute the query
+            return SetList<T>(dt);          //no results
+        }
+        #endregion
 
+        #region tasks
+        public async Task<List<T>> DataAsync<T>(string query) where T : new()
+        {
+            DataTable dt = await DataTableAsync(query);                //execute the query
+            return SetList<T>(dt);          //no results
+        }
+        #endregion
+
+        #region helpers
+        public List<T> SetList<T>(DataTable dt) where T : new()
+        {
             if (dt.Rows.Count > 0)
             {
                 List<T> result = new List<T>();
@@ -33,7 +47,7 @@ namespace drualcman
                             {
                                 pi.SetValue(item, row[pi.Name], null);
                             }
-                            catch 
+                            catch
                             {
 
                             }
