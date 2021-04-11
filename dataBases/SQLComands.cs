@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace drualcman
 {
@@ -10,47 +9,7 @@ namespace drualcman
     /// </summary>
     public partial class dataBases
     {
-      
-        /// <summary>
-        /// Conector de la base de datos
-        /// </summary>
-        /// <returns>
-        /// Devuelve un SqlConnection
-        /// Si hay error devuelve el mensaje del error
-        /// </returns>
-        public SqlConnection cnnDDBB()
-        {
-            return this.cnnDDBB(this.rutaDDBB);
-        }
-
-        /// <summary>
-        /// Conector de la base de datos
-        /// </summary>
-        /// <param name="RutaDDBB">Ruta alternativa de base de datos</param>
-        /// <returns>
-        /// Devuelve un SqlConnection
-        /// Si hay error devuelve el mensaje del error
-        /// </returns>
-        public SqlConnection cnnDDBB(string RutaDDBB)
-        {
-            defLog log = new defLog(this.FolderLog);
-            log.start("cnnDDBB(RutaDDBB)", RutaDDBB, "");
-            try
-            {
-                SqlConnection cnn = new SqlConnection(RutaDDBB);
-                if (this.LogError) log.end(cnn, this.rutaDDBB);
-                log.Dispose();
-
-                return cnn;
-            }
-            catch (Exception ex)
-            {
-                log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
-                log.Dispose();
-                throw ex;
-            }
-        }
-
+        #region methods
         /// <summary>
         /// Execute a command. Only return false if exception.
         /// </summary>
@@ -163,69 +122,85 @@ namespace drualcman
         /// </summary>
         /// <param name="sql">Query to execute</param>
         /// <returns></returns>
-        public object Execute(string sql)
+        #endregion
+
+        #region task
+        public async Task<bool> ExecuteCommandAsync(SqlCommand cmd) => await ExecuteCommandAsync(cmd, 30);
+        public async Task<bool> ExecuteCommandAsync(SqlCommand cmd, int timeout) 
         {
-            return Execute(sql, 30);
-        }
-
-
-        /// <summary>
-        /// Execute a command and return the value
-        /// </summary>
-        /// <param name="sql">Query to execute</param>
-        /// <param name="timeout">seconds to get a timeout</param>
-        /// <returns></returns>
-        public object Execute(string sql, int timeout)
-        {
-            object result;
-            if (!string.IsNullOrEmpty(sql))
-            {
-                SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = sql;
-                result = Execute(cmd);
-                cmd.Dispose();
-            }
-            else
-            {
-                result = null;
-            }
-            return result;
-        }
-
-
-        /// <summary>
-        /// Execute a command. Only return false if exception.
-        /// </summary>
-        /// <param name="sql">Query to execute</param>
-        /// <returns></returns>
-        public bool ExecuteCommand(string sql)
-        {
-            return ExecuteCommand(sql, 30);
-        }
-
-        /// <summary>
-        /// Execute a command. Only return false if exception.
-        /// </summary>
-        /// <param name="sql">command with the data</param>
-        /// <param name="timeout">seconds to get a timeout</param>
-        /// <returns></returns>
-        public bool ExecuteCommand(string sql, int timeout)
-        {
+            defLog log = new defLog(this.FolderLog);
             bool result;
-            if (!string.IsNullOrEmpty(sql))
+
+            if (cmd != null)
             {
-                SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = sql;
-                result = ExecuteCommand(cmd, timeout);
+                log.start("ExecuteCommand(cmd)", cmd.CommandText, this.rutaDDBB);
+                try
+                {
+                    if (cmd.Connection == null) cmd.Connection = this.cnnDDBB();
+                    cmd.Connection.Open();
+                    cmd.CommandTimeout = timeout;
+                    await cmd.ExecuteNonQueryAsync();
+                    result = true;
+                    if (this.LogError) log.end(result.ToString());
+                }
+                catch (Exception ex)
+                {
+                    result = false;
+                    log.end(result, ex);
+                }
+                finally
+                {
+                    cmd.Connection.Close();
+                }
                 cmd.Dispose();
             }
             else
             {
+                log.start("ExecuteCommand(cmd)", "", this.rutaDDBB);
                 result = false;
+                log.end(result.ToString(), "CMD is null");
             }
+
             return result;
         }
+        public async Task<object> ExecuteAsync(SqlCommand cmd) => await ExecuteAsync(cmd, 30);
+        public async Task<object> ExecuteAsync(SqlCommand cmd, int timeout) 
+        {
+            defLog log = new defLog(this.FolderLog);
+            object result;
 
+            if (cmd != null)
+            {
+                log.start("Execute(cmd)", cmd.CommandText, this.rutaDDBB);
+                try
+                {
+                    if (cmd.Connection == null) cmd.Connection = this.cnnDDBB();
+                    cmd.Connection.Open();
+                    cmd.CommandTimeout = timeout;
+                    result = await cmd.ExecuteScalarAsync();
+                    if (this.LogError) log.end(result.ToString());
+                }
+                catch (Exception ex)
+                {
+                    result = null;
+                    log.end(result, ex);
+                }
+                finally
+                {
+                    cmd.Connection.Close();
+                }
+                cmd.Dispose();
+            }
+            else
+            {
+                log.start("Execute(cmd)", "", this.rutaDDBB);
+                result = null;
+                log.end(result.ToString(), "CMD is null");
+            }
+
+            return result;
+        }
+        #endregion
     }
 
 }

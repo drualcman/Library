@@ -101,7 +101,7 @@ namespace drualcman
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
                 return ds;
             }
@@ -159,7 +159,7 @@ namespace drualcman
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
             }
 

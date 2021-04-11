@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace drualcman
 {
     public partial class dataBases
     {
+        #region direct queries
         /// <summary>
         /// Insert into a DB
         /// </summary>
@@ -45,25 +47,7 @@ namespace drualcman
             int result;
             if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
             {
-                string columns = string.Empty;
-                string values = string.Empty;
-                string logValues = string.Empty;
-                int i;
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = this.cnnDDBB();
-                //check columns
-                for (i = 0; i < colName.Count(); i++)
-                {
-                    columns += colName[i] + ",";
-                    values += "@value_" + i.ToString() + ",";
-                    if (colValue[i] != null) logValues += colValue[i].ToString() + ",";
-                    else logValues += "NULL,";
-                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
-                }
-                columns = columns.Remove(columns.Length - 1, 1);
-                values = values.Remove(values.Length - 1, 1);
-                string sql = "INSERT INTO " + table + "(" + columns + ") VALUES (" + values + ");";
-                cmd.CommandText = sql;
+                SqlCommand cmd = SetInsert(table, colName, colValue);
                 if (returnScope)
                 {
                     cmd.CommandText += "; select SCOPE_IDENTITY()";
@@ -89,5 +73,67 @@ namespace drualcman
             return result;
         }
 
+        #region tasks
+        public async Task<int> InsertInDBAsync(string table, string[] colName, object[] colValue, bool returnScope)
+        {
+            int result;
+            if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
+            {
+                SqlCommand cmd = SetInsert(table, colName, colValue);
+                cmd.Connection = this.cnnDDBB();                
+                if (returnScope)
+                {
+                    cmd.CommandText += "; select SCOPE_IDENTITY()";
+                    try
+                    {
+                        result = Convert.ToInt32(await ExecuteAsync(cmd));
+                    }
+                    catch
+                    {
+                        result = 0;
+                    }
+                }
+                else
+                {
+                    result = ExecuteCommand(cmd) ? 1 : 0;
+                }
+                cmd.Dispose();
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+        #endregion
+
+        #endregion
+
+        #region helpers
+        private SqlCommand SetInsert(string table, string[] colName, object[] colValue)
+        {
+            string columns = string.Empty;
+            string values = string.Empty;
+            string logValues = string.Empty;
+            int i;
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = this.cnnDDBB();
+            //check columns
+            for (i = 0; i < colName.Count(); i++)
+            {
+                columns += colName[i] + ",";
+                values += "@value_" + i.ToString() + ",";
+                if (colValue[i] != null) logValues += colValue[i].ToString() + ",";
+                else logValues += "NULL,";
+                cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
+            }
+            columns = columns.Remove(columns.Length - 1, 1);
+            values = values.Remove(values.Length - 1, 1);
+            string sql = "INSERT INTO " + table + "(" + columns + ") VALUES (" + values + ");";            
+            cmd.CommandText = sql;
+            return cmd;
+        }
+        #endregion
     }
 }
