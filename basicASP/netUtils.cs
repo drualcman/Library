@@ -598,6 +598,178 @@ namespace drualcman
                                   userPass, numDestinatarios, IsBodyHtml, filename, folder, temp, enableSsl);
             }
 
+            /// <summary>
+            /// Función genérica de envío de correo electrónico devuelve el error producido ostring.empty si todo ok
+            /// </summary>
+            /// <param name="eMail">Mail del destinatario. Se admiten varias direccion separadas por ; La ultima tiene que tener ; para saber que esta formateado</param>
+            /// <param name="Asunto">Asunto del envio del correo</param>    
+            /// <param name="cuerpoTexto">Texto que aparecera en el mensaje. Se admite HTML</param>
+            /// <param name="empresaRemitente">Nombre de la empresa o persona que envia el mail</param>
+            /// <param name="mailRemitente">Mail del remitente (opcional)</param>
+            /// <param name="hostSMTP">Servidor de envio</param>
+            /// <param name="userName">Nombre de usuario</param>
+            /// <param name="userPass">Password de la cuenta</param>
+            /// <param name="enableSsl">Habilitar la seguridad del servidor</param>
+            /// <returns>
+            /// String empty if it's success. If not return the error message
+            /// </returns>
+            public string EnviarMail(string eMail, string Asunto, string cuerpoTexto,
+                string empresaRemitente, string mailRemitente, string hostSMTP, string userName,
+                string userPass, bool IsBodyHtml, bool enableSsl = false)
+            {
+                string err = string.Empty;
+                // preparar el correo en fotmato HTML   
+                if (eMail != "")
+                {
+                    // ENVÍO DEL FORMULARIO DE CONTACTO
+                    // variables para la gestión del correo
+                    MailMessage correo = new MailMessage();
+                    SmtpClient smtp = new SmtpClient(hostSMTP);
+                    // identificación de usuario
+                    if (enableSsl) smtp.Port = 587;
+                    smtp.EnableSsl = enableSsl;
+                    //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    //smtp.UseDefaultCredentials = false;
+                    NetworkCredential userCredentials = new NetworkCredential(userName, userPass);
+                    smtp.Credentials = userCredentials;
+                    // agregar remitente
+                    MailAddress emailRemitente;
+                    try
+                    {
+                        emailRemitente = new MailAddress(mailRemitente, empresaRemitente);
+                    }
+                    catch
+                    {
+                        emailRemitente = new MailAddress("info@community-mall.com", "DrUalcman API");
+                    }
+                    correo.From = emailRemitente;
+                    correo.ReplyToList.Add(emailRemitente);
+                    // agregar el asunto
+                    correo.Subject = Asunto;
+                    // propiedades del mail
+                    correo.Priority = MailPriority.Normal;
+                    correo.IsBodyHtml = IsBodyHtml;
+
+                    ficheros f = new ficheros();
+                    string fileHTML;
+                    //guardar una copia del correo para poner un enlace a la copia HTML del mismo
+                    try
+                    {
+                        fileHTML = f.guardaDato("mail.html", cuerpoTexto, "mails", true);
+                    }
+                    catch
+                    {
+                        fileHTML = string.Empty;
+                    }
+
+                    cuerpoTexto += Environment.NewLine;
+
+                    if (!string.IsNullOrEmpty(fileHTML))
+                    {
+                        if (IsBodyHtml == true)
+                        {
+                            //insert link
+                            cuerpoTexto += basicHTML.a(knowServerURL() + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
+                        }
+                        else
+                        {
+                            //inser texto where is it the file
+                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
+                        }
+                    }
+
+                    // cuerpo del mail
+                    correo.Body = cuerpoTexto;
+
+                    //hacer el envio a todas las direcciones encontradas
+                    if (eMail.IndexOf(";") > 0)
+                    {
+                        // extraer las direcciones
+                        string[] Direcciones = eMail.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        bool seguimiento;
+                        if (eMail.IndexOf("invite.trustpilot.com") < 0) seguimiento = false;
+                        else seguimiento = true;
+
+                        byte s = 1;
+                        bool enviado = false;
+                        int numDestinatarios = 50;
+                        // recorrer las direcciones para realizar el envio
+                        foreach (string item in Direcciones)
+                        {
+                            if (item != "")
+                            {
+                                //comprobar que tiene @
+                                if (item.IndexOf("@") > 0)
+                                {
+                                    MailAddress nuevoCorreo = new MailAddress(item);
+                                    if (seguimiento)
+                                    {
+                                        if (s < 2) correo.To.Add(nuevoCorreo);
+                                        else correo.Bcc.Add(nuevoCorreo);
+                                    }
+                                    else correo.Bcc.Add(nuevoCorreo);
+                                }
+
+                                if (s >= numDestinatarios)
+                                {
+                                    try
+                                    {
+                                        smtp.Send(correo);
+                                        enviado = true;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        err += "1: " + ex.ToString();
+                                        enviado = false;
+                                    }
+                                    finally
+                                    {
+                                        correo.To.Clear();
+                                        correo.Bcc.Clear();
+                                    }
+                                    s = 0;          // reseteamos para volver a enviar a otro grupo de correos
+                                }
+                                else
+                                    enviado = false;
+                            }
+                            s++;
+                        }
+                        // enviar al resto de destinatarios
+                        if (enviado == false)
+                        {
+                            try
+                            {
+                                smtp.Send(correo);
+                            }
+                            catch (Exception ex)
+                            {
+                                err += "2: " + ex.ToString();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // solo hay un destinatario
+                        try
+                        {
+                            //MailAddress nuevoCorreo = new MailAddress(eMail);                        
+                            //correo.To.Add(nuevoCorreo);
+                            correo.To.Add(eMail);
+                            smtp.Send(correo);
+                        }
+                        catch (Exception ex)
+                        {
+                            err = "3: " + ex.ToString();
+                        }
+                    }
+
+                    correo.Dispose();
+                    smtp.Dispose();
+                }
+
+                return err;
+            }
             #endregion
         }
     }
