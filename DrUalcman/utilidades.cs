@@ -229,6 +229,25 @@ namespace drualcman
         }
 
         /// <summary>
+        /// Comprueba que la tarjeta de credito es correcta
+        /// </summary>
+        /// <param name="insertCode">Url con el video que deseamos extraer el ID</param>
+        /// <returns></returns>
+        public static string ExtractYoutubeEmbed(string insertCode)
+        {
+            Regex YoutubeVideoRegex = new Regex(@"embed\/([\w+\-+]+)[\""\?]", RegexOptions.IgnoreCase);
+
+            Match youtubeMatch = YoutubeVideoRegex.Match(insertCode);
+
+            string id = string.Empty;
+
+            if (youtubeMatch.Success)
+                id = youtubeMatch.Groups[youtubeMatch.Groups.Count - 1].Value;
+
+            return id;
+        }
+
+        /// <summary>
         /// Conocer el tipo del objeto enviado
         /// </summary>
         /// <param name="sender"></param>
