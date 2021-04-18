@@ -19,6 +19,7 @@ namespace drualcman
         /// </summary>
         /// <param name="dv"></param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Data.Converters.GetCSV")]
         public static string GetCSV(DataView dv)
             => CSVConverter.GetCSV(dv, ",");
 
@@ -27,6 +28,7 @@ namespace drualcman
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Data.Converters.GetCSV")]
         public static string GetCSV(DataView dt, string separator)
             => CSVConverter.GetCSV(dt, separator);
 
@@ -35,6 +37,7 @@ namespace drualcman
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Data.Converters.GetCSV")]
         public static string GetCSV(DataTable dt)
             => CSVConverter.GetCSV(dt, ",");
 
@@ -44,9 +47,11 @@ namespace drualcman
         /// <param name="dt"></param>
         /// <param name="separator">Separator to use</param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Data.Converters.GetCSV")]
         public static string GetCSV(DataTable dt, string separator)
             => CSVConverter.GetCSV(dt, separator);
 
+        [Obsolete(message: "Use drualcman.Data.Converters.CSVToDataTable(pathFile) or drualcman.Data.Converters.FromStream")]
         public static DataTable CSVtoData(Stream data, char separator)
             => DataTableConverter.FromStream(data, separator);
         #endregion

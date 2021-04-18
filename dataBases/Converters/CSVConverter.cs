@@ -75,7 +75,7 @@ namespace drualcman.Data.Converters
         /// <param name="filePath"></param>
         /// <param name="separator"></param>
         /// <returns></returns>
-        public static DataTable CSVToData(string filePath, char separator)
+        public static DataTable CSVToDataTable(string filePath, char separator)
         {
             StreamReader sr = new StreamReader(filePath);
             DataTable dt = new DataTable();
@@ -91,7 +91,7 @@ namespace drualcman.Data.Converters
         /// <param name="filePath"></param>
         /// <param name="separator"></param>
         /// <returns></returns>
-        public static async Task<DataTable> CSVToDataAsync(string filePath, char separator)
+        public static async Task<DataTable> CSVToDataTableAsync(string filePath, char separator)
         {            
             StreamReader sr = new StreamReader(filePath);
             DataTable dt = new DataTable();
