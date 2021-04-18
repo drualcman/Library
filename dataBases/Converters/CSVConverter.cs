@@ -70,16 +70,15 @@ namespace drualcman.Data.Converters
         }
 
         /// <summary>
-        /// Convert a csv file into a DataTable
+        /// Convert from csv file into a DataTable
         /// </summary>
-        /// <param name="filePath"></param>
+        /// <param name="filePath">full path to get the file to part into a datatable</param>
         /// <param name="separator"></param>
         /// <returns></returns>
         public static DataTable CSVToDataTable(string filePath, char separator)
         {
-            StreamReader sr = new StreamReader(filePath);
             DataTable dt = new DataTable();
-            return dt.FromStream(sr.BaseStream, separator);
+            return dt.FromFile(filePath, separator);
         }
         #endregion
 
@@ -88,14 +87,13 @@ namespace drualcman.Data.Converters
         /// <summary>
         /// Convert a csv file into a DataTable
         /// </summary>
-        /// <param name="filePath"></param>
+        /// <param name="filePath">full path to get the file to part into a datatable</param>
         /// <param name="separator"></param>
         /// <returns></returns>
         public static async Task<DataTable> CSVToDataTableAsync(string filePath, char separator)
         {            
-            StreamReader sr = new StreamReader(filePath);
             DataTable dt = new DataTable();
-            return await dt.FromStreamAsync(sr.BaseStream, separator);
+            return await dt.FromFileAsync(filePath, separator);
 
         }
         #endregion

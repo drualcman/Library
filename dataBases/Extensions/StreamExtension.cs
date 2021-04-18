@@ -12,7 +12,7 @@ namespace drualcman.Data.Extensions
     {
         #region Methods
         /// <summary>
-        /// get aDataTable from Stream Data
+        /// Parse DataTable from Stream Data
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="data"></param>
@@ -40,6 +40,12 @@ namespace drualcman.Data.Extensions
         #endregion
 
         #region Async
+        /// <summary>
+        /// Parse DataTable from Stream Data
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="data"></param>
+        /// <param name="separator"></param>
         public static async Task<DataTable> FromStreamAsync(this DataTable dt, Stream data, char separator)
         {
             StreamReader sr = new StreamReader(data);
