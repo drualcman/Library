@@ -20,6 +20,11 @@ namespace drualcman
             #endregion
 
             #region Constructor
+            public netUtils()
+            {
+                this.Context = null;
+            }
+
             public netUtils(HttpContext context)
             {
                 this.Context = context;
@@ -400,7 +405,7 @@ namespace drualcman
 
                         //comprobar que no es una lista de archivo
                         string fichero = string.Empty;
-                        string folder2 = "~/" + folder;
+                        string folder2 =  "~/" + folder;
                         if (filename.IndexOf(";") > 0)
                         {
                             //es una lista de archivos
