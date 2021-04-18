@@ -9,7 +9,6 @@ namespace drualcman
 {
     public partial class dataBases
     {
-
         /// <summary>
         /// Manejo de datos
         /// </summary>
