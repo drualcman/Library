@@ -1,4 +1,5 @@
-﻿using System;
+﻿using drualcman.Data.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -46,35 +47,10 @@ namespace drualcman
             /// </summary>
             /// <param name="o"></param>
             /// <returns></returns>
+            [Obsolete(message: "Use Object extension or drualcman.Data.Converters.ObjectConverter.ToJson")]
             public static string ObjectToJSON(object o)
             {
-                try
-                {
-                    if (o != null)
-                    {
-                        if (utilidades.getTipo(o).ToLower() == "dataset")
-                        {
-                            string retorno = "[";
-                            foreach (DataTable item in ((DataSet)o).Tables)
-                            {
-                                retorno += ConvertDataTableToJSON(item) + ",";
-                            }
-                            retorno = retorno.Remove(retorno.Length - 1, 1) + "]";
-                            return retorno;
-                        }
-                        else
-                        {
-                            //convertir el objeto en un DataTable
-                            DataTable dt = ObjectToData(o);
-                            return ConvertDataTableToJSON(dt);
-                        }
-                    }
-                    else return "{\"Object\":\"NULL\"}";
-                }
-                catch
-                {
-                    return "{\"Object\":\"" + o.ToString() + "\"}";
-                }
+                return o.ToJson();
             }
 
             /// <summary>
@@ -206,27 +182,6 @@ namespace drualcman
                         for (int cols = 0; cols < ds.Tables[0].Columns.Count; cols++)
                         {
                             jsonString.Append(@"""" + ds.Tables[0].Columns[cols].ColumnName + @""":");
-
-                            /* 
-                            //IF NOT LAST PROPERTY
-
-                            if (cols < ds.Tables[0].Columns.Count - 1)
-                            {
-                                GenerateJsonProperty(ds, rows, cols, jsonString);
-                            }
-
-                            //IF LAST PROPERTY
-
-                            else if (cols == ds.Tables[0].Columns.Count - 1)
-                            {
-                                GenerateJsonProperty(ds, rows, cols, jsonString, true);
-                            }
-                            */
-
-                            var b = (cols < ds.Tables[0].Columns.Count - 1)
-                                ? GenerateJsonProperty(ds.Tables[0], rows, cols, jsonString)
-                                : (cols != ds.Tables[0].Columns.Count - 1)
-                                  || GenerateJsonProperty(ds.Tables[0], rows, cols, jsonString, true);
                         }
                         jsonString.Append(rows == ds.Tables[0].Rows.Count - 1 ? "}" : "},");
                     }
@@ -240,206 +195,19 @@ namespace drualcman
             {
                 return dataBases.DataManagement.ConvertDataSetToJSON(ds);
             }
+
             /// <summary>
-            /// Convertir uyn DataTable en un objero JSON
+            /// Convert DataTable to Json
             /// </summary>
             /// <param name="dt"></param>
             /// <returns></returns>
+            [Obsolete(message: "Use DataTable Extension method or drualcman.Data.Converters.DataTableConverter.ToJson")]
             public static string ConvertDataTableToJSON(DataTable dt)
             {
-                //https://stackoverflow.com/questions/17398019/convert-datatable-to-json-in-c-sharp                
-                System.Text.StringBuilder jsonString = new System.Text.StringBuilder();
-
-                if (dt.Rows.Count > 0)
-                {
-                    jsonString.Append("[");
-                    for (int rows = 0; rows < dt.Rows.Count; rows++)
-                    {
-                        jsonString.Append("{");
-                        for (int cols = 0; cols < dt.Columns.Count; cols++)
-                        {
-                            jsonString.Append(@"""" + dt.Columns[cols].ColumnName + @""":");
-
-                            /* 
-                            //IF NOT LAST PROPERTY
-
-                            if (cols < ds.Tables[0].Columns.Count - 1)
-                            {
-                                GenerateJsonProperty(ds, rows, cols, jsonString);
-                            }
-
-                            //IF LAST PROPERTY
-
-                            else if (cols == ds.Tables[0].Columns.Count - 1)
-                            {
-                                GenerateJsonProperty(ds, rows, cols, jsonString, true);
-                            }
-                            */
-
-                            var b = (cols < dt.Columns.Count - 1)
-                                ? GenerateJsonProperty(dt, rows, cols, jsonString)
-                                : (cols != dt.Columns.Count - 1)
-                                  || GenerateJsonProperty(dt, rows, cols, jsonString, true);
-                        }
-                        jsonString.Append(rows == dt.Rows.Count - 1 ? "}" : "},");
-                    }
-                    jsonString.Append("]");
-                    return jsonString.ToString();
-                }
-                return null;
+                return drualcman.Data.Converters.DataTableConverter.ToJson(dt);
             }
 
-            #region Helpers
-            private static bool GenerateJsonProperty(DataTable dt, int rows, int cols, System.Text.StringBuilder jsonString, bool isLast = false)
-            {
-                // IF LAST PROPERTY THEN REMOVE 'COMMA'  IF NOT LAST PROPERTY THEN ADD 'COMMA'
-                string addComma = isLast ? "" : ",";
-                numeros n = new numeros();
-                if (dt.Rows[rows][cols] == DBNull.Value)
-                {
-                    jsonString.Append(" null " + addComma);
-                }
-                else if (dt.Columns[cols].DataType == typeof(DateTime))
-                {
-                    jsonString.Append(@"""" + (((DateTime)dt.Rows[rows][cols]).ToString("yyyy-MM-dd HH':'mm':'ss")) + @"""" + addComma);
-                }
-                else if (dt.Columns[cols].DataType == typeof(string))
-                {
-                    jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-                else if (dt.Columns[cols].DataType == typeof(bool))
-                {
-                    jsonString.Append(Convert.ToBoolean(dt.Rows[rows][cols]) ? "true" + addComma : "false" + addComma);
-                }
-                else if (dt.Columns[cols].DataType == typeof(Int16))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(Int32))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true, "{0:0}") + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(Int64))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true, "{0:0}") + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(int))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true, "{0:0}") + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(Double))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(Decimal))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(float))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(long))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(short))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(Single))
-                {
-                    try
-                    {
-                        jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else if (dt.Columns[cols].DataType == typeof(Byte))
-                {
-                    try
-                    {
-                        jsonString.Append(Convert.ToByte(dt.Rows[rows][cols]) + addComma);
-                    }
-                    catch
-                    {
-                        jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                    }
-                }
-                else
-                {
-                    jsonString.Append(@"""" + (dt.Rows[rows][cols].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-                n = null;
-                return true;
-            }
-
+            #region Helpers          
             /// <summary>
             /// Check don't have a , between " on the text.
             /// </summary>

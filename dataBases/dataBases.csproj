@@ -14,4 +14,8 @@
     <ProjectReference Include="..\DrUalcman\DrUalcman.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 </Project>

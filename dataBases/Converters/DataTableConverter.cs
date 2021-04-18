@@ -42,6 +42,13 @@ namespace drualcman.Data.Converters
         public static List<TModel> ToList<TModel>(DataTable dt, string[] columns) where TModel : new() 
             => dt.ToList<TModel>(columns);
 
+        /// <summary>
+        /// Convert DataTable to Json
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static string ToJson(DataTable dt)
+            => dt.ToJson();
         #endregion
 
         #region async
