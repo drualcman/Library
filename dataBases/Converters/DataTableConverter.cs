@@ -11,6 +11,8 @@ namespace drualcman.Data.Converters
 {
     public class DataTableConverter
     {
+
+        #region methods
         /// <summary>
         /// get aDataTable from Stream Data
         /// </summary>
@@ -21,5 +23,56 @@ namespace drualcman.Data.Converters
             DataTable dt = new DataTable();            
             return dt.FromStream(data, separator);
         }
+
+        /// <summary>
+        /// Get list of object send from data table
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static List<TModel> ToList<TModel>(DataTable dt) where TModel : new()
+            => dt.ToList<TModel>();
+
+        /// <summary>
+        /// Get list of object send from data table
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static List<TModel> ToList<TModel>(DataTable dt, string[] columns) where TModel : new() 
+            => dt.ToList<TModel>(columns);
+
+        #endregion
+
+        #region async
+        /// <summary>
+        /// get aDataTable from Stream Data
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="separator"></param>
+        public static async Task<DataTable> FromStreamAsync(Stream data, char separator)
+        {
+            DataTable dt = new DataTable();
+            return await dt.FromStreamAsync(data, separator);
+        }
+
+        /// <summary>
+        /// Get list of object send from data table
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static async Task<List<TModel>> ToListAsync<TModel>(DataTable dt) where TModel : new()
+            => await dt.ToListAsync<TModel>();
+
+        /// <summary>
+        /// Get list of object send from data table
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static async Task<List<TModel>> ToListAsync<TModel>(DataTable dt, string[] columns) where TModel : new()
+            => await dt.ToListAsync<TModel>(columns);
+        #endregion
     }
 }

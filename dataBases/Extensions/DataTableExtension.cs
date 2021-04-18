@@ -10,6 +10,13 @@ namespace drualcman.Data.Extensions
 {
     public static class DataTableExtension
     {
+        /// <summary>
+        /// Get list of object send from data table
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="dt"></param>
+        /// <param name="columns">columns name to parse</param>
+        /// <returns></returns>
         public static List<TModel> ToList<TModel>(this DataTable dt, string[] columns) where TModel : new()
         {
             if (dt.Rows.Count > 0)
@@ -45,6 +52,12 @@ namespace drualcman.Data.Extensions
             else return new List<TModel>();          //no results
         }
 
+        /// <summary>
+        /// Get list of object send from data table
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="dt"></param>
+        /// <returns></returns>
         public static List<TModel> ToList<TModel>(this DataTable dt) where TModel : new()
         {
             if (dt.Rows.Count > 0)
@@ -90,17 +103,36 @@ namespace drualcman.Data.Extensions
         }
 
         #region async
+        /// <summary>
+        /// Get list of object send from data table
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static Task<List<TModel>> ToListAsync<TModel>(this DataTable dt, string[] columns) where TModel : new()
+        {
+            if (dt.Rows.Count > 0)
+            {
+                return Task.FromResult(dt.ToList<TModel>(columns));
+            }
+            else return Task.FromResult(new List<TModel>());          //no results
+        }
 
+        /// <summary>
+        /// Get list of object send from data table
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="dt"></param>
+        /// <returns></returns>
         public static async Task<List<TModel>> ToListAsync<TModel>(this DataTable dt) where TModel : new()
         {
             if (dt.Rows.Count > 0)
             {
                 string[] columns = await dt.ColumnNamesToArrayAsync();
-                return dt.ToList<TModel>(columns);
+                return await dt.ToListAsync<TModel>(columns);
             }
             else return new List<TModel>();          //no results
         }
-
 
         /// <summary>
         /// Get all column names from the table send

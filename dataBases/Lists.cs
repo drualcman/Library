@@ -12,6 +12,12 @@ namespace drualcman
     public partial class dataBases
     {
         #region direct queries
+        /// <summary>
+        /// Executer query and return List of model send
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public List<TModel> Data<TModel>(string query) where TModel: new ()
         {   
             DataTable dt = DataTable(query);                //execute the query
@@ -19,7 +25,13 @@ namespace drualcman
         }
         #endregion
 
-        #region tasks
+        #region async
+        /// <summary>
+        /// Executer query and return List of model send
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public async Task<List<TModel>> DataAsync<TModel>(string query) where TModel : new()
         {
             DataTable dt = await DataTableAsync(query);                //execute the query
