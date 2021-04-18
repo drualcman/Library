@@ -10,41 +10,6 @@ namespace drualcman
 {
     public partial class dataBases
     {
-
-        /// <summary>
-        /// Get all column names from the table send
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public string[] GetColumnNames(DataTable dt)
-        {
-            List<string> names = new List<string>();
-
-            foreach (DataColumn item in dt.Columns)
-            {
-                names.Add(item.ColumnName);
-            }
-
-            return names.ToArray();
-        }
-
-        /// <summary>
-        /// Get all column names from the row send
-        /// </summary>
-        /// <param name="dr"></param>
-        /// <returns></returns>
-        public string[] GetColumnNames(DataRow dr)
-        {
-            List<string> names = new List<string>();
-
-            foreach (DataColumn item in dr.ItemArray)
-            {
-                names.Add(item.ColumnName);
-            }
-
-            return names.ToArray();
-        }
-
         private void CheckSqlInjection(string query, defLog log)
         {
             if (checkQuery(query))
