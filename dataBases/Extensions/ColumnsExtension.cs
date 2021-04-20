@@ -19,7 +19,7 @@ namespace drualcman.Data.Extensions
         {
             List<string> names = new List<string>();
 
-            foreach (DataColumn item in dr.ItemArray)
+            foreach (DataColumn item in dr.Table.Columns)
             {
                 names.Add(item.ColumnName);
             }
