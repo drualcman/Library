@@ -20,7 +20,7 @@ namespace drualcman.Data.Extensions
         {
             //https://stackoverflow.com/questions/17398019/convert-datatable-to-json-in-c-sharp                
             StringBuilder jsonString = new StringBuilder();
-            int c = ds.Tables[0].Rows.Count;
+            int c = ds.Tables.Count;
             if (c > 0)
             {
                 jsonString.Append("[");
