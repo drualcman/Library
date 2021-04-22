@@ -18,7 +18,7 @@ namespace drualcman
         /// <typeparam name="TModel"></typeparam>
         /// <param name="query"></param>
         /// <returns></returns>
-        public List<TModel> Data<TModel>(string query) where TModel: new ()
+        public List<TModel> List<TModel>(string query) where TModel: new ()
         {   
             DataTable dt = DataTable(query);                //execute the query
             return dt.ToList<TModel>();          
@@ -32,7 +32,7 @@ namespace drualcman
         /// <typeparam name="TModel"></typeparam>
         /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<List<TModel>> DataAsync<TModel>(string query) where TModel : new()
+        public async Task<List<TModel>> ListAsync<TModel>(string query) where TModel : new()
         {
             DataTable dt = await DataTableAsync(query);                //execute the query
             return await dt.ToListAsync<TModel>();          
