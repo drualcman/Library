@@ -110,7 +110,7 @@ namespace drualcman
                                     log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
                                     log.Dispose();
 
-                                    throw exReader;
+                                    throw;
                                 }
                                 cmd.Dispose();              // cerrar la conexión
                             }
@@ -121,7 +121,7 @@ namespace drualcman
                                 log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
                                 log.Dispose();
 
-                                throw exConexion;
+                                throw;
                             }
                             // cerrar la conexión
                             con.Close();
@@ -630,7 +630,7 @@ namespace drualcman
 
                         cmd.Dispose();              // cerrar la conexión
                         cnn.Close();
-                        throw exReader;
+                        throw;
                     }
                     if (this.LogError) log.end(datoRetorno, this.rutaDDBB);
                     log.Dispose();

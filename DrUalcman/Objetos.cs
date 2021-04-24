@@ -16,16 +16,7 @@ namespace drualcman
         /// <returns></returns>
         public static string GetTipo(object sender)
         {
-            string tipo = string.Empty;
-            try
-            {
-                tipo = sender.GetType().Name;
-                return tipo;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+                return sender.GetType().Name;
 
         }
 

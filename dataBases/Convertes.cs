@@ -62,7 +62,7 @@ namespace drualcman
         /// <param name="o"></param>
         /// <returns></returns>
         public static string ObjectToJSON(object o)
-            => DataManagement.ObjectToJSON(o);
+            => o.ToJson();
 
         /// <summary>
         /// Convertir un objeto a data table
@@ -91,7 +91,7 @@ namespace drualcman
             {
                 return source as DataSet;
             }
-            catch (Exception ex)
+            catch 
             {
                 throw;
             }
@@ -125,7 +125,7 @@ namespace drualcman
                 }
                 return dt;
             }
-            catch (Exception ex)
+            catch 
             {
                 throw;
             }
@@ -192,7 +192,7 @@ namespace drualcman
         /// <param name="dt"></param>
         /// <returns></returns>
         public string ConvertDatatableToJSON(DataTable dt)
-            => DataManagement.ConvertDataTableToJSON(dt);
+            => dt.ToJson();
 
         /// <summary>
         /// Convertir un data table en JSON
@@ -200,7 +200,7 @@ namespace drualcman
         /// <param name="dt"></param>
         /// <returns></returns>
         public static string DatatableToJSON(DataTable dt)
-            => DataManagement.ConvertDataTableToJSON(dt);
+            => dt.ToJson();
 
         /// <summary>
         /// Convert JSON data format in DataTable

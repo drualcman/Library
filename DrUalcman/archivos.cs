@@ -196,17 +196,10 @@ namespace drualcman
         public bool borrarArchivo(string nombreArchivo)
         {
             bool bResultado = true;
-            try
-            {
                 if (existeFichero(nombreArchivo) == true)
                     File.Delete(nombreArchivo);
                 else
                     bResultado = false;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
             return bResultado;
         }
 

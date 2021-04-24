@@ -455,8 +455,6 @@ namespace drualcman
             string retorno = string.Empty;
             DateTime hour = DateTime.Now;
 
-            try
-            {
                 switch (tipo)
                 {
                     case TipoTiempo.Years:
@@ -484,11 +482,6 @@ namespace drualcman
                         hour = hour.AddTicks((long)add);
                         break;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
 
             retorno = hour.ToString(format);
 
@@ -507,8 +500,6 @@ namespace drualcman
         {
             string retorno = string.Empty;
 
-            try
-            {
                 switch (tipo)
                 {
                     case TipoTiempo.Years:
@@ -536,11 +527,6 @@ namespace drualcman
                         fechahora = fechahora.AddTicks((long)add);
                         break;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
 
             retorno = fechahora.ToString(format);
 

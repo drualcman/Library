@@ -221,18 +221,12 @@ namespace drualcman
             string retorno = string.Empty;
             string pattern = @"(?:- *)?\d";
             System.Text.RegularExpressions.Regex rgx = new System.Text.RegularExpressions.Regex(pattern);
-            try
-            {
+       
                 foreach (System.Text.RegularExpressions.Match m in rgx.Matches(texto.ToString()))
                 {
                     retorno += m.Value;
                 }
-                return retorno;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+                return retorno;  
         }
 
         /// <summary>
@@ -245,18 +239,13 @@ namespace drualcman
             string retorno = string.Empty;
             string pattern = @"(?:- *)?\d";
             System.Text.RegularExpressions.Regex rgx = new System.Text.RegularExpressions.Regex(pattern);
-            try
-            {
+         
                 foreach (System.Text.RegularExpressions.Match m in rgx.Matches(texto))
                 {
                     retorno += m.Value;
                 }
                 return retorno;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+         
         }
     
         /// <summary>

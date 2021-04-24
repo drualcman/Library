@@ -1,4 +1,5 @@
-﻿using System;
+﻿using drualcman.Data.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -126,7 +127,7 @@ namespace drualcman
                 string _result;
                 try
                 {
-                    _result = dataBases.DataManagement.ObjectToJSON(Result);
+                    _result = Result.ToJson();
                 }
                 catch
                 {
@@ -141,7 +142,7 @@ namespace drualcman
                 string _err;
                 try
                 {
-                    _result = dataBases.DataManagement.ObjectToJSON(Result);
+                    _result = Result.ToJson();
                 }
                 catch
                 {
@@ -162,7 +163,7 @@ namespace drualcman
             public void end(object Result, string Err)
             {
                 this.endtime = DateTime.Now.ToShortTimeString();
-                this.result = dataBases.DataManagement.ObjectToJSON(Result);
+                this.result = Result.ToJson();
                 this.error = Err;
                 writeLog();
             }

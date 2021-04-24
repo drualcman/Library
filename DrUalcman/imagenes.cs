@@ -129,8 +129,6 @@ namespace drualcman
         public static string InsertarTexto(string file, string folder, string Str_TextOnImage, Color StringColor,  
             Font fuente, Point posicion, StringAlignment horizontal, StringAlignment vertical)
         {
-            try
-            {
                 //creando el objeto de la imagen
                 archivos a = new archivos();
                 string rutaImg = a.checkCarpeta(folder) + file;
@@ -157,11 +155,6 @@ namespace drualcman
                 //guardar la nueva imagen
                 bitmap.Save(newFile);
                 return newFile;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         /// <summary>
@@ -179,8 +172,6 @@ namespace drualcman
         public static string InsertarTexto(Image bitmap, string folder, string Str_TextOnImage, Color StringColor,
             Font fuente, Point posicion, StringAlignment horizontal, StringAlignment vertical)
         {
-            try
-            {
                 //creando el objeto de la imagen
                 archivos a = new archivos();
                 string newFile = a.creaNombreFile(a.checkCarpeta(folder), "jpg", "txt");
@@ -204,11 +195,7 @@ namespace drualcman
                 //guardar la nueva imagen
                 bitmap.Save(newFile);
                 return newFile;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+          
         }
 
         /// <summary>
@@ -226,8 +213,6 @@ namespace drualcman
         public static Image InsertarTextoImagen(string file, string folder, string Str_TextOnImage, Color StringColor,
             Font fuente, Point posicion, StringAlignment horizontal, StringAlignment vertical)
         {
-            try
-            {
                 //creando el objeto de la imagen
                 archivos a = new archivos();
                 string rutaImg = a.checkCarpeta(folder) + file;
@@ -250,11 +235,6 @@ namespace drualcman
                 graphicsImage.DrawString(Str_TextOnImage, fuente, new SolidBrush(StringColor), MiPOS, stringformat);
                 graphicsImage.Save();
                 return bitmap;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         /// <summary>
@@ -271,8 +251,6 @@ namespace drualcman
         public static Image InsertarTextoImagen(Image bitmap, string Str_TextOnImage, Color StringColor,
             Font fuente, Point posicion, StringAlignment horizontal, StringAlignment vertical)
         {
-            try
-            {
                 //Dibujo la imagen
                 Graphics graphicsImage = Graphics.FromImage(bitmap);
                 //Establezco la orientación mediante coordenadas   
@@ -290,11 +268,6 @@ namespace drualcman
                 graphicsImage.DrawString(Str_TextOnImage, fuente, new SolidBrush(StringColor), MiPOS, stringformat);
                 graphicsImage.Save();
                 return bitmap;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
         #endregion
     }

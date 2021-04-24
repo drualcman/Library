@@ -488,16 +488,9 @@ namespace drualcman
             /// <returns></returns>
             public string guardaDato(string NombreArchivo, string Archivo, string Carpeta = "", bool NombreDinamico = false, string pre = "")
             {
-                try
-                {
                     System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
                     byte[] file = encoding.GetBytes(Archivo);
                     return guardaDato(NombreArchivo, file, Carpeta, NombreDinamico, pre);
-                }
-                catch (Exception ex)
-                {                   
-                    throw ex;
-                }
             }
             
             /// <summary>
