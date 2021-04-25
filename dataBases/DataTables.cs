@@ -10,6 +10,28 @@ namespace drualcman
     public partial class dataBases
     {
         #region direct queries
+
+        /// <summary>
+        /// Return DataTable from Query
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un DataSet
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public DataTable DataTable<TModel>() => DataTable<TModel>(30);
+
+        /// <summary>
+        /// Return DataTable from Query
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un DataSet
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public DataTable DataTable<TModel>(int timeout) => ConsultarConDataTable(SetQuery<TModel>(), timeout);
+
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
@@ -19,6 +41,7 @@ namespace drualcman
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
         public DataTable ConsultarConDataTable(string querySQL) => ConsultarConDataTable(querySQL, 30);
+
 
         /// <summary>
         /// Return DataTable from Query
@@ -152,6 +175,26 @@ namespace drualcman
         #endregion
 
         #region tasks
+
+        /// <summary>
+        /// Return DataTable from Query
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <returns>
+        /// DataTable
+        /// </returns>
+        public async Task<DataTable> DataTableAsync<TModel>() => await DataTableAsync<TModel>(30);
+
+        /// <summary>
+        /// Return DataTable from Query
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// DataTable
+        /// </returns>
+        public async Task<DataTable> DataTableAsync<TModel>(int timeout) => await DataTableAsync(SetQuery<TModel>(), 30);
+
         /// <summary>
         /// Return DataTable from Query
         /// </summary>

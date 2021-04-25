@@ -16,6 +16,14 @@ namespace drualcman
         /// Executer query and return List of model send
         /// </summary>
         /// <typeparam name="TModel"></typeparam>
+        /// <returns></returns>
+        public List<TModel> List<TModel>() where TModel : new() =>
+            List<TModel>(SetQuery<TModel>());
+
+        /// <summary>
+        /// Executer query and return List of model send
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
         /// <param name="query"></param>
         /// <returns></returns>
         public List<TModel> List<TModel>(string query) where TModel: new ()
@@ -26,6 +34,14 @@ namespace drualcman
         #endregion
 
         #region async
+        /// <summary>
+        /// Executer query and return List of model send
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <returns></returns>
+        public async Task<List<TModel>> ListAsync<TModel>() where TModel : new() =>
+            await ListAsync<TModel>(SetQuery<TModel>());
+
         /// <summary>
         /// Executer query and return List of model send
         /// </summary>

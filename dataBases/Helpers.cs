@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -102,6 +103,28 @@ namespace drualcman
             }
             else resultado = true;
             return resultado;
+        }
+
+        /// <summary>
+        /// Get the select from the properties name about the model send
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public string SetQuery<TModel>()
+        {
+            PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);            
+            StringBuilder retorno = new StringBuilder("SELECT ");
+            int c = properties.Length;
+            int last = c - 1;
+            for (int i = 0; i < c; i++)
+            {
+                if (i < last) retorno.Append($" {properties[i].Name},");
+                else retorno.Append($" {properties[i].Name}");
+            }
+            retorno.Append($" FROM {typeof(TModel).Name};");
+
+            return retorno.ToString(); 
         }
     }
 }

@@ -10,6 +10,26 @@ namespace drualcman
     public partial class dataBases
     {
         #region direct queries
+
+        /// <summary>
+        /// Return DataView
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <returns>
+        /// </returns>
+        public DataView DataView<TModel>() =>
+            DataView<TModel>(30);
+
+        /// <summary>
+        /// Return DataView
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// </returns>
+        public DataView DataView<TModel>(int timeout) =>
+            ConsultarConDataView(SetQuery<TModel>(), timeout);
+
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
@@ -29,10 +49,8 @@ namespace drualcman
         /// <param name="querySQL">Consulta SQL a ejecutar</param>
         /// <returns>
         /// </returns>
-        public DataView DataView(string querySQL)
-        {
-            return ConsultarConDataView(querySQL, 30);
-        }
+        public DataView DataView(string querySQL)=>
+            ConsultarConDataView(querySQL, 30);
 
         /// <summary>
         /// Return DataView
@@ -41,10 +59,8 @@ namespace drualcman
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public DataView DataView(string querySQL, int timeout)
-        {
-            return ConsultarConDataView(querySQL, timeout);
-        }
+        public DataView DataView(string querySQL, int timeout)=>
+            ConsultarConDataView(querySQL, timeout);
 
         /// <summary>
         /// Devuelve datos de la consulta
@@ -64,6 +80,26 @@ namespace drualcman
         #endregion
 
         #region tasks
+
+        /// <summary>
+        /// Return DataView
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <returns>
+        /// </returns>
+        public async Task<DataView> DataViewAsync<TModel>() =>
+            await DataViewAsync<TModel>(30);
+
+        /// <summary>
+        /// Return DataView
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// </returns>
+        public async Task<DataView> DataViewAsync<TModel>(int timeout) => 
+            await DataViewAsync(SetQuery<TModel>(), 30);
+
         /// <summary>
         /// Return DataView
         /// </summary>

@@ -14,6 +14,27 @@ namespace drualcman
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un DataSet
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public DataSet DataSet<TModel>() => DataSet<TModel>(30);
+
+        /// <summary>
+        /// Devuelve datos de la consulta
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="timehout"></param>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un DataSet
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public DataSet DataSet<TModel>(int timehout) => DataSet(SetQuery<TModel>(), timehout);
+
+        /// <summary>
+        /// Devuelve datos de la consulta
+        /// </summary>
         /// <param name="querySQL">Consulta SQL a ejecutar</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
@@ -211,6 +232,30 @@ namespace drualcman
         #endregion region
 
         #region tasks
+        /// <summary>
+        /// Return DataSet from a direct query
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un DataSet
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public async Task<DataSet> DataSetAsync<TModel>() =>
+            await DataSetAsync<TModel>(30);
+        
+
+        /// <summary>
+        /// Return DataSet from a direct query
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un DataSet
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public async Task<DataSet> DataSetAsync<TModel>(int timehout) =>
+            await DataSetAsync(SetQuery<TModel>());
+
         /// <summary>
         /// Return DataSet from a direct query
         /// </summary>
