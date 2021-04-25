@@ -122,7 +122,7 @@ namespace drualcman
                 if (i < last) retorno.Append($" {properties[i].Name},");
                 else retorno.Append($" {properties[i].Name}");
             }
-            retorno.Append($" FROM {typeof(TModel).Name};");
+            retorno.Append($" FROM {typeof(TModel).Name} ");
 
             return retorno.ToString(); 
         }
