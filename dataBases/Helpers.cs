@@ -119,10 +119,10 @@ namespace drualcman
             int last = c - 1;
             for (int i = 0; i < c; i++)
             {
-                if (i < last) retorno.Append($" {properties[i].Name},");
-                else retorno.Append($" {properties[i].Name}");
+                if (i < last) retorno.Append($" [{properties[i].Name}],");
+                else retorno.Append($" [{properties[i].Name}]");
             }
-            retorno.Append($" FROM {typeof(TModel).Name} ");
+            retorno.Append($" FROM [{typeof(TModel).Name}] ");
 
             return retorno.ToString(); 
         }
