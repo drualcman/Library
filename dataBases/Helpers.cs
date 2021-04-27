@@ -1,4 +1,5 @@
-﻿using System;
+﻿using drualcman.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -113,17 +114,39 @@ namespace drualcman
         /// <returns></returns>
         public string SetQuery<TModel>()
         {
-            PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);            
+            PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);  
+            string tableName;
+            DatabaseAttribute table = typeof(TModel).GetCustomAttribute<DatabaseAttribute>();
+            if (table is not null)
+            {
+                if (string.IsNullOrEmpty(table.TableName)) tableName = typeof(TModel).Name;
+                else tableName = table.TableName;
+            }
+            else tableName = typeof(TModel).Name;
+
             StringBuilder retorno = new StringBuilder("SELECT ");
             int c = properties.Length;
             int last = c - 1;
             for (int i = 0; i < c; i++)
             {
-                if (i < last) retorno.Append($" [{properties[i].Name}],");
-                else retorno.Append($" [{properties[i].Name}]");
+                DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
+                string fieldName = properties[i].Name;
+                if (field is not null)
+                {
+                    if (!field.Ignore)
+                    {
+                        if (string.IsNullOrEmpty(field.TableName)) fieldName = properties[i].Name;
+                        else fieldName = field.TableName;
+                    }
+                    else fieldName = string.Empty;
+                }
+                if (!string.IsNullOrEmpty(fieldName))
+                {
+                    if (i < last) retorno.Append($" [{fieldName}],");
+                    else retorno.Append($" [{fieldName}]");
+                }
             }
-            retorno.Append($" FROM [{typeof(TModel).Name}] ");
-
+            retorno.Append($" FROM [{tableName}] ");
             return retorno.ToString(); 
         }
     }
