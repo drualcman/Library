@@ -145,6 +145,33 @@ namespace drualcman
             }
             retorno.Remove(retorno.Length - 1, 1);
             retorno.Append($" FROM [{tableName}] ");
+
+            if (this.WhereRequired is not null)
+            {
+                retorno.Append($" WHERE ");
+                for (int i = 0; i < c; i++)
+                {
+                    DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
+                    string fieldName = properties[i].Name;
+                    if (field is not null)
+                    {
+                        if (field.Required && field.IndexKey)
+                        {
+                            if (string.IsNullOrEmpty(field.IndexedName)) fieldName = properties[i].Name;
+                            else fieldName = field.IndexedName;
+
+                            if (this.WhereRequired.ContainsKey(fieldName))
+                            {
+                                KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
+                                retorno.Append($" [{where.Key}] = {where.Value} ");
+                                retorno.Append("AND");
+                            }
+                        }
+                        else fieldName = string.Empty;
+                    }
+                }
+                retorno.Remove(retorno.Length - 3, 3);
+            }
             return retorno.ToString(); 
         }
     }

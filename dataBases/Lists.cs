@@ -40,7 +40,7 @@ namespace drualcman
         /// <typeparam name="TModel"></typeparam>
         /// <returns></returns>
         public async Task<List<TModel>> ListAsync<TModel>() where TModel : new() =>
-            await ListAsync<TModel>(SetQuery<TModel>());
+            await ListAsync<TModel>(SetQuery<TModel>() );
 
         /// <summary>
         /// Executer query and return List of model send

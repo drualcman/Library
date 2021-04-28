@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace drualcman.Attributes
 {
@@ -12,5 +8,6 @@ namespace drualcman.Attributes
         public bool Ignore { get; set; }
         public bool Required { get; set; }
         public bool IndexKey { get; set; }
+        public string IndexedName { get; set; }
     }
 }
