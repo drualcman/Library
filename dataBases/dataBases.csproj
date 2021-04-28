@@ -6,17 +6,13 @@
     <RootNamespace>drualcman</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Helpers\**" />
-    <EmbeddedResource Remove="Helpers\**" />
-    <None Remove="Helpers\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dependencies\Dependencies.csproj" />
     <ProjectReference Include="..\DrUalcman\DrUalcman.csproj" />
   </ItemGroup>
 
