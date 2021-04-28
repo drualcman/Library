@@ -156,6 +156,7 @@ namespace drualcman
                     string fieldName = properties[i].Name;
                     if (field is not null)
                     {
+                        if (!string.IsNullOrEmpty(field.Name)) fieldName = field.Name;
                         if (field.IndexKey)
                         {
                             if (string.IsNullOrEmpty(field.IndexedName)) 
@@ -164,18 +165,17 @@ namespace drualcman
                                 {
                                     foundSome = true;
                                     KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
-                                    retorno.Append($" [{where.Key}] = {where.Value} ");
+                                    retorno.Append($" [{fieldName}] = {where.Value} ");
                                     retorno.Append("AND");
                                 }
                             }
                             else
                             {
-                                fieldName = field.IndexedName;
-                                if (this.WhereRequired.ContainsKey(fieldName))
+                                if (this.WhereRequired.ContainsKey(field.IndexedName))
                                 {
                                     foundSome = true;
-                                    KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
-                                    retorno.Append($" [{where.Key}] = {where.Value} ");
+                                    KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == field.IndexedName).FirstOrDefault();
+                                    retorno.Append($" [{fieldName}] = {where.Value} ");
                                     retorno.Append("AND");
                                 }
                             }
@@ -187,7 +187,7 @@ namespace drualcman
                         {
                             foundSome = true;
                             KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
-                            retorno.Append($" [{where.Key}] = {where.Value} ");
+                            retorno.Append($" [{fieldName}] = {where.Value} ");
                             retorno.Append("AND");
                         }
                     }
@@ -195,7 +195,6 @@ namespace drualcman
                 if (foundSome) retorno.Remove(retorno.Length - 3, 3);
                 else retorno.Remove(retorno.Length - 7, 7);
             }
-            string k = retorno.ToString();
             return retorno.ToString(); 
         }
     }
