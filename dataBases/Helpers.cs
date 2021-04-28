@@ -126,7 +126,6 @@ namespace drualcman
 
             StringBuilder retorno = new StringBuilder("SELECT ");
             int c = properties.Length;
-            int last = c - 1;
             for (int i = 0; i < c; i++)
             {
                 DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
@@ -141,11 +140,10 @@ namespace drualcman
                     else fieldName = string.Empty;
                 }
                 if (!string.IsNullOrEmpty(fieldName))
-                {
-                    if (i < last) retorno.Append($" [{fieldName}],");
-                    else retorno.Append($" [{fieldName}]");
-                }
+                    retorno.Append($" [{fieldName}],");
+                
             }
+            retorno.Remove(retorno.Length - 1, 1);
             retorno.Append($" FROM [{tableName}] ");
             return retorno.ToString(); 
         }
