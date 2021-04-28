@@ -119,8 +119,8 @@ namespace drualcman
             DatabaseAttribute table = typeof(TModel).GetCustomAttribute<DatabaseAttribute>();
             if (table is not null)
             {
-                if (string.IsNullOrEmpty(table.TableName)) tableName = typeof(TModel).Name;
-                else tableName = table.TableName;
+                if (string.IsNullOrEmpty(table.Name)) tableName = typeof(TModel).Name;
+                else tableName = table.Name;
             }
             else tableName = typeof(TModel).Name;
 
@@ -134,8 +134,8 @@ namespace drualcman
                 {
                     if (!field.Ignore)
                     {
-                        if (string.IsNullOrEmpty(field.TableName)) fieldName = properties[i].Name;
-                        else fieldName = field.TableName;
+                        if (string.IsNullOrEmpty(field.Name)) fieldName = properties[i].Name;
+                        else fieldName = field.Name;
                     }
                     else fieldName = string.Empty;
                 }
@@ -148,6 +148,7 @@ namespace drualcman
 
             if (this.WhereRequired is not null)
             {
+                bool foundSome = false;
                 retorno.Append($" WHERE ");
                 for (int i = 0; i < c; i++)
                 {
@@ -155,23 +156,46 @@ namespace drualcman
                     string fieldName = properties[i].Name;
                     if (field is not null)
                     {
-                        if (field.Required && field.IndexKey)
+                        if (field.IndexKey)
                         {
-                            if (string.IsNullOrEmpty(field.IndexedName)) fieldName = properties[i].Name;
-                            else fieldName = field.IndexedName;
-
-                            if (this.WhereRequired.ContainsKey(fieldName))
+                            if (string.IsNullOrEmpty(field.IndexedName)) 
                             {
-                                KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
-                                retorno.Append($" [{where.Key}] = {where.Value} ");
-                                retorno.Append("AND");
+                                if (this.WhereRequired.ContainsKey(fieldName))
+                                {
+                                    foundSome = true;
+                                    KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
+                                    retorno.Append($" [{where.Key}] = {where.Value} ");
+                                    retorno.Append("AND");
+                                }
+                            }
+                            else
+                            {
+                                fieldName = field.IndexedName;
+                                if (this.WhereRequired.ContainsKey(fieldName))
+                                {
+                                    foundSome = true;
+                                    KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
+                                    retorno.Append($" [{where.Key}] = {where.Value} ");
+                                    retorno.Append("AND");
+                                }
                             }
                         }
-                        else fieldName = string.Empty;
+                    }
+                    else
+                    {
+                        if (this.WhereRequired.ContainsKey(fieldName))
+                        {
+                            foundSome = true;
+                            KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
+                            retorno.Append($" [{where.Key}] = {where.Value} ");
+                            retorno.Append("AND");
+                        }
                     }
                 }
-                retorno.Remove(retorno.Length - 3, 3);
+                if (foundSome) retorno.Remove(retorno.Length - 3, 3);
+                else retorno.Remove(retorno.Length - 7, 7);
             }
+            string k = retorno.ToString();
             return retorno.ToString(); 
         }
     }
