@@ -782,6 +782,7 @@ namespace drualcman
         }
         #endregion
 
+        #region methods
         /// <summary>
         /// Setup the parameter for the required where without the constructor
         /// </summary>
@@ -791,6 +792,11 @@ namespace drualcman
             this.WhereRequired = where;
         }
 
+        public object GetWhereValue(string key)
+        {
+            return this.WhereRequired.Where(k => k.Key == key).FirstOrDefault().Value;
+        }
+        #endregion
     }
 
 
