@@ -49,8 +49,54 @@ namespace drualcman
                 //return the resized image
                 return Image.GetThumbnailImage(width, height, null, IntPtr.Zero);
             }
+            else
+            {
+                //return the original resized image
+                return Image;
+            }
+        }
+
+        /// <summary>
+        /// Image resize
+        /// </summary>
+        /// <param name="maxWidth"></param>
+        /// <param name="maxHeight"></param>
+        /// <param name="imageBytes"></param>
+        /// <returns></returns>
+        public static byte[] ResizeImage(int maxWidth, int maxHeight, byte[] imageBytes)
+        {
+            utilidades a = new utilidades();
+            Image Image = a.byteArrayToImage(imageBytes);
+
+            int width = Image.Width;
+            int height = Image.Height;
+            if (width > maxWidth || height > maxHeight)
+            {
+                //The flips are in here to prevent any embedded image thumbnails -- usually from cameras
+                //from displaying as the thumbnail image later, in other words, we want a clean
+                //resize, not a grainy one.
+                Image.RotateFlip(RotateFlipType.Rotate180FlipX);
+                Image.RotateFlip(RotateFlipType.Rotate180FlipY);
+
+                float ratio;
+                if (width < height)
+                {
+                    ratio = (float)width / (float)height;
+                    width = maxWidth;
+                    height = Convert.ToInt32(Math.Round((float)width / ratio));
+                }
+                else
+                {
+                    ratio = (float)height / (float)width;
+                    height = maxHeight;
+                    width = Convert.ToInt32(Math.Round((float)height / ratio));
+                }
+
+                //return the resized image
+                imageBytes = a.imageToByteArray(Image.GetThumbnailImage(width, height, null, IntPtr.Zero));                
+            }
             //return the original resized image
-            return Image;
+            return imageBytes;
         }
 
         /// <summary>
