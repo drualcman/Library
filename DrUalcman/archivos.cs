@@ -92,8 +92,8 @@ namespace drualcman
         /// <returns></returns>
         public string guardaDato(string NombreArchivo, string Archivo, string Carpeta = "", bool NombreDinamico = false, string pre = "")
         {
-            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-            byte[] file = encoding.GetBytes(Archivo);
+            UTF8Encoding encoding = new UTF8Encoding();
+            byte[] file = encoding.GetBytes(Archivo);            
             return guardaDato(NombreArchivo, file, Carpeta, NombreDinamico, pre);
         }
 
@@ -116,7 +116,7 @@ namespace drualcman
             }
             else
             {
-                System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                UTF8Encoding encoding = new UTF8Encoding();
                 file = encoding.GetBytes(Archivo);
             }
 

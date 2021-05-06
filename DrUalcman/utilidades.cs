@@ -310,9 +310,8 @@ namespace drualcman
         /// <returns></returns>
         public byte[] imageToByteArray(Image imageIn, ImageFormat formato)
         {
-            MemoryStream ms = new MemoryStream();
+            using MemoryStream ms = new MemoryStream();
             imageIn.Save(ms, formato);
-            ms.Dispose();
             return ms.ToArray();
         }
 
@@ -353,10 +352,9 @@ namespace drualcman
         /// <param name="byteArrayIn"></param>
         /// <returns></returns>
         public Image byteArrayToImage(byte[] byteArrayIn)
-        {            
-            MemoryStream ms = new MemoryStream(byteArrayIn);
-            Image returnImage = Image.FromStream(ms);
-            ms.Dispose();            
+        {
+            using MemoryStream ms = new MemoryStream(byteArrayIn);
+            Image returnImage = Image.FromStream(ms);            
             return returnImage;
         }
     }
