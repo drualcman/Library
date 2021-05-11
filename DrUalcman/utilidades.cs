@@ -185,6 +185,7 @@ namespace drualcman
                 ch = Convert.ToChar(num1);
                 builder.Append(ch);
             }
+            
             return builder.ToString();
         }
 
@@ -206,6 +207,7 @@ namespace drualcman
                     retorno += item.Value;
                 }
             }
+            
             return retorno;
         }
 
@@ -243,7 +245,7 @@ namespace drualcman
 
             if (youtubeMatch.Success)
                 id = youtubeMatch.Groups[youtubeMatch.Groups.Count - 1].Value;
-
+            
             return id;
         }
 
@@ -308,7 +310,7 @@ namespace drualcman
         /// <returns></returns>
         public byte[] imageToByteArray(Image imageIn, ImageFormat formato)
         {
-            MemoryStream ms = new MemoryStream();
+            using MemoryStream ms = new MemoryStream();
             imageIn.Save(ms, formato);
             return ms.ToArray();
         }
@@ -351,8 +353,8 @@ namespace drualcman
         /// <returns></returns>
         public Image byteArrayToImage(byte[] byteArrayIn)
         {
-            MemoryStream ms = new MemoryStream(byteArrayIn);
-            Image returnImage = Image.FromStream(ms);
+            using MemoryStream ms = new MemoryStream(byteArrayIn);
+            Image returnImage = Image.FromStream(ms);            
             return returnImage;
         }
     }
