@@ -218,7 +218,7 @@ namespace drualcman
 
                 try
                 {
-                    serverURL = this.Context.Request.Scheme + "://" + this.Context.Request.Host.Host;
+                    serverURL = this.Context.Request.Scheme + "://" + this.Context.Request.Host.Value;
                 }
                 catch
                 {
