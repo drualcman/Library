@@ -24,6 +24,17 @@ namespace drualcman.Data.Converters
             return dt.FromStream(data, separator);
         }
 
+
+        /// <summary>
+        /// get aDataTable from Stream Data
+        /// </summary>
+        /// <param name="data"></param>
+        public static DataTable FromJson(string data)
+        {
+            DataTable dt = new DataTable();
+            return dt.FromJson(data);
+        }
+
         /// <summary>
         /// Get list of object send from data table
         /// </summary>
