@@ -1,4 +1,6 @@
-﻿using System;
+﻿using drualcman.Attributes;
+using drualcman.Enums;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -24,28 +26,59 @@ namespace drualcman.Data.Extensions
         {
             if (dt.Rows.Count > 0)
             {
+                List<TableName> tables = new List<TableName>();
                 List<TModel> result = new List<TModel>();
                 PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                int tableCount = 0;
+                TableName newTable = new TableName(typeof(TModel).Name, $"t{tableCount}", InnerDirection.NONE, string.Empty, string.Empty);
+                tables.Add(newTable);
+
+                bool isDirectQuery = columns[0].IndexOf(".") < 0;
+
                 foreach (DataRow row in dt.Rows)
                 {
                     TModel item = new TModel();
 
                     string[] rowCols = row.ColumnNamesToArray();
                     bool hasData = false;
-                    foreach (PropertyInfo pi in properties)
+                    int c = properties.Length;
+                    for (int i = 0; i < c; i++)
                     {
-                        if (columns.Contains(pi.Name, StringComparer.OrdinalIgnoreCase) && 
-                            rowCols.Contains(pi.Name, StringComparer.OrdinalIgnoreCase))
+                        DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
+                        string columName;
+                        if (field is not null)
+                        {
+                            if (!field.Ignore)
+                            {
+                                if (isDirectQuery)
+                                    columName = properties[i].Name;
+                                else if (field.Inner == InnerDirection.NONE)
+                                    columName = $"{tables[0].Short}.{properties[i].Name}";
+                                else
+                                {
+                                    columName = $"{tables[0].Short}.{properties[i].Name}";
+                                }
+                            }
+                            else
+                                columName = string.Empty;
+                        }
+                        else
+                        {
+                            if (isDirectQuery)
+                                columName = properties[i].Name;
+                            else
+                                columName = $"{tables[0].Short}.{properties[i].Name}";
+                        }
+
+                        if (columns.Contains(columName, StringComparer.OrdinalIgnoreCase) &&
+                            rowCols.Contains(columName, StringComparer.OrdinalIgnoreCase))
                         {
                             try
                             {
-                                pi.SetValue(item, row[pi.Name], null);
+                                properties[i].SetValue(item, row[columName], null);
                                 hasData = true;
                             }
-                            catch
-                            {
-
-                            }
+                            catch { }
                         }
                     }
                     if (hasData) result.Add(item);      //only add the item if have some to add

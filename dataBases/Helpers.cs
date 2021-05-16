@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 
 namespace drualcman
 {
+    /// <summary>
+    /// Setup inner model relationship
+    /// </summary>
+    public record TableName(string Name, string Short, InnerDirection Inner, string Column, string Index);
+
     public partial class dataBases
     {
         #region security
@@ -108,8 +113,6 @@ namespace drualcman
         }
         #endregion
 
-        record TableName(string Name, string Short, InnerDirection Inner, string Column, string Index);
-
         /// <summary>
         /// Get the select from the properties name about the model send
         /// </summary>
@@ -138,7 +141,7 @@ namespace drualcman
             for (int i = 0; i < c; i++)
             {
                 DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
-                string fieldName = properties[i].Name;
+                string fieldName;
                 if (field is not null)
                 {
                     if (!field.Ignore)
@@ -157,8 +160,11 @@ namespace drualcman
                                 fieldName = field.Name;
                         }
                     }
-                    else fieldName = string.Empty;
+                    else
+                        fieldName = string.Empty;
                 }
+                else
+                    fieldName = properties[i].Name;
                 if (!string.IsNullOrEmpty(fieldName))
                     retorno.Append($" {tables[0].Short}.[{fieldName}] [{tables[0].Short}.{fieldName}],");
                 
