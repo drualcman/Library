@@ -211,7 +211,7 @@ namespace drualcman
                                 {
                                     foundSome = true;
                                     KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == field.IndexedName).FirstOrDefault();
-                                    retorno.Append($" {tables[0].Short}.[{field.IndexedName}] = {where.Value} ");
+                                    retorno.Append($" {tables[0].Short}.[{fieldName}] = {where.Value} ");
                                     retorno.Append("AND");
                                 }
                             }
