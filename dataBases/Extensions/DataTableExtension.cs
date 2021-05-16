@@ -56,7 +56,15 @@ namespace drualcman.Data.Extensions
                                     columName = $"{tables[0].Short}.{properties[i].Name}";
                                 else
                                 {
-                                    columName = $"{tables[0].Short}.{properties[i].Name}";
+                                    columName = string.Empty;
+                                    try
+                                    {
+                                        properties[i].SetValue(item,
+                                            ColumnToObject(ref columns, row, properties[i].PropertyType, ref tables, ref tableCount),
+                                            null);
+                                        hasData = true;
+                                    }
+                                    catch { }
                                 }
                             }
                             else
@@ -348,6 +356,66 @@ namespace drualcman.Data.Extensions
         #endregion
         #endregion
 
+        static object ColumnToObject(ref string[] columns, DataRow row, Type model,
+            ref List<TableName> tables, ref int tableCount) 
+        {
+            PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            TableName table = tables.Where(t => t.Name == model.Name).FirstOrDefault();
+            if (table is null)
+            {
+                tableCount++;
+                table = new TableName(model.Name, $"t{tableCount}", InnerDirection.NONE, string.Empty, string.Empty);
+                tables.Add(table);                
+            }
+            
+
+            object item = Assembly.GetAssembly(model).CreateInstance(model.FullName, true);            
+
+            string[] rowCols = row.ColumnNamesToArray();
+            int c = properties.Length;
+            for (int i = 0; i < c; i++)
+            {
+                DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
+                string columName;
+                if (field is not null)
+                {
+                    if (!field.Ignore)
+                    {
+                        if (field.Inner == InnerDirection.NONE)
+                            columName = $"{table.Short}.{properties[i].Name}";
+                        else
+                        {
+                            columName = string.Empty;
+                            try
+                            {
+                                properties[i].SetValue(item, 
+                                    ColumnToObject(ref columns, row, properties[i].PropertyType, ref tables, ref tableCount), null);                                
+                            }
+                            catch { }
+                        }
+                    }
+                    else
+                        columName = string.Empty;
+                }
+                else
+                {
+                    columName = $"{table.Short}.{properties[i].Name}";
+                }
+
+                if (columns.Contains(columName, StringComparer.OrdinalIgnoreCase) &&
+                    rowCols.Contains(columName, StringComparer.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        properties[i].SetValue(item, row[columName], null);
+                    }
+                    catch { }
+                }
+            }
+
+            return item;
+        }
 
         #region Helpers
         private static string GenerateJsonProperty(DataTable dt, int row, int col, bool isLast = false)
