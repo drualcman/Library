@@ -90,7 +90,9 @@ namespace drualcman.Data.Extensions
                     jsonString.Append("{");
                     for (int col = 0; col < c; col++)
                     {
-                        jsonString.Append(@"""" + dt.Columns[col].ColumnName + @""":");
+                        jsonString.Append("\"");
+                        jsonString.Append(dt.Columns[col].ColumnName);
+                        jsonString.Append("\":");
 
                         bool last = !(col < c - 1);
                         jsonString.Append(GenerateJsonProperty(dt, row, col, last));
@@ -319,149 +321,55 @@ namespace drualcman.Data.Extensions
         {
             // IF LAST PROPERTY THEN REMOVE 'COMMA'  IF NOT LAST PROPERTY THEN ADD 'COMMA'
             string addComma = isLast ? "" : ",";
-            numeros n = new numeros();
             StringBuilder jsonString = new StringBuilder();
             if (dt.Rows[row][col] == DBNull.Value)
             {
-                jsonString.Append(" null " + addComma);
+                jsonString.Append(" null ");
             }
             else if (dt.Columns[col].DataType == typeof(DateTime))
             {
-                jsonString.Append(@"""" + (((DateTime)dt.Rows[row][col]).ToString("yyyy-MM-dd HH':'mm':'ss")) + @"""" + addComma);
+                jsonString.Append("\"");
+                jsonString.Append(((DateTime)dt.Rows[row][col]).ToString("yyyy-MM-dd HH':'mm':'ss"));
+                jsonString.Append("\"");
             }
             else if (dt.Columns[col].DataType == typeof(string))
             {
-                jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
+                jsonString.Append("\"");
+                jsonString.Append(dt.Rows[row][col].ToString().Replace("\"", "\\\""));
+                jsonString.Append("\"");
             }
             else if (dt.Columns[col].DataType == typeof(bool))
             {
-                jsonString.Append(Convert.ToBoolean(dt.Rows[row][col]) ? "true" + addComma : "false" + addComma);
+                jsonString.Append(Convert.ToBoolean(dt.Rows[row][col]) ? "true" : "false");
             }
-            else if (dt.Columns[col].DataType == typeof(Int16))
+            else if (dt.Columns[col].DataType == typeof(Int16) ||
+                dt.Columns[col].DataType == typeof(Int32) ||
+                dt.Columns[col].DataType == typeof(Int64) ||
+                dt.Columns[col].DataType == typeof(Double) ||
+                dt.Columns[col].DataType == typeof(Decimal) ||
+                dt.Columns[col].DataType == typeof(Single) ||
+                dt.Columns[col].DataType == typeof(Byte) ||
+                dt.Columns[col].DataType == typeof(int) ||
+                dt.Columns[col].DataType == typeof(float) ||
+                dt.Columns[col].DataType == typeof(long) ||
+                dt.Columns[col].DataType == typeof(short))
             {
                 try
                 {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true) + addComma);
+                    jsonString.Append($"{dt.Rows[row][col]}");
                 }
                 catch
                 {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(Int32))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true, "{0:0}") + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(Int64))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true, "{0:0}") + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(int))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true, "{0:0}") + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(Double))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(Decimal))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(float))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(long))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(short))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(Single))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[row][col], true) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
-                }
-            }
-            else if (dt.Columns[col].DataType == typeof(Byte))
-            {
-                try
-                {
-                    jsonString.Append(Convert.ToByte(dt.Rows[row][col]) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
+                    jsonString.Append("null");
                 }
             }
             else
             {
-                jsonString.Append(@"""" + (dt.Rows[row][col].ToString().Replace("\"", "\\\"")) + @"""" + addComma);
+                jsonString.Append("\"");
+                jsonString.Append(dt.Rows[row][col].ToString().Replace("\"", "\\\""));
+                jsonString.Append("\"");
             }
+            jsonString.Append(addComma);
             return jsonString.ToString();
         }
 

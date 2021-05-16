@@ -1,4 +1,5 @@
 ﻿using drualcman.Attributes;
+using drualcman.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +13,7 @@ namespace drualcman
 {
     public partial class dataBases
     {
+        #region security
         private void CheckSqlInjection(string query, defLog log)
         {
             if (checkQuery(query))
@@ -65,7 +67,6 @@ namespace drualcman
             }            
         }
 
-
         /// <summary>
         /// Prevenir INJECTION SQL en las consultas
         /// </summary>
@@ -105,6 +106,9 @@ namespace drualcman
             else resultado = true;
             return resultado;
         }
+        #endregion
+
+        record TableName(string Name, string Short, InnerDirection Inner, string Column, string Index);
 
         /// <summary>
         /// Get the select from the properties name about the model send
@@ -114,7 +118,9 @@ namespace drualcman
         /// <returns></returns>
         public string SetQuery<TModel>()
         {
-            PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);  
+            PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            
+            List<TableName> tables = new List<TableName>();
             string tableName;
             DatabaseAttribute table = typeof(TModel).GetCustomAttribute<DatabaseAttribute>();
             if (table is not null)
@@ -123,6 +129,9 @@ namespace drualcman
                 else tableName = table.Name;
             }
             else tableName = typeof(TModel).Name;
+            int tableCount = 0;
+            TableName newTable = new TableName(tableName, $"t{tableCount}", InnerDirection.NONE, string.Empty, string.Empty);
+            tables.Add(newTable);
 
             StringBuilder retorno = new StringBuilder("SELECT ");
             int c = properties.Length;
@@ -134,17 +143,38 @@ namespace drualcman
                 {
                     if (!field.Ignore)
                     {
-                        if (string.IsNullOrEmpty(field.Name)) fieldName = properties[i].Name;
-                        else fieldName = field.Name;
+                        if (field.Inner != InnerDirection.NONE)
+                        {
+                            //add columns from the property model
+                            InnerColumns(properties[i], ref retorno, field, ref tables, ref tableCount);
+                            fieldName = string.Empty;
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(field.Name))
+                                fieldName = properties[i].Name;
+                            else
+                                fieldName = field.Name;
+                        }
                     }
                     else fieldName = string.Empty;
                 }
                 if (!string.IsNullOrEmpty(fieldName))
-                    retorno.Append($" [{fieldName}],");
+                    retorno.Append($" {tables[0].Short}.[{fieldName}] [{tables[0].Short}.{fieldName}],");
                 
             }
             retorno.Remove(retorno.Length - 1, 1);
-            retorno.Append($" FROM [{tableName}] ");
+            retorno.Append($" FROM [{tables[0].Name}] {tables[0].Short} ");
+
+            if (tables.Count() > 1)
+            {
+                //add inner joins depending of the model database attributes
+                int tc = tables.Count();
+                for (int i = 1; i < tc; i++)
+                {
+                    retorno.Append($" {tables[i].Inner} JOIN [{tables[i].Name}] {tables[i].Short} on {tables[0].Short}.{(string.IsNullOrEmpty(tables[i].Index) ? string.IsNullOrEmpty(tables[i].Column) ? $"{tables[i].Name}Id" : tables[i].Column : tables[i].Index)} = {tables[i].Short}.{(string.IsNullOrEmpty(tables[i].Column) ? $"{tables[i].Name}Id" : tables[i].Column)}");
+                }
+            }
 
             if (this.WhereRequired is not null)
             {
@@ -165,7 +195,7 @@ namespace drualcman
                                 {
                                     foundSome = true;
                                     KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
-                                    retorno.Append($" [{fieldName}] = {where.Value} ");
+                                    retorno.Append($" {tables[0].Short}.[{fieldName}] = {where.Value} ");
                                     retorno.Append("AND");
                                 }
                             }
@@ -175,7 +205,7 @@ namespace drualcman
                                 {
                                     foundSome = true;
                                     KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == field.IndexedName).FirstOrDefault();
-                                    retorno.Append($" [{fieldName}] = {where.Value} ");
+                                    retorno.Append($" {tables[0].Short}.[{field.IndexedName}] = {where.Value} ");
                                     retorno.Append("AND");
                                 }
                             }
@@ -187,7 +217,7 @@ namespace drualcman
                         {
                             foundSome = true;
                             KeyValuePair<string, object> where = this.WhereRequired.Where(k => k.Key == fieldName).FirstOrDefault();
-                            retorno.Append($" [{fieldName}] = {where.Value} ");
+                            retorno.Append($" {tables[0].Short}.[{fieldName}] = {where.Value} ");
                             retorno.Append("AND");
                         }
                     }
@@ -197,5 +227,59 @@ namespace drualcman
             }
             return retorno.ToString(); 
         }
+
+        private void InnerColumns(PropertyInfo column, ref StringBuilder retorno, DatabaseAttribute origin, ref List<TableName> tables, ref int tableCount)
+        {
+            Type t = column.PropertyType;
+            PropertyInfo[] properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            string tableName;
+            DatabaseAttribute table = t.GetCustomAttribute<DatabaseAttribute>();
+            if (table is not null)
+            {
+                if (string.IsNullOrEmpty(table.Name))
+                    tableName = t.Name;
+                else
+                    tableName = table.Name;
+            }
+            else
+                tableName = t.Name;
+
+            tableCount++;
+            string shortName = $"t{tableCount}";
+            TableName newTable = new TableName(tableName, shortName,  origin.Inner, 
+                origin.InnerColumn ?? origin.Name ?? "", origin.InnerIndex ??  origin.Name ?? origin.InnerColumn ?? "");
+            tables.Add(newTable);
+
+            int c = properties.Length;
+            for (int i = 0; i < c; i++)
+            {
+                DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
+                string fieldName = properties[i].Name;
+                if (field is not null)
+                {
+                    if (!field.Ignore)
+                    {
+                        if (field.Inner != InnerDirection.NONE)
+                        {
+                            //add columns from the property model
+                            InnerColumns(properties[i], ref retorno, field, ref tables, ref tableCount);
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(field.Name))
+                                fieldName = properties[i].Name;
+                            else
+                                fieldName = field.Name;
+                        }
+                    }
+                    else
+                        fieldName = string.Empty;
+                }
+                if (!string.IsNullOrEmpty(fieldName))
+                    retorno.Append($" {shortName}.[{fieldName}] {shortName}.{fieldName},");
+
+            }
+        }        
     }
 }
