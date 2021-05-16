@@ -277,7 +277,7 @@ namespace drualcman
                         fieldName = string.Empty;
                 }
                 if (!string.IsNullOrEmpty(fieldName))
-                    retorno.Append($" {shortName}.[{fieldName}] {shortName}.{fieldName},");
+                    retorno.Append($" {shortName}.[{fieldName}] [{shortName}.{fieldName}],");
 
             }
         }        
