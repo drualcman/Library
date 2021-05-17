@@ -121,33 +121,34 @@ namespace drualcman
         #region helpers
         private SqlCommand SetUpdate(string table, string[] colName, object[] colValue, string[] indexColumn, object[] index)
         {
-            string columns = string.Empty;
-            string values = string.Empty;
-            string indexes = string.Empty;
+            StringBuilder columns = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            StringBuilder indexes = new StringBuilder();
             int i;
 
             SqlCommand cmd = new SqlCommand();
-            cmd.Connection = this.cnnDDBB();
-            string sql = "UPDATE " + table + " SET ";
+            cmd.Connection = cnnDDBB();
+            StringBuilder sql = new StringBuilder($"UPDATE {table} SET");
             //check columns
             for (i = 0; i < colName.Count(); i++)
             {
-                columns += colName[i] + ",";
-                values += colValue[i] + ",";
+                columns.Append($"[{colName[i].Replace("[","").Replace("]", "")}],");
+                values.Append(colValue[i] + ",");
                 cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
-                sql += colName[i] + " = @value_" + i.ToString() + ",";
+                sql.Append($"{colName[i]} = @value_{i},");
             }
-            sql = sql.Remove(sql.Length - 1, 1);
-            sql += "  WHERE ";
+            sql.Remove(sql.Length - 1, 1);
+            sql.Append("  WHERE ");
             for (i = 0; i < indexColumn.Count(); i++)
             {
-                indexes += indexColumn[i] + "=";
-                indexes += index[i] + ",";
+                indexes.Append(indexColumn[i] + "=");
+                indexes.Append(index[i] + ",");
                 cmd.Parameters.AddWithValue("@index_" + i.ToString(), index[i]);
-                sql += indexColumn[i] + " = @index_" + i.ToString() + " AND ";
+                sql.Append($"{indexColumn[i]}  = @index_{i} AND ");
             }
-            sql = sql.Remove(sql.Length - 4, 4) + ";";
-            cmd.CommandText = sql;
+            sql.Remove(sql.Length - 4, 4);
+            sql.Append(";");
+            cmd.CommandText = sql.ToString();
             return cmd;
         }
         #endregion

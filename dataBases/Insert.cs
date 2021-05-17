@@ -112,26 +112,25 @@ namespace drualcman
         #region helpers
         private SqlCommand SetInsert(string table, string[] colName, object[] colValue)
         {
-            string columns = string.Empty;
-            string values = string.Empty;
-            string logValues = string.Empty;
+            StringBuilder columns = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            StringBuilder logValues = new StringBuilder();
             int i;
 
             SqlCommand cmd = new SqlCommand();
-            cmd.Connection = this.cnnDDBB();
+            cmd.Connection = cnnDDBB();
             //check columns
             for (i = 0; i < colName.Count(); i++)
             {
-                columns += colName[i] + ",";
-                values += "@value_" + i.ToString() + ",";
-                if (colValue[i] != null) logValues += colValue[i].ToString() + ",";
-                else logValues += "NULL,";                
+                columns.Append($"[{colName[i].Replace("[", "").Replace("]", "")}],");
+                values.Append($"@value_{i},");
+                if (colValue[i] != null) logValues.Append(colValue[i].ToString() + ",");
+                else logValues.Append("NULL,");
                 cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
             }
-            columns = columns.Remove(columns.Length - 1, 1);
-            values = values.Remove(values.Length - 1, 1);
-            string sql = "INSERT INTO " + table + "(" + columns + ") VALUES (" + values + ");";            
-            cmd.CommandText = sql;
+            columns.Remove(columns.Length - 1, 1);
+            values.Remove(values.Length - 1, 1);
+            cmd.CommandText = $"INSERT INTO {table} ({columns}) VALUES ({values});";            
             return cmd;
         }
         #endregion
