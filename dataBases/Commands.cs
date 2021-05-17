@@ -121,7 +121,7 @@ namespace drualcman
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = sql;
-                result = Execute(cmd);
+                result = Execute(cmd, timeout);
                 cmd.Dispose();
             }
             else
