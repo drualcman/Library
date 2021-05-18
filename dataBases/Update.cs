@@ -138,15 +138,18 @@ namespace drualcman
                 sql.Append($" [{colName[i].Replace("[", "").Replace("]", "")}] = @value_{i},");
             }
             sql.Remove(sql.Length - 1, 1);
-            sql.Append("  WHERE ");
-            for (i = 0; i < indexColumn.Count(); i++)
+            if (indexColumn.Count() > 0)
             {
-                indexes.Append(indexColumn[i] + "=");
-                indexes.Append(index[i] + ",");
-                cmd.Parameters.AddWithValue("@index_" + i.ToString(), index[i]);
-                sql.Append($" [{indexColumn[i].Replace("[", "").Replace("]", "")}]  = @index_{i} AND ");
+                sql.Append("  WHERE ");
+                for (i = 0; i < indexColumn.Count(); i++)
+                {
+                    indexes.Append(indexColumn[i] + "=");
+                    indexes.Append(index[i] + ",");
+                    cmd.Parameters.AddWithValue("@index_" + i.ToString(), index[i]);
+                    sql.Append($" [{indexColumn[i].Replace("[", "").Replace("]", "")}]  = @index_{i} AND ");
+                }
+                sql.Remove(sql.Length - 4, 4);
             }
-            sql.Remove(sql.Length - 4, 4);
             sql.Append(";");
             cmd.CommandText = sql.ToString();
             return cmd;
