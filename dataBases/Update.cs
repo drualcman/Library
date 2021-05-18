@@ -144,7 +144,7 @@ namespace drualcman
                 indexes.Append(indexColumn[i] + "=");
                 indexes.Append(index[i] + ",");
                 cmd.Parameters.AddWithValue("@index_" + i.ToString(), index[i]);
-                sql.Append($" [{indexColumn[i]}]  = @index_{i} AND ");
+                sql.Append($" [{indexColumn[i].Replace("[", "").Replace("]", "")}]  = @index_{i} AND ");
             }
             sql.Remove(sql.Length - 4, 4);
             sql.Append(";");
