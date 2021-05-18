@@ -128,7 +128,7 @@ namespace drualcman
 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = cnnDDBB();
-            StringBuilder sql = new StringBuilder($"UPDATE {table} SET");
+            StringBuilder sql = new StringBuilder($"UPDATE {table} SET ");
             //check columns
             for (i = 0; i < colName.Count(); i++)
             {
