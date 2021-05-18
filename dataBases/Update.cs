@@ -135,7 +135,7 @@ namespace drualcman
                 columns.Append($"[{colName[i].Replace("[","").Replace("]", "")}],");
                 values.Append(colValue[i] + ",");
                 cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
-                sql.Append($"{colName[i]} = @value_{i},");
+                sql.Append($" [{colName[i].Replace("[", "").Replace("]", "")}] = @value_{i},");
             }
             sql.Remove(sql.Length - 1, 1);
             sql.Append("  WHERE ");
