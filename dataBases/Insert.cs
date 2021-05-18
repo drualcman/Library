@@ -114,7 +114,6 @@ namespace drualcman
         {
             StringBuilder columns = new StringBuilder();
             StringBuilder values = new StringBuilder();
-            StringBuilder logValues = new StringBuilder();
             int i;
 
             SqlCommand cmd = new SqlCommand();
@@ -124,8 +123,6 @@ namespace drualcman
             {
                 columns.Append($"[{colName[i].Replace("[", "").Replace("]", "")}],");
                 values.Append($"@value_{i},");
-                if (colValue[i] != null) logValues.Append(colValue[i].ToString() + ",");
-                else logValues.Append("NULL,");
                 cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
             }
             columns.Remove(columns.Length - 1, 1);
