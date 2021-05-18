@@ -792,6 +792,23 @@ namespace drualcman
             this.WhereRequired = where;
         }
 
+        /// <summary>
+        /// Setup the parameter for the required where without the constructor
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        public void SetWhere(string column, object value)
+        {
+            if (this.WhereRequired.ContainsKey(column))
+            {
+                this.WhereRequired[column] = value;
+            }
+            else
+            {
+                this.WhereRequired.Add(column, value);
+            }
+        }
+
         public object GetWhereValue(string key)
         {
             return this.WhereRequired.Where(k => k.Key == key).FirstOrDefault().Value;
