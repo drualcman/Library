@@ -121,32 +121,28 @@ namespace drualcman
         #region helpers
         private SqlCommand SetUpdate(string table, string[] colName, object[] colValue, string[] indexColumn, object[] index)
         {
-            StringBuilder columns = new StringBuilder();
-            StringBuilder values = new StringBuilder();
-            StringBuilder indexes = new StringBuilder();
             int i;
 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = cnnDDBB();
-            StringBuilder sql = new StringBuilder($"UPDATE {table} SET");
+            StringBuilder sql = new StringBuilder($"UPDATE {table} SET ");
             //check columns
             for (i = 0; i < colName.Count(); i++)
             {
-                columns.Append($"[{colName[i].Replace("[","").Replace("]", "")}],");
-                values.Append(colValue[i] + ",");
                 cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
-                sql.Append($"{colName[i]} = @value_{i},");
+                sql.Append($" [{colName[i].Replace("[", "").Replace("]", "")}] = @value_{i},");
             }
             sql.Remove(sql.Length - 1, 1);
-            sql.Append("  WHERE ");
-            for (i = 0; i < indexColumn.Count(); i++)
+            if (indexColumn.Count() > 0)
             {
-                indexes.Append(indexColumn[i] + "=");
-                indexes.Append(index[i] + ",");
-                cmd.Parameters.AddWithValue("@index_" + i.ToString(), index[i]);
-                sql.Append($"{indexColumn[i]}  = @index_{i} AND ");
+                sql.Append("  WHERE ");
+                for (i = 0; i < indexColumn.Count(); i++)
+                {
+                    cmd.Parameters.AddWithValue($"@index_{i}", index[i]);
+                    sql.Append($" [{indexColumn[i].Replace("[", "").Replace("]", "")}]  = @index_{i} AND ");
+                }
+                sql.Remove(sql.Length - 4, 4);
             }
-            sql.Remove(sql.Length - 4, 4);
             sql.Append(";");
             cmd.CommandText = sql.ToString();
             return cmd;
