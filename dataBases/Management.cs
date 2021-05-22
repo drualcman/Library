@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace drualcman
@@ -188,14 +189,44 @@ namespace drualcman
         /// <summary>
         /// Comprobar si hay algun registro coincidente. La primera columna debe de ser un valor numerico
         /// </summary>
-        /// <param name="strSQL">La primera columna debe de ser un valor numerico</param>
+        /// <param name="querySQL">La primera columna debe de ser un valor numerico</param>
         /// <returns></returns>
         public bool ExisteEnDDBB(string querySQL)
         {
+            return ExisteEnDDBB(querySQL, 30);
+        }
+
+        /// <summary>
+        /// Comprobar si hay algun registro coincidente. La primera columna debe de ser un valor numerico
+        /// </summary>
+        /// <param name="querySQL">La primera columna debe de ser un valor numerico</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns></returns>
+        public bool ExisteEnDDBB(string querySQL, int timeout)
+        {
+            return HasRowsAsync(querySQL, timeout).Result;
+        }
+
+        /// <summary>
+        /// Comprobar si hay algun registro coincidente. La primera columna debe de ser un valor numerico
+        /// </summary>
+        /// <param name="sql">La primera columna debe de ser un valor numerico</param>
+        /// <returns></returns>
+        public async Task<bool> HasRowsAsync(string sql) =>
+            await HasRowsAsync(sql, 30);
+
+        /// <summary>
+        /// Comprobar si hay algun registro coincidente. La primera columna debe de ser un valor numerico
+        /// </summary>
+        /// <param name="sql">La primera columna debe de ser un valor numerico</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns></returns>
+        public async Task<bool> HasRowsAsync(string sql, int timeout)
+        {
             defLog log = new defLog(this.FolderLog);
-            log.start("ExisteEnDDBB(querySQL)", querySQL, "");
+            log.start("ExisteEnDDBB(querySQL)", sql, "");
             bool retorno = false;
-            if (string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
                 log.Dispose();
@@ -204,71 +235,58 @@ namespace drualcman
             }
             else
             {
-                if (checkQuery(querySQL))
+                if (checkQuery(sql))
                 {
                     // no permitir comentarios ni algunas instrucciones maliciosas
-                    if (querySQL.IndexOf("--") > -1)
+                    if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP TABLE ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else
                     {
-                        //comprobar si la secuencia SQL devuelve algún valor
-
-                        //int numReg = 0;
-
                         //realizar las acciones requeridas de la consulta SQL
-                        using (SqlConnection con = new SqlConnection(rutaDDBB))
+                        using SqlConnection con = new SqlConnection(rutaDDBB);
+                        try
                         {
-                            try
-                            {
-                                con.Open();
-                                SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
-                                DataSet ds = new DataSet();
-                                da.Fill(ds);
-                                da.Dispose();
-                                if (ds.Tables[0].Rows.Count > 0)
-                                {
-                                    retorno = true;
-                                }
-                                else
-                                {
-                                    retorno = false;
-                                }
-                                ds.Dispose();
-                            }
-                            catch (Exception ex)
-                            {
-                                con.Close();
-                                log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
-                                log.Dispose();
+                            con.Open();
+                            using SqlCommand command = new SqlCommand(sql, con);
+                            command.CommandTimeout = timeout;
+                            using SqlDataReader dr = await command.ExecuteReaderAsync();
+                            retorno = dr.HasRows;
+                        }
+                        catch (Exception ex)
+                        {
+                            log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                            log.Dispose();
 
-                                throw;
-                            }
+                            throw;
+                        }
+                        finally
+                        {
                             con.Close();
                         }
                     }
@@ -276,7 +294,8 @@ namespace drualcman
                 else
                     retorno = false;
             }
-            if (this.LogError) log.end(retorno, this.rutaDDBB);
+            if (this.LogError)
+                log.end(retorno, this.rutaDDBB);
             log.Dispose();
 
             return retorno;

@@ -24,7 +24,7 @@ namespace drualcman
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public List<TModel> ToList<TModel>() where TModel : new() =>
+        public List<TModel> List<TModel>() where TModel : new() =>
             List<TModel>("", 30);
 
 
@@ -36,7 +36,7 @@ namespace drualcman
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public List<TModel> ToList<TModel>(int timeout) where TModel : new() =>
+        public List<TModel> List<TModel>(int timeout) where TModel : new() =>
             List<TModel>("", timeout);
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace drualcman
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public List<TModel> ToList<TModel>(string sql) where TModel : new() =>
+        public List<TModel> List<TModel>(string sql) where TModel : new() =>
             List<TModel>(sql, 30);
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace drualcman
                 using SqlCommand command = new SqlCommand(querySQL, con);
                 command.CommandTimeout = timeout;
                 using SqlDataReader dr = await command.ExecuteReaderAsync();
-
+                dr.
                 List<TableName> tables = new List<TableName>();
                 List<TModel> result = new List<TModel>();
                 PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
