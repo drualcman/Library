@@ -13,6 +13,63 @@ namespace drualcman.Data.Extensions
 {
     public static class DataTableExtension
     {
+        #region columns
+        #region methods
+
+        /// <summary>
+        /// Get all column names from the table send
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static List<string> ColumnNamesToList(this DataTable dt)
+        {
+            List<string> names = new List<string>();
+
+            foreach (DataColumn item in dt.Columns)
+            {
+                names.Add(item.ColumnName);
+            }
+
+            return names;
+        }
+
+        /// <summary>
+        /// Get all column names from the table send
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static string[] ColumnNamesToArray(this DataTable dt)
+        {
+            List<string> names = new List<string>();
+
+            foreach (DataColumn item in dt.Columns)
+            {
+                names.Add(item.ColumnName);
+            }
+
+            return names.ToArray();
+        }
+
+        #endregion
+
+        #region async
+        /// <summary>
+        /// Get all column names from the table send
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static Task<List<string>> ColumnNamesToListAsync(this DataTable dt) => Task.FromResult(dt.ColumnNamesToList());
+
+        /// <summary>
+        /// Get all column names from the table send
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static Task<string[]> ColumnNamesToArrayAsync(this DataTable dt) => Task.FromResult(dt.ColumnNamesToArray());
+
+        #endregion
+        #endregion
+        
         #region methods
         #region TO
         /// <summary>
@@ -30,15 +87,16 @@ namespace drualcman.Data.Extensions
                 List<TModel> result = new List<TModel>();
                 PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 int tableCount = 0;
-                TableName newTable = new TableName(typeof(TModel).Name, $"t{tableCount}", InnerDirection.NONE, string.Empty, string.Empty);
+                TableName newTable = new TableName(typeof(TModel).Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
                 tables.Add(newTable);
 
                 bool isDirectQuery = columns[0].IndexOf(".") < 0;
+                List<string> hasList = new List<string>();
 
                 foreach (DataRow row in dt.Rows)
                 {
                     TModel item = new TModel();
-
+                    
                     string[] rowCols = row.ColumnNamesToArray();
                     bool hasData = false;
                     int c = properties.Length;
@@ -53,18 +111,30 @@ namespace drualcman.Data.Extensions
                                 if (isDirectQuery)
                                     columName = properties[i].Name;
                                 else if (field.Inner == InnerDirection.NONE)
-                                    columName = $"{tables[0].Short}.{properties[i].Name}";
+                                    columName = $"{tables[0].ShortName}.{properties[i].Name}";
                                 else
                                 {
                                     columName = string.Empty;
-                                    try
+
+                                    if (Helpers.ObjectHelpers.IsGenericList(properties[i].PropertyType.FullName)&& 
+                                        !hasList.Contains(properties[i].PropertyType.Name))
                                     {
-                                        properties[i].SetValue(item,
-                                            ColumnToObject(ref columns, row, properties[i].PropertyType, ref tables, ref tableCount),
-                                            null);
-                                        hasData = true;
+                                        hasList.Add(properties[i].PropertyType.Name);
+                                        Type[] genericType = properties[i].PropertyType.GetGenericArguments();
+                                        Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
+                                        properties[i].SetValue(item, Activator.CreateInstance(creatingCollectionType));
                                     }
-                                    catch { }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            properties[i].SetValue(item,
+                                                ColumnToObject(ref columns, row, properties[i].PropertyType, ref tables, ref tableCount),
+                                                null);
+                                            hasData = true;
+                                        }
+                                        catch { }
+                                    }
                                 }
                             }
                             else
@@ -75,7 +145,7 @@ namespace drualcman.Data.Extensions
                             if (isDirectQuery)
                                 columName = properties[i].Name;
                             else
-                                columName = $"{tables[0].Short}.{properties[i].Name}";
+                                columName = $"{tables[0].ShortName}.{properties[i].Name}";
                         }
 
                         if (columns.Contains(columName, StringComparer.OrdinalIgnoreCase) &&
@@ -91,6 +161,15 @@ namespace drualcman.Data.Extensions
                     }
                     if (hasData) result.Add(item);      //only add the item if have some to add
                 }
+
+                if (hasList.Any())
+                {
+                    //need to create a list of object who is named in the list
+                    //1. create a list grouped by main model
+                    //List<TModel> mainModel = result.g;
+
+                }
+
                 return result;
             }
             else return new List<TModel>();          //no results
@@ -356,8 +435,9 @@ namespace drualcman.Data.Extensions
         #endregion
         #endregion
 
-        static object ColumnToObject(ref string[] columns, DataRow row, Type model,
-            ref List<TableName> tables, ref int tableCount) 
+        #region Helpers
+        private static object ColumnToObject(ref string[] columns, DataRow row, Type model,
+            ref List<TableName> tables, ref int tableCount)
         {
             PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -365,12 +445,11 @@ namespace drualcman.Data.Extensions
             if (table is null)
             {
                 tableCount++;
-                table = new TableName(model.Name, $"t{tableCount}", InnerDirection.NONE, string.Empty, string.Empty);
-                tables.Add(table);                
+                table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
+                tables.Add(table);
             }
-            
 
-            object item = Assembly.GetAssembly(model).CreateInstance(model.FullName, true);            
+            var item = Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
 
             string[] rowCols = row.ColumnNamesToArray();
             int c = properties.Length;
@@ -383,14 +462,14 @@ namespace drualcman.Data.Extensions
                     if (!field.Ignore)
                     {
                         if (field.Inner == InnerDirection.NONE)
-                            columName = $"{table.Short}.{properties[i].Name}";
+                            columName = $"{table.ShortName}.{properties[i].Name}";
                         else
                         {
                             columName = string.Empty;
                             try
                             {
-                                properties[i].SetValue(item, 
-                                    ColumnToObject(ref columns, row, properties[i].PropertyType, ref tables, ref tableCount), null);                                
+                                properties[i].SetValue(item,
+                                    ColumnToObject(ref columns, row, properties[i].PropertyType, ref tables, ref tableCount), null);
                             }
                             catch { }
                         }
@@ -400,7 +479,7 @@ namespace drualcman.Data.Extensions
                 }
                 else
                 {
-                    columName = $"{table.Short}.{properties[i].Name}";
+                    columName = $"{table.ShortName}.{properties[i].Name}";
                 }
 
                 if (columns.Contains(columName, StringComparer.OrdinalIgnoreCase) &&
@@ -417,7 +496,6 @@ namespace drualcman.Data.Extensions
             return item;
         }
 
-        #region Helpers
         private static string GenerateJsonProperty(DataTable dt, int row, int col, bool isLast = false)
         {
             // IF LAST PROPERTY THEN REMOVE 'COMMA'  IF NOT LAST PROPERTY THEN ADD 'COMMA'
