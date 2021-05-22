@@ -24,10 +24,8 @@ namespace drualcman
         /// Devuelve una cadena con el resultado
         /// Si hay error devuelve el mensasje de error
         /// </returns>
-        public string ObtenerDato(string querySQL, int colSQL)
-        {
-            return ObtenerDato(querySQL, colSQL, 30);
-        }
+        public string ObtenerDato(string querySQL, int colSQL) =>
+            GetColAync(querySQL, colSQL, 30).Result;
 
         /// <summary>
         /// Obtiene un dato en concreo de la base de datos
@@ -39,10 +37,72 @@ namespace drualcman
         /// Devuelve una cadena con el resultado
         /// Si hay error devuelve el mensasje de error
         /// </returns>
-        public string ObtenerDato(string querySQL, int colSQL, int timeOut)
+        public string ObtenerDato(string querySQL, int colSQL, int timeOut) =>
+            GetColAync(querySQL, colSQL, timeOut).Result;
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public string ObtenerDato(string querySQL, string colSQL) =>
+            GetColAync(querySQL, colSQL, 30).Result;
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <param name="timeOut">Execution timeout</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public string ObtenerDato(string querySQL, string colSQL, int timeOut) =>
+            GetColAync(querySQL, colSQL, timeOut).Result;
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public async Task<string> GetColAync(string querySQL, int colSQL) =>
+            await GetColAync(querySQL, colSQL, 30);
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public async Task<string> GetColAync(string querySQL, string colSQL) =>
+            await GetColAync(querySQL, colSQL, 30);
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <param name="timeOut">Execution timeout</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public async Task<string> GetColAync(string querySQL, string colSQL, int timeOut)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ObtenerDato(querySQL, colSQL, timeOut)", querySQL, colSQL.ToString() + ", " + timeOut.ToString());
+            log.start("GetColAync(querySQL, colSQL, timeOut)", querySQL, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
             if (string.IsNullOrWhiteSpace(querySQL))
             {
@@ -86,71 +146,56 @@ namespace drualcman
                     }
                     else
                     {
-                        using (SqlConnection con = new SqlConnection(this.rutaDDBB))
+                        using SqlConnection con = new SqlConnection(this.rutaDDBB);
+
+                        try
                         {
+                            using SqlCommand cmd = new SqlCommand(querySQL, con);
+                            cmd.CommandTimeout = timeOut;
+                            con.Open();
                             try
                             {
-                                SqlCommand cmd = new SqlCommand(querySQL, con);
-                                cmd.CommandTimeout = timeOut;
-                                con.Open();
-
-                                try
+                                using SqlDataReader dr = await cmd.ExecuteReaderAsync();         // ejecutar el comando SQL
+                                if (dr.HasRows)
                                 {
-                                    SqlDataReader dr = cmd.ExecuteReader();         // ejecutar el comando SQL
                                     if (dr.Read())                                      // leer los datos
-                                        datoRetorno = dr.GetValue(colSQL).ToString();      // obtener el campo deseado
+                                        datoRetorno = dr[colSQL].ToString();      // obtener el campo deseado
                                     else
                                         datoRetorno = string.Empty;
-                                    dr.Close();                                     // cerrar la consulta
-                                    dr.Dispose();                                   // cerrar la conexión
                                 }
-                                catch (Exception exReader)
-                                {
-                                    cmd.Dispose();              // cerrar la conexión
-                                    con.Close();
-                                    log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
-                                    log.Dispose();
-
-                                    throw;
-                                }
-                                cmd.Dispose();              // cerrar la conexión
+                                else
+                                    datoRetorno = string.Empty;
+                                dr.Close();                                     // cerrar la consulta
                             }
-                            catch (Exception exConexion)
+                            catch (Exception exReader)
                             {
-                                con.Close();
-                                con.Dispose();
-                                log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
+                                log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
                                 log.Dispose();
 
                                 throw;
                             }
-                            // cerrar la conexión
-                            con.Close();
-                            con.Dispose();
                         }
-                        if (this.LogError) log.end(datoRetorno, this.rutaDDBB);
-                        log.Dispose();
+                        catch (Exception exConexion)
+                        {
+                            log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
+                            log.Dispose();
 
-                        return datoRetorno;
+                            throw;
+                        }
+                        finally
+                        {
+                            con.Close();
+                        }
+
+                        if (this.LogError)
+                            log.end(datoRetorno, this.rutaDDBB);
+                        log.Dispose();
                     }
                 }
                 else
-                    return string.Empty;
+                    datoRetorno = string.Empty;
+                return datoRetorno;
             }
-        }
-
-        /// <summary>
-        /// Obtiene un dato en concreo de la base de datos
-        /// </summary>
-        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
-        /// <param name="colSQL">Columna para situarnos</param> 
-        /// <returns>
-        /// Devuelve una cadena con el resultado
-        /// Si hay error devuelve el mensasje de error
-        /// </returns>
-        public string ObtenerDato(string querySQL, string colSQL)
-        {
-            return ObtenerDato(querySQL, colSQL, 30);
         }
 
         /// <summary>
@@ -163,27 +208,104 @@ namespace drualcman
         /// Devuelve una cadena con el resultado
         /// Si hay error devuelve el mensasje de error
         /// </returns>
-        public string ObtenerDato(string querySQL, string colSQL, int timeOut)
+        public async Task<string> GetColAync(string querySQL, int colSQL, int timeOut)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ObtenerDato(querySQL, colSQL)", querySQL, colSQL + ", " + timeOut.ToString());
-            string datoRetorno;
-            try
+            log.start("GetColAync(querySQL, colSQL, timeOut)", querySQL, colSQL.ToString() + ", " + timeOut.ToString());
+            string datoRetorno = string.Empty;
+            if (string.IsNullOrWhiteSpace(querySQL))
             {
-                DataTable dt = ConsultarConDataTable(querySQL);
-                datoRetorno = dt.Rows[0][colSQL].ToString();
-            }
-            catch (Exception ex)
-            {
-                log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
                 log.Dispose();
 
-                throw;
+                throw new ArgumentException("La cadena no puede ser nula");
             }
-            if (this.LogError) log.end(datoRetorno, this.rutaDDBB);
-            log.Dispose();
+            else
+            {
+                if (checkQuery(querySQL))
+                {
+                    // no permitir comentarios ni algunas instrucciones maliciosas
+                    if (querySQL.IndexOf("--") > -1)
+                    {
+                        log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
+                        log.Dispose();
 
-            return datoRetorno;
+                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                    }
+                    else if (querySQL.ToUpper().IndexOf("DROP TABLE ") > -1)
+                    {
+                        log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
+                        log.Dispose();
+
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    }
+                    else if (querySQL.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                    {
+                        log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
+                        log.Dispose();
+
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    }
+                    else if (querySQL.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                    {
+                        log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
+                        log.Dispose();
+
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    }
+                    else
+                    {
+                        using SqlConnection con = new SqlConnection(this.rutaDDBB);
+
+                        try
+                        {
+                            using SqlCommand cmd = new SqlCommand(querySQL, con);
+                            cmd.CommandTimeout = timeOut;
+                            con.Open();
+                            try
+                            {
+                                using SqlDataReader dr = await cmd.ExecuteReaderAsync();         // ejecutar el comando SQL
+                                if (dr.HasRows)
+                                {
+                                    if (dr.Read())                                      // leer los datos
+                                        datoRetorno = dr[colSQL].ToString();      // obtener el campo deseado
+                                    else
+                                        datoRetorno = string.Empty;
+                                }
+                                else
+                                    datoRetorno = string.Empty;
+                                dr.Close();                                     // cerrar la consulta
+                            }
+                            catch (Exception exReader)
+                            {
+                                log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
+                                log.Dispose();
+
+                                throw;
+                            }
+                        }
+                        catch (Exception exConexion)
+                        {
+                            log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
+                            log.Dispose();
+
+                            throw;
+                        }
+                        finally
+                        {
+                            con.Close();
+                        }
+
+                        if (this.LogError)
+                            log.end(datoRetorno, this.rutaDDBB);
+                        log.Dispose();
+
+                    }
+                }
+                else
+                    datoRetorno = string.Empty;
+                return datoRetorno;
+            }
         }
 
         /// <summary>
@@ -277,6 +399,7 @@ namespace drualcman
                             command.CommandTimeout = timeout;
                             using SqlDataReader dr = await command.ExecuteReaderAsync();
                             retorno = dr.HasRows;
+                            dr.Close();                                     // cerrar la consulta
                         }
                         catch (Exception ex)
                         {

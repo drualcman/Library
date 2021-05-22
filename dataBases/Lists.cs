@@ -122,7 +122,6 @@ namespace drualcman
                 using SqlCommand command = new SqlCommand(querySQL, con);
                 command.CommandTimeout = timeout;
                 using SqlDataReader dr = await command.ExecuteReaderAsync();
-                dr.
                 List<TableName> tables = new List<TableName>();
                 List<TModel> result = new List<TModel>();
                 PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
