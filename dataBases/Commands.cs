@@ -10,27 +10,27 @@ namespace drualcman
         /// <summary>
         /// Ejecuta un comando SQL
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// Retorna el valor obtenido del web service al ejecutar el comando
         /// </returns>
-        public bool ComandoSQL(string querySQL)
+        public bool ComandoSQL(string sql)
         {
-            return EjecutarSQL(querySQL);
+            return EjecutarSQL(sql);
         }
 
         /// <summary>
         /// Ejecuta un comando SQL
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// Retorna el valor obtenido del web service al ejecutar el comando
         /// </returns>
-        public bool EjecutarSQL(string querySQL)
+        public bool EjecutarSQL(string sql)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("EjecutarSQL(querySQL)", querySQL, "");
-            if (string.IsNullOrWhiteSpace(querySQL))
+            log.start("EjecutarSQL(sql)", sql, "");
+            if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
                 log.Dispose();
@@ -39,26 +39,26 @@ namespace drualcman
             }
             else
             {
-                if (checkQuery(querySQL))
+                if (checkQuery(sql))
                 {
                     //
                     // Comprobar que están indicando valores correctos (o casi)
                     //
                     // Que no sea una cadena vacía                    
 
-                    if ((querySQL.ToUpper().IndexOf("UPDATE ") < 0))
+                    if ((sql.ToUpper().IndexOf("UPDATE ") < 0))
                     {
-                        if ((querySQL.ToUpper().IndexOf("INSERT ") < 0))
+                        if ((sql.ToUpper().IndexOf("INSERT ") < 0))
                         {
-                            if ((querySQL.ToUpper().IndexOf("DELETE ") < 0))
+                            if ((sql.ToUpper().IndexOf("DELETE ") < 0))
                             {
-                                if ((querySQL.ToUpper().IndexOf("EXEC ") < 0))
+                                if ((sql.ToUpper().IndexOf("EXEC ") < 0))
                                 {
-                                    if ((querySQL.ToUpper().IndexOf("DROP ") < 0))
+                                    if ((sql.ToUpper().IndexOf("DROP ") < 0))
                                     {
-                                        if ((querySQL.ToUpper().IndexOf("ALTER ") < 0))
+                                        if ((sql.ToUpper().IndexOf("ALTER ") < 0))
                                         {
-                                            if ((querySQL.ToUpper().IndexOf("CREATE ") < 0))
+                                            if ((sql.ToUpper().IndexOf("CREATE ") < 0))
                                             {
                                                 string err = "La cadena debe ser: " + "\r\n" +
                                                     "UPDATE < tabla > SET < campo=valor >" + "\r\n" +
@@ -68,7 +68,7 @@ namespace drualcman
                                                     "CREATE TABLE" + "\r\n" +
                                                     "DROP TABLE/PROCEDURE/FUNCTION < tabla >" + "\r\n" +
                                                     "ALTER TABLE < tabla > < definicion >" + "\r\n" +
-                                                    "SQL: " + querySQL + "\n" + this.rutaDDBB;
+                                                    "SQL: " + sql + "\n" + this.rutaDDBB;
                                                 log.end(null, err);
                                                 log.Dispose();
 
@@ -82,16 +82,16 @@ namespace drualcman
                     }
 
 
-                    if (querySQL.IndexOf("--") > -1)
+                    if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
                     else
                     {
-                        bool retorno = ExecuteCommand(querySQL);
+                        bool retorno = ExecuteCommand(sql);
                         if (this.LogError) log.end(retorno, this.rutaDDBB);
                         log.Dispose();
                         return retorno;
@@ -211,52 +211,52 @@ namespace drualcman
         /// <summary>
         /// Ejecutar un SP en el servidor devuelve XML con los datos
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// </returns>
-        public string EjecutarSP(string querySQL)
+        public string EjecutarSP(string sql)
         {
-            if ((querySQL.ToUpper().IndexOf("EXEC ") < 0))
-                querySQL = "EXEC " + querySQL;
+            if ((sql.ToUpper().IndexOf("EXEC ") < 0))
+                sql = "EXEC " + sql;
 
-            return ConsultarConXML(querySQL);
+            return ConsultarConXML(sql);
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados por</param>
         /// <returns>
         /// </returns>
-        public string EjecutarSP(string querySQL, string param)
+        public string EjecutarSP(string sql, string param)
         {
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(querySQL) || string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
 
-            return EjecutarSP(querySQL + " " + param);
+            return EjecutarSP(sql + " " + param);
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados en array string</param>
         /// <returns>
         /// </returns>
-        public string EjecutarSP(string querySQL, string[] param)
+        public string EjecutarSP(string sql, string[] param)
         {
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(querySQL) || string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
@@ -270,7 +270,7 @@ namespace drualcman
 
             doParam = doParam.TrimEnd().Remove(doParam.Length - 2, 1);
 
-            return EjecutarSP(querySQL + " " + doParam);
+            return EjecutarSP(sql + " " + doParam);
         }
 
         #region tasks

@@ -18,93 +18,93 @@ namespace drualcman
         /// <summary>
         /// Obtiene un dato en concreo de la base de datos
         /// </summary>
-        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="sql">Consulta a SQL ejecutar</param> 
         /// <param name="colSQL">Columna para situarnos</param> 
         /// <returns>
         /// Devuelve una cadena con el resultado
         /// Si hay error devuelve el mensasje de error
         /// </returns>
-        public string ObtenerDato(string querySQL, int colSQL) =>
-            GetColAync(querySQL, colSQL, 30).Result;
+        public string ObtenerDato(string sql, int colSQL) =>
+            GetColAync(sql, colSQL, 30).Result;
 
         /// <summary>
         /// Obtiene un dato en concreo de la base de datos
         /// </summary>
-        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="sql">Consulta a SQL ejecutar</param> 
         /// <param name="colSQL">Columna para situarnos</param> 
         /// <param name="timeOut">Execution timeout</param> 
         /// <returns>
         /// Devuelve una cadena con el resultado
         /// Si hay error devuelve el mensasje de error
         /// </returns>
-        public string ObtenerDato(string querySQL, int colSQL, int timeOut) =>
-            GetColAync(querySQL, colSQL, timeOut).Result;
+        public string ObtenerDato(string sql, int colSQL, int timeOut) =>
+            GetColAync(sql, colSQL, timeOut).Result;
 
         /// <summary>
         /// Obtiene un dato en concreo de la base de datos
         /// </summary>
-        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="sql">Consulta a SQL ejecutar</param> 
         /// <param name="colSQL">Columna para situarnos</param> 
         /// <returns>
         /// Devuelve una cadena con el resultado
         /// Si hay error devuelve el mensasje de error
         /// </returns>
-        public string ObtenerDato(string querySQL, string colSQL) =>
-            GetColAync(querySQL, colSQL, 30).Result;
+        public string ObtenerDato(string sql, string colSQL) =>
+            GetColAync(sql, colSQL, 30).Result;
 
         /// <summary>
         /// Obtiene un dato en concreo de la base de datos
         /// </summary>
-        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
-        /// <param name="colSQL">Columna para situarnos</param> 
-        /// <param name="timeOut">Execution timeout</param> 
-        /// <returns>
-        /// Devuelve una cadena con el resultado
-        /// Si hay error devuelve el mensasje de error
-        /// </returns>
-        public string ObtenerDato(string querySQL, string colSQL, int timeOut) =>
-            GetColAync(querySQL, colSQL, timeOut).Result;
-
-        /// <summary>
-        /// Obtiene un dato en concreo de la base de datos
-        /// </summary>
-        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
-        /// <param name="colSQL">Columna para situarnos</param> 
-        /// <returns>
-        /// Devuelve una cadena con el resultado
-        /// Si hay error devuelve el mensasje de error
-        /// </returns>
-        public async Task<string> GetColAync(string querySQL, int colSQL) =>
-            await GetColAync(querySQL, colSQL, 30);
-
-        /// <summary>
-        /// Obtiene un dato en concreo de la base de datos
-        /// </summary>
-        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
-        /// <param name="colSQL">Columna para situarnos</param> 
-        /// <returns>
-        /// Devuelve una cadena con el resultado
-        /// Si hay error devuelve el mensasje de error
-        /// </returns>
-        public async Task<string> GetColAync(string querySQL, string colSQL) =>
-            await GetColAync(querySQL, colSQL, 30);
-
-        /// <summary>
-        /// Obtiene un dato en concreo de la base de datos
-        /// </summary>
-        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="sql">Consulta a SQL ejecutar</param> 
         /// <param name="colSQL">Columna para situarnos</param> 
         /// <param name="timeOut">Execution timeout</param> 
         /// <returns>
         /// Devuelve una cadena con el resultado
         /// Si hay error devuelve el mensasje de error
         /// </returns>
-        public async Task<string> GetColAync(string querySQL, string colSQL, int timeOut)
+        public string ObtenerDato(string sql, string colSQL, int timeOut) =>
+            GetColAync(sql, colSQL, timeOut).Result;
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="sql">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public async Task<string> GetColAync(string sql, int colSQL) =>
+            await GetColAync(sql, colSQL, 30);
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="sql">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public async Task<string> GetColAync(string sql, string colSQL) =>
+            await GetColAync(sql, colSQL, 30);
+
+        /// <summary>
+        /// Obtiene un dato en concreo de la base de datos
+        /// </summary>
+        /// <param name="sql">Consulta a SQL ejecutar</param> 
+        /// <param name="colSQL">Columna para situarnos</param> 
+        /// <param name="timeOut">Execution timeout</param> 
+        /// <returns>
+        /// Devuelve una cadena con el resultado
+        /// Si hay error devuelve el mensasje de error
+        /// </returns>
+        public async Task<string> GetColAync(string sql, string colSQL, int timeOut)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("GetColAync(querySQL, colSQL, timeOut)", querySQL, colSQL.ToString() + ", " + timeOut.ToString());
+            log.start("GetColAync(sql, colSQL, timeOut)", sql, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
-            if (string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
                 log.Dispose();
@@ -113,36 +113,36 @@ namespace drualcman
             }
             else
             {
-                if (checkQuery(querySQL))
+                if (checkQuery(sql))
                 {
                     // no permitir comentarios ni algunas instrucciones maliciosas
-                    if (querySQL.IndexOf("--") > -1)
+                    if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP TABLE ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else
                     {
@@ -150,7 +150,7 @@ namespace drualcman
 
                         try
                         {
-                            using SqlCommand cmd = new SqlCommand(querySQL, con);
+                            using SqlCommand cmd = new SqlCommand(sql, con);
                             cmd.CommandTimeout = timeOut;
                             con.Open();
                             try
@@ -201,19 +201,19 @@ namespace drualcman
         /// <summary>
         /// Obtiene un dato en concreo de la base de datos
         /// </summary>
-        /// <param name="querySQL">Consulta a SQL ejecutar</param> 
+        /// <param name="sql">Consulta a SQL ejecutar</param> 
         /// <param name="colSQL">Columna para situarnos</param> 
         /// <param name="timeOut">Execution timeout</param> 
         /// <returns>
         /// Devuelve una cadena con el resultado
         /// Si hay error devuelve el mensasje de error
         /// </returns>
-        public async Task<string> GetColAync(string querySQL, int colSQL, int timeOut)
+        public async Task<string> GetColAync(string sql, int colSQL, int timeOut)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("GetColAync(querySQL, colSQL, timeOut)", querySQL, colSQL.ToString() + ", " + timeOut.ToString());
+            log.start("GetColAync(sql, colSQL, timeOut)", sql, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
-            if (string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
                 log.Dispose();
@@ -222,36 +222,36 @@ namespace drualcman
             }
             else
             {
-                if (checkQuery(querySQL))
+                if (checkQuery(sql))
                 {
                     // no permitir comentarios ni algunas instrucciones maliciosas
-                    if (querySQL.IndexOf("--") > -1)
+                    if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP TABLE ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else
                     {
@@ -259,7 +259,7 @@ namespace drualcman
 
                         try
                         {
-                            using SqlCommand cmd = new SqlCommand(querySQL, con);
+                            using SqlCommand cmd = new SqlCommand(sql, con);
                             cmd.CommandTimeout = timeOut;
                             con.Open();
                             try
@@ -311,22 +311,22 @@ namespace drualcman
         /// <summary>
         /// Comprobar si hay algun registro coincidente. La primera columna debe de ser un valor numerico
         /// </summary>
-        /// <param name="querySQL">La primera columna debe de ser un valor numerico</param>
+        /// <param name="sql">La primera columna debe de ser un valor numerico</param>
         /// <returns></returns>
-        public bool ExisteEnDDBB(string querySQL)
+        public bool ExisteEnDDBB(string sql)
         {
-            return ExisteEnDDBB(querySQL, 30);
+            return ExisteEnDDBB(sql, 30);
         }
 
         /// <summary>
         /// Comprobar si hay algun registro coincidente. La primera columna debe de ser un valor numerico
         /// </summary>
-        /// <param name="querySQL">La primera columna debe de ser un valor numerico</param>
+        /// <param name="sql">La primera columna debe de ser un valor numerico</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns></returns>
-        public bool ExisteEnDDBB(string querySQL, int timeout)
+        public bool ExisteEnDDBB(string sql, int timeout)
         {
-            return HasRowsAsync(querySQL, timeout).Result;
+            return HasRowsAsync(sql, timeout).Result;
         }
 
         /// <summary>
@@ -346,7 +346,7 @@ namespace drualcman
         public async Task<bool> HasRowsAsync(string sql, int timeout)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ExisteEnDDBB(querySQL)", sql, "");
+            log.start("ExisteEnDDBB(sql)", sql, "");
             bool retorno = false;
             if (string.IsNullOrWhiteSpace(sql))
             {
@@ -403,7 +403,7 @@ namespace drualcman
                         }
                         catch (Exception ex)
                         {
-                            log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                            log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
                             log.Dispose();
 
                             throw;
@@ -427,32 +427,32 @@ namespace drualcman
         /// <summary>
         /// Devuelve datos de la consulta en formato XML
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>Devuelve los datos en formato XML, Si hay error devuelve el texto del error</returns>
-        public string ConsultarConXML(string querySQL)
+        public string ConsultarConXML(string sql)
         {
-            return ConsultarConXML(querySQL, 30);
+            return ConsultarConXML(sql, 30);
         }
 
         /// <summary>
         /// Devuelve datos de la consulta en formato XML
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>Devuelve los datos en formato XML, Si hay error devuelve el texto del error</returns>
-        public string ConsultarConXML(string querySQL, int timeout)
+        public string ConsultarConXML(string sql, int timeout)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ConsultarConXML", querySQL, "");
+            log.start("ConsultarConXML", sql, "");
             // Que no sea una cadena vacía
-            if (string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula.\n" + this.rutaDDBB);
                 log.Dispose();
 
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
-            if (checkQuery(querySQL))
+            if (checkQuery(sql))
             {
                 //
                 // Comprobar que están indicando valores correctos (o casi)
@@ -461,52 +461,52 @@ namespace drualcman
                 bool ok = true;
                 // no permitir comentarios ni algunas instrucciones maliciosas
                 // no permitir comentarios ni algunas instrucciones maliciosas
-                if (querySQL.IndexOf("--") > -1)
+                if (sql.IndexOf("--") > -1)
                 {
                     log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                    throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP TABLE ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("EXEC") < 0) // Comprobar que realmente se use SELECT, o EXEC
+                else if (sql.ToUpper().IndexOf("EXEC") < 0) // Comprobar que realmente se use SELECT, o EXEC
                 {
                     ok = false;
                 }
                 else ok = true;
 
                 // Comprobar que realmente se use SELECT, o EXEC
-                if (querySQL.ToUpper().IndexOf("SELECT") < 0 && ok == false)
+                if (sql.ToUpper().IndexOf("SELECT") < 0 && ok == false)
                 {
-                    log.end(null, "La cadena debe ser SELECT campos FROM tabla / EXEC Storage Proces and variables.SQL: " + querySQL + "\n" + this.rutaDDBB);
+                    log.end(null, "La cadena debe ser SELECT campos FROM tabla / EXEC Storage Proces and variables.SQL: " + sql + "\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla / EXEC Storage Proces and variables. SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla / EXEC Storage Proces and variables. SQL: " + sql);
                 }
                 else
                 {
                     SqlConnection con = new SqlConnection(rutaDDBB);
-                    SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
+                    SqlDataAdapter da = new SqlDataAdapter(sql, con);
                     da.SelectCommand.CommandTimeout = timeout;
                     DataSet ds = new DataSet();
                     try
@@ -518,7 +518,7 @@ namespace drualcman
                         da.Dispose();
                         ds.Dispose();
                         con.Close();
-                        log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                        log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
                         log.Dispose();
 
                         throw;
@@ -547,39 +547,39 @@ namespace drualcman
         /// <returns>Devuelve el siguiente entero disponible</returns>
         public int ObtenerNuevoId(string Tabla)
         {
-            string querySQL = "SELECT IDENT_CURRENT('" + Tabla + "')";
+            string sql = "SELECT IDENT_CURRENT('" + Tabla + "')";
             defLog log = new defLog(this.FolderLog);
-            log.start("ObtenerNuevoId(tabla)", querySQL, Tabla);
-            if (checkQuery(querySQL))
+            log.start("ObtenerNuevoId(tabla)", sql, Tabla);
+            if (checkQuery(sql))
             {
                 // no permitir comentarios ni algunas instrucciones maliciosas
-                if (querySQL.IndexOf("--") > -1)
+                if (sql.IndexOf("--") > -1)
                 {
                     log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                    throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP TABLE ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else
                 {
@@ -588,14 +588,14 @@ namespace drualcman
 
                     try
                     {
-                        string dato = ObtenerDato(querySQL, 0);
+                        string dato = ObtenerDato(sql, 0);
                         //if (string.IsNullOrEmpty(dato)) dato = "0";
                         newId = Convert.ToInt32(dato);
                         newId++;
                     }
                     catch (Exception ex)
                     {
-                        log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                        log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
                         log.Dispose();
 
                         throw;
@@ -623,54 +623,54 @@ namespace drualcman
         /// <returns>Devuelve el siguiente entero disponible</returns>
         public int ObtenerNuevoId(string Tabla, string col)
         {
-            string querySQL = "SELECT TOP 1 " + col + " FROM " + Tabla +
+            string sql = "SELECT TOP 1 " + col + " FROM " + Tabla +
                 " ORDER BY " + col + " DESC";
             defLog log = new defLog(this.FolderLog);
-            log.start("ObtenerNuevoId(tabla, col)", querySQL, Tabla + "," + col);
-            if (checkQuery(querySQL))
+            log.start("ObtenerNuevoId(tabla, col)", sql, Tabla + "," + col);
+            if (checkQuery(sql))
             {
                 // no permitir comentarios ni algunas instrucciones maliciosas
-                if (querySQL.IndexOf("--") > -1)
+                if (sql.IndexOf("--") > -1)
                 {
                     log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                    throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP TABLE ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else
                 {
                     int newId = 0;
                     try
                     {
-                        string dato = ObtenerDato(querySQL, 0);
+                        string dato = ObtenerDato(sql, 0);
                         if (string.IsNullOrEmpty(dato)) newId = 0;
                         else newId = Convert.ToInt32(dato);
                         newId++;
                     }
                     catch (Exception ex)
                     {
-                        log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                        log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
                         log.Dispose();
 
                         throw;
@@ -694,18 +694,18 @@ namespace drualcman
         /// <summary>
         /// Ejecutar un SP en el servidor
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// </returns>
-        public string escalarSP(string querySQL)
+        public string escalarSP(string sql)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ConsutarConDataSet", querySQL, "");
+            log.start("ConsutarConDataSet", sql, "");
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(querySQL))
+            if (string.IsNullOrEmpty(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
                 log.Dispose();
@@ -713,44 +713,44 @@ namespace drualcman
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
 
-            if (checkQuery(querySQL))
+            if (checkQuery(sql))
             {
                 // no permitir comentarios ni algunas instrucciones maliciosas
-                if (querySQL.IndexOf("--") > -1)
+                if (sql.IndexOf("--") > -1)
                 {
                     log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                    throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP TABLE ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
-                else if (querySQL.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                     log.Dispose();
 
-                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                    throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else
                 {
-                    if ((querySQL.ToUpper().IndexOf("EXEC ") < 0))
-                        querySQL = "EXEC " + querySQL;
+                    if ((sql.ToUpper().IndexOf("EXEC ") < 0))
+                        sql = "EXEC " + sql;
 
                     SqlConnection cnn = new SqlConnection(rutaDDBB);
-                    SqlCommand cmd = new SqlCommand(querySQL, cnn);
+                    SqlCommand cmd = new SqlCommand(sql, cnn);
 
                     string datoRetorno = string.Empty;
 
@@ -790,38 +790,38 @@ namespace drualcman
         /// <summary>
         /// Ejecutar un SP en el servidor
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados por</param>
         /// <returns>
         /// </returns>
-        public string escalarSP(string querySQL, string param)
+        public string escalarSP(string sql, string param)
         {
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(querySQL) || string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
 
-            return escalarSP(querySQL + " " + param);
+            return escalarSP(sql + " " + param);
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados en array string</param>
         /// <returns>
         /// </returns>
-        public string escalarSP(string querySQL, string[] param)
+        public string escalarSP(string sql, string[] param)
         {
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(querySQL) || string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
@@ -835,20 +835,20 @@ namespace drualcman
 
             doParam = doParam.TrimEnd().Remove(doParam.Length - 2, 1);
 
-            return escalarSP(querySQL + " " + doParam);
+            return escalarSP(sql + " " + doParam);
         }
 
         /// <summary>
         /// Obtener los datos de una consulta sql en formato ArrayList
         /// </summary>
-        /// <param name="querySQL">Consulta a ejecutar</param>
+        /// <param name="sql">Consulta a ejecutar</param>
         /// <returns></returns>
-        public ArrayList getData(string querySQL)
+        public ArrayList getData(string sql)
         {
             ArrayList retorno = new ArrayList();
             defLog log = new defLog(this.FolderLog);
-            log.start("getData(querySQ)", querySQL, "");
-            if (string.IsNullOrWhiteSpace(querySQL))
+            log.start("getData(querySQ)", sql, "");
+            if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
                 log.Dispose();
@@ -859,7 +859,7 @@ namespace drualcman
             {
                 try
                 {
-                    DataSet ds = ConsultarConDataSet(querySQL);
+                    DataSet ds = ConsultarConDataSet(sql);
 
                     foreach (DataTable table in ds.Tables)
                     {
@@ -883,7 +883,7 @@ namespace drualcman
                 }
                 catch (Exception ex)
                 {
-                    log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                    log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
                     log.Dispose();
 
                     throw;
@@ -898,14 +898,14 @@ namespace drualcman
         /// <summary>
         /// Obtener los datos de una consulta sql en formato ArrayList
         /// </summary>
-        /// <param name="querySQL">Consulta a ejecutar</param>
+        /// <param name="sql">Consulta a ejecutar</param>
         /// <returns></returns>
-        public ArrayList getData(string querySQL, int cols)
+        public ArrayList getData(string sql, int cols)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("GetData(querySQL, cols)", querySQL, cols.ToString());
+            log.start("GetData(sql, cols)", sql, cols.ToString());
             ArrayList retorno = new ArrayList();
-            if (string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
                 log.Dispose();
@@ -914,36 +914,36 @@ namespace drualcman
             }
             else
             {
-                if (checkQuery(querySQL))
+                if (checkQuery(sql))
                 {
                     // no permitir comentarios ni algunas instrucciones maliciosas
-                    if (querySQL.IndexOf("--") > -1)
+                    if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + querySQL);
+                        throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP TABLE ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
-                    else if (querySQL.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                    else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
                         log.Dispose();
 
-                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + querySQL);
+                        throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else
                     {
@@ -951,7 +951,7 @@ namespace drualcman
                         {
                             using (SqlConnection con = new SqlConnection(rutaDDBB))
                             {
-                                SqlCommand cmd = new SqlCommand(querySQL, con);
+                                SqlCommand cmd = new SqlCommand(sql, con);
                                 SqlDataReader ds;
 
                                 con.Open();
@@ -986,7 +986,7 @@ namespace drualcman
                         }
                         catch (Exception ex)
                         {
-                            log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                            log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
                             log.Dispose();
 
                             throw;

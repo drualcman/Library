@@ -33,49 +33,49 @@ namespace drualcman
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public DataView ConsultarConDataView(string querySQL)
+        public DataView ConsultarConDataView(string sql)
         {
-            return ConsultarConDataView(querySQL, 30);
+            return ConsultarConDataView(sql, 30);
         }
 
         /// <summary>
         /// Return DataView
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// </returns>
-        public DataView DataView(string querySQL)=>
-            ConsultarConDataView(querySQL, 30);
+        public DataView DataView(string sql)=>
+            ConsultarConDataView(sql, 30);
 
         /// <summary>
         /// Return DataView
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public DataView DataView(string querySQL, int timeout)=>
-            ConsultarConDataView(querySQL, timeout);
+        public DataView DataView(string sql, int timeout)=>
+            ConsultarConDataView(sql, timeout);
 
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public DataView ConsultarConDataView(string querySQL, int timeout)
+        public DataView ConsultarConDataView(string sql, int timeout)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ConsultarConDataView", querySQL, "");
-            return ConsultarConDataTable(querySQL, timeout).DefaultView;
+            log.start("ConsultarConDataView", sql, "");
+            return ConsultarConDataTable(sql, timeout).DefaultView;
         }
         #endregion
 

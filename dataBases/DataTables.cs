@@ -35,128 +35,128 @@ namespace drualcman
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public DataTable ConsultarConDataTable(string querySQL) => ConsultarConDataTable(querySQL, 30);
+        public DataTable ConsultarConDataTable(string sql) => ConsultarConDataTable(sql, 30);
 
 
         /// <summary>
         /// Return DataTable from Query
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public DataTable DataTable(string querySQL) => ConsultarConDataTable(querySQL, 30);
+        public DataTable DataTable(string sql) => ConsultarConDataTable(sql, 30);
 
         /// <summary>
         /// Return DataTable from Query
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public DataTable DataTable(string querySQL, int timeout) => ConsultarConDataTable(querySQL, timeout);
+        public DataTable DataTable(string sql, int timeout) => ConsultarConDataTable(sql, timeout);
 
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// DataTable
         /// </returns>
-        public DataTable ConsultarConDataTable(string querySQL, int timeout)
+        public DataTable ConsultarConDataTable(string sql, int timeout)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ConsultarConDataTable", querySQL, "");
-            return ConsultarConDataSet(querySQL, timeout).Tables[0];
+            log.start("ConsultarConDataTable", sql, "");
+            return ConsultarConDataSet(sql, timeout).Tables[0];
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor y devolver la primera tabla como DataTable
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// </returns>
-        public DataTable spConDataTable(string querySQL)
+        public DataTable spConDataTable(string sql)
         {
-            return spConDataTable(querySQL, 30);
+            return spConDataTable(sql, 30);
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor y devolver la primera tabla como DataTable
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public DataTable spConDataTable(string querySQL, int timeout)
+        public DataTable spConDataTable(string sql, int timeout)
         {
-            if ((querySQL.ToUpper().IndexOf("EXEC ") < 0))
-                querySQL = "EXEC " + querySQL;
+            if ((sql.ToUpper().IndexOf("EXEC ") < 0))
+                sql = "EXEC " + sql;
 
-            return ConsultarConDataTable(querySQL, timeout);
+            return ConsultarConDataTable(sql, timeout);
         }
 
         /// <summary>
         ///  Ejecutar un SP en el servidor y devolver la primera tabla como DataTable
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados por</param>
         /// <returns>
         /// </returns>
-        public DataTable spConDataTable(string querySQL, string param)
+        public DataTable spConDataTable(string sql, string param)
         {
-            return spConDataTable(querySQL, param, 30);
+            return spConDataTable(sql, param, 30);
         }
 
         /// <summary>
         ///  Ejecutar un SP en el servidor y devolver la primera tabla como DataTable
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados por</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public DataTable spConDataTable(string querySQL, string param, int timeout)
+        public DataTable spConDataTable(string sql, string param, int timeout)
         {
-            return spConDataTable(querySQL + " " + param, timeout);
+            return spConDataTable(sql + " " + param, timeout);
         }
 
         /// <summary>
         ///  Ejecutar un SP en el servidor y devolver la primera tabla como DataTable
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados en array string</param>
         /// <returns>
         /// </returns>
-        public DataTable spConDataTable(string querySQL, string[] param)
+        public DataTable spConDataTable(string sql, string[] param)
         {
-            return spConDataTable(querySQL, param, 30);
+            return spConDataTable(sql, param, 30);
         }
 
         /// <summary>
         ///  Ejecutar un SP en el servidor y devolver la primera tabla como DataTable
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados en array string</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public DataTable spConDataTable(string querySQL, string[] param, int timeout)
+        public DataTable spConDataTable(string sql, string[] param, int timeout)
         {
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(querySQL) || string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
@@ -170,7 +170,7 @@ namespace drualcman
 
             doParam = doParam.TrimEnd().Remove(doParam.Length - 2, 1);
 
-            return spConDataTable(querySQL + " " + doParam, timeout);
+            return spConDataTable(sql + " " + doParam, timeout);
         }
         #endregion
 

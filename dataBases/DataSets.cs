@@ -35,12 +35,12 @@ namespace drualcman
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public DataSet ConsultarConDataSet(string querySQL) => ConsultarConDataSet(querySQL, 30);
+        public DataSet ConsultarConDataSet(string sql) => ConsultarConDataSet(sql, 30);
 
         /// <summary>
         /// Return DataSet from a direct query
@@ -66,18 +66,18 @@ namespace drualcman
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public DataSet ConsultarConDataSet(string querySQL, int timeout)
+        public DataSet ConsultarConDataSet(string sql, int timeout)
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ConsultarConDataSet", querySQL, "");
+            log.start("ConsultarConDataSet", sql, "");
             // Que no sea una cadena vacía
-            if (string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
                 log.Dispose();
@@ -89,10 +89,10 @@ namespace drualcman
                 try
                 {
                     // Comprobar que están indicando valores correctos (o casi)
-                    CheckSqlInjection(querySQL, log);
+                    CheckSqlInjection(sql, log);
 
                     SqlConnection con = new SqlConnection(this.rutaDDBB);
-                    SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
+                    SqlDataAdapter da = new SqlDataAdapter(sql, con);
                     da.SelectCommand.CommandTimeout = timeout;
                     DataSet ds = new DataSet();
                     try
@@ -102,7 +102,7 @@ namespace drualcman
                     catch (Exception ex)
                     {
                         ds.Dispose();
-                        log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                        log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
                         log.Dispose();
 
                         throw;
@@ -120,7 +120,7 @@ namespace drualcman
                 }
                 catch (Exception ex)
                 {
-                    log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                    log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
                     log.Dispose();
                     throw;
                 }
@@ -130,90 +130,90 @@ namespace drualcman
         /// <summary>
         /// Ejecutar un SP en el servidor y devolver un DataSet
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// </returns>
-        public DataSet spConDataset(string querySQL)
+        public DataSet spConDataset(string sql)
         {
-            return spConDataset(querySQL, 30);
+            return spConDataset(sql, 30);
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor y devolver un DataSet
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public DataSet spConDataset(string querySQL, int timeout)
+        public DataSet spConDataset(string sql, int timeout)
         {
-            if ((querySQL.ToUpper().IndexOf("EXEC ") < 0))
-                querySQL = "EXEC " + querySQL;
+            if ((sql.ToUpper().IndexOf("EXEC ") < 0))
+                sql = "EXEC " + sql;
 
-            return ConsultarConDataSet(querySQL, timeout);
+            return ConsultarConDataSet(sql, timeout);
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor y devolver un DataSet
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados por</param>
         /// <returns>
         /// </returns>
-        public DataSet spConDataset(string querySQL, string param)
+        public DataSet spConDataset(string sql, string param)
         {
-            return spConDataset(querySQL, param, 30);
+            return spConDataset(sql, param, 30);
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor y devolver un DataSet
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados por</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public DataSet spConDataset(string querySQL, string param, int timeout)
+        public DataSet spConDataset(string sql, string param, int timeout)
         {
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(querySQL) || string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
 
-            return spConDataset(querySQL + " " + param, timeout);
+            return spConDataset(sql + " " + param, timeout);
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor y devolver un DataSet
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados en array string</param>
         /// <returns>
         /// </returns>
-        public DataSet spConDataset(string querySQL, string[] param)
+        public DataSet spConDataset(string sql, string[] param)
         {
-            return spConDataset(querySQL, param, 30);
+            return spConDataset(sql, param, 30);
         }
 
         /// <summary>
         /// Ejecutar un SP en el servidor y devolver un DataSet
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="param">Parametros del proceso separados en array string</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public DataSet spConDataset(string querySQL, string[] param, int timeout)
+        public DataSet spConDataset(string sql, string[] param, int timeout)
         {
             //
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(querySQL) || string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
@@ -227,7 +227,7 @@ namespace drualcman
 
             doParam = doParam.TrimEnd().Remove(doParam.Length - 2, 1);
 
-            return spConDataset(querySQL + " " + doParam, timeout);
+            return spConDataset(sql + " " + doParam, timeout);
         }
         #endregion region
 

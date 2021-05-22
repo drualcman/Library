@@ -53,15 +53,15 @@ namespace drualcman
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public List<TModel> List<TModel>(string querySQL, int timeout) where TModel : new()
+        public List<TModel> List<TModel>(string sql, int timeout) where TModel : new()
         {
-            return ListAsync<TModel>(querySQL, timeout).Result;
+            return ListAsync<TModel>(sql, timeout).Result;
         }
         #endregion
 
@@ -96,30 +96,30 @@ namespace drualcman
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
-        /// <param name="querySQL">Consulta SQL a ejecutar</param>
+        /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public async Task<List<TModel>> ListAsync<TModel>(string querySQL, int timeout) where TModel : new()
+        public async Task<List<TModel>> ListAsync<TModel>(string sql, int timeout) where TModel : new()
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ToList", querySQL, "");
+            log.start("ToList", sql, "");
             // If a query is empty create the query from the Model
-            if (string.IsNullOrWhiteSpace(querySQL))
+            if (string.IsNullOrWhiteSpace(sql))
             {
-                querySQL = SetQuery<TModel>();
+                sql = SetQuery<TModel>();
             }
 
             try
             {
                 // Comprobar que están indicando valores correctos (o casi)
-                CheckSqlInjection(querySQL, log);
+                CheckSqlInjection(sql, log);
 
                 using SqlConnection con = new SqlConnection(this.rutaDDBB);
                 con.Open();
-                using SqlCommand command = new SqlCommand(querySQL, con);
+                using SqlCommand command = new SqlCommand(sql, con);
                 command.CommandTimeout = timeout;
                 using SqlDataReader dr = await command.ExecuteReaderAsync();
 
@@ -219,7 +219,7 @@ namespace drualcman
             }
             catch (Exception ex)
             {
-                log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
                 log.Dispose();
                 throw;
             }
