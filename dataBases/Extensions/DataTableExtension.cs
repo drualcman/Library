@@ -81,22 +81,23 @@ namespace drualcman.Data.Extensions
         /// <returns></returns>
         public static List<TModel> ToList<TModel>(this DataTable dt, string[] columns) where TModel : new()
         {
+            List<TModel> result = new List<TModel>();
             if (dt.Rows.Count > 0)
             {
+                TModel item = new TModel();
+                Type model = item.GetType();
+                PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
                 List<TableName> tables = new List<TableName>();
-                List<TModel> result = new List<TModel>();
-                PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 int tableCount = 0;
-                TableName newTable = new TableName(typeof(TModel).Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
+                TableName newTable = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
                 tables.Add(newTable);
 
                 bool isDirectQuery = columns[0].IndexOf(".") < 0;
                 List<string> hasList = new List<string>();
 
                 foreach (DataRow row in dt.Rows)
-                {
-                    TModel item = new TModel();
-                    
+                {                    
                     string[] rowCols = row.ColumnNamesToArray();
                     bool hasData = false;
                     int c = properties.Length;
@@ -169,10 +170,8 @@ namespace drualcman.Data.Extensions
                     //List<TModel> mainModel = result.g;
 
                 }
-
-                return result;
             }
-            else return new List<TModel>();          //no results
+            return result;
         }
 
         /// <summary>

@@ -122,97 +122,99 @@ namespace drualcman
                 using SqlCommand command = new SqlCommand(querySQL, con);
                 command.CommandTimeout = timeout;
                 using SqlDataReader dr = await command.ExecuteReaderAsync();
-                List<TableName> tables = new List<TableName>();
-                List<TModel> result = new List<TModel>();
-                PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                int tableCount = 0;
-                TableName newTable = new TableName(typeof(TModel).Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
-                tables.Add(newTable);
 
-                List<string> hasList = new List<string>();
-                ReadOnlyCollection<DbColumn> columnNames = null;
-                bool isDirectQuery = false;
-                while (await dr.ReadAsync())
+                List<TModel> result = new List<TModel>();
+                if (dr.HasRows)
                 {
                     TModel item = new TModel();
-                    if (columnNames is null)
-                    {
-                        columnNames = await dr.GetColumnSchemaAsync();
-                        isDirectQuery = columnNames[0].ColumnName.IndexOf(".") < 0;
-                    }
+                    Type model = item.GetType();
+                    PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-                    bool hasData = false;
+                    List<TableName> tables = new List<TableName>();
+                    int tableCount = 0;
+                    TableName newTable = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
+                    tables.Add(newTable);
+
+                    List<string> hasList = new List<string>();
+                    ReadOnlyCollection<DbColumn> columnNames = await dr.GetColumnSchemaAsync();
+                    bool isDirectQuery = columnNames[0].ColumnName.IndexOf(".") < 0;
+
                     int c = properties.Length;
-                    for (int i = 0; i < c; i++)
+                    while (await dr.ReadAsync())
                     {
-                        DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
-                        string columName;
-                        if (field is not null)
+                        bool hasData = false;
+                        for (int i = 0; i < c; i++)
                         {
-                            if (!field.Ignore)
+                            DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
+                            string columName;
+                            if (field is not null)
+                            {
+                                if (!field.Ignore)
+                                {
+                                    if (isDirectQuery)
+                                        columName = properties[i].Name;
+                                    else if (field.Inner == InnerDirection.NONE)
+                                        columName = $"{tables[0].ShortName}.{properties[i].Name}";
+                                    else
+                                    {
+                                        columName = string.Empty;
+
+                                        if (Helpers.ObjectHelpers.IsGenericList(properties[i].PropertyType.FullName) &&
+                                            !hasList.Contains(properties[i].PropertyType.Name))
+                                        {
+                                            hasList.Add(properties[i].PropertyType.Name);
+                                            Type[] genericType = properties[i].PropertyType.GetGenericArguments();
+                                            Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
+                                            properties[i].SetValue(item, Activator.CreateInstance(creatingCollectionType));
+                                        }
+                                        else
+                                        {
+                                            try
+                                            {
+                                                properties[i].SetValue(item,
+                                                    ColumnToObject(ref columnNames, dr, properties[i].PropertyType, ref tables, ref tableCount),
+                                                    null);
+                                                hasData = true;
+                                            }
+                                            catch { }
+                                        }
+                                    }
+                                }
+                                else
+                                    columName = string.Empty;
+                            }
+                            else
                             {
                                 if (isDirectQuery)
                                     columName = properties[i].Name;
-                                else if (field.Inner == InnerDirection.NONE)
-                                    columName = $"{tables[0].ShortName}.{properties[i].Name}";
                                 else
-                                {
-                                    columName = string.Empty;
-
-                                    if (Helpers.ObjectHelpers.IsGenericList(properties[i].PropertyType.FullName) &&
-                                        !hasList.Contains(properties[i].PropertyType.Name))
-                                    {
-                                        hasList.Add(properties[i].PropertyType.Name);
-                                        Type[] genericType = properties[i].PropertyType.GetGenericArguments();
-                                        Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
-                                        properties[i].SetValue(item, Activator.CreateInstance(creatingCollectionType));
-                                    }
-                                    else
-                                    {
-                                        try
-                                        {
-                                            properties[i].SetValue(item,
-                                                ColumnToObject(ref columnNames, dr, properties[i].PropertyType, ref tables, ref tableCount),
-                                                null);
-                                            hasData = true;
-                                        }
-                                        catch { }
-                                    }
-                                }
+                                    columName = $"{tables[0].ShortName}.{properties[i].Name}";
                             }
-                            else
-                                columName = string.Empty;
-                        }
-                        else
-                        {
-                            if (isDirectQuery)
-                                columName = properties[i].Name;
-                            else
-                                columName = $"{tables[0].ShortName}.{properties[i].Name}";
-                        }
 
-                        if (HaveColumn(ref columnNames, columName))
-                        {
-                            try
+                            if (HaveColumn(ref columnNames, columName))
                             {
-                                properties[i].SetValue(item, dr[columName], null);
-                                hasData = true;
+                                try
+                                {
+                                    properties[i].SetValue(item, dr[columName], null);
+                                    hasData = true;
+                                }
+                                catch { }
                             }
-                            catch { }
                         }
+                        if (hasData)
+                            result.Add(item);      //only add the item if have some to add
                     }
-                    if (hasData)
-                        result.Add(item);      //only add the item if have some to add
-                }
 
-                if (hasList.Any())
-                {
-                    //need to create a list of object who is named in the list
-                    //1. create a list grouped by main model
-                    //List<TModel> mainModel = result.g;
+                    //if (hasList.Any())
+                    //{
+                    //    //need to create a list of object who is named in the list
+                    //    //1. create a list grouped by main model
+                    //    //List<TModel> mainModel = result.g;
 
+                    //}
+                    dr.Close();                                     // cerrar la consulta
+                    con.Close();
                 }
-                con.Close();
                 return result;
             }
             catch (Exception ex)
@@ -234,7 +236,7 @@ namespace drualcman
         /// <returns></returns>
         private bool HaveColumn(ref ReadOnlyCollection<DbColumn> columns, string columnName, bool ignoreCase = true)
         {
-            bool have = false;
+            bool have;
             int t = columns.Count;
             int c = 0;
             do
