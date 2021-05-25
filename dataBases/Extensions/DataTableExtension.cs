@@ -26,29 +26,39 @@ namespace drualcman.Data.Extensions
             {
                 List<TModel> result = new List<TModel>();
                 PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                foreach (DataRow row in dt.Rows)
+                TModel item = new TModel();
+                string[] rowCols = dt.Rows[0].ColumnNamesToArray();
+                
+                List<PropertyInfo> columnas = new List<PropertyInfo>();
+                int p = properties.Length;
+
+                for (int i = 0; i < p; i++)
                 {
-                    TModel item = new TModel();
-
-                    string[] rowCols = row.ColumnNamesToArray();
-                    bool hasData = false;
-                    foreach (PropertyInfo pi in properties)
+                    if (columns.Contains(properties[i].Name, StringComparer.OrdinalIgnoreCase) &&
+                       rowCols.Contains(properties[i].Name, StringComparer.OrdinalIgnoreCase))
                     {
-                        if (columns.Contains(pi.Name, StringComparer.OrdinalIgnoreCase) && 
-                            rowCols.Contains(pi.Name, StringComparer.OrdinalIgnoreCase))
-                        {
-                            try
-                            {
-                                pi.SetValue(item, row[pi.Name], null);
-                                hasData = true;
-                            }
-                            catch
-                            {
+                        columnas.Add(properties[i]);
+                    }
+                }
 
-                            }
+                int c = dt.Rows.Count;
+                for (int x = 0; x < c; x++)
+                {
+                    bool hasData = false;
+                    for (int i = 0; i < p; i++)
+                    {
+                        try
+                        {
+                            properties[i].SetValue(item, dt.Rows[x][properties[i].Name], null);
+                            hasData = true;
+                        }
+                        catch
+                        {
+
                         }
                     }
-                    if (hasData) result.Add(item);      //only add the item if have some to add
+                    if (hasData)
+                        result.Add(item);      //only add the item if have some to add
                 }
                 return result;
             }
