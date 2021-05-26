@@ -26,7 +26,6 @@ namespace drualcman.Data.Extensions
             {
                 List<TModel> result = new List<TModel>();
                 PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                TModel item = new TModel();
                 string[] rowCols = dt.Rows[0].ColumnNamesToArray();
                 
                 List<PropertyInfo> columnas = new List<PropertyInfo>();
@@ -44,12 +43,16 @@ namespace drualcman.Data.Extensions
                 int c = dt.Rows.Count;
                 for (int x = 0; x < c; x++)
                 {
+                    TModel item = new TModel();
                     bool hasData = false;
                     for (int i = 0; i < p; i++)
                     {
                         try
                         {
-                            properties[i].SetValue(item, dt.Rows[x][properties[i].Name], null);
+                            if (properties[i].PropertyType.Name == typeof(bool).Name)
+                                properties[i].SetValue(item, Convert.ToBoolean(dt.Rows[x][properties[i].Name]), null);
+                            else
+                                properties[i].SetValue(item, dt.Rows[x][properties[i].Name], null);
                             hasData = true;
                         }
                         catch
