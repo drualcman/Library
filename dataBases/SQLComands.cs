@@ -50,7 +50,7 @@ namespace drualcman
                 }
                 finally
                 {
-                    cmd.Connection.Close();
+                    cmd.Connection.Dispose();                    
                 }
                 cmd.Dispose();
             }
@@ -103,7 +103,7 @@ namespace drualcman
                 }
                 finally
                 {
-                    cmd.Connection.Close();
+                    cmd.Connection.Dispose();
                 }
                 cmd.Dispose();
             }
@@ -150,7 +150,7 @@ namespace drualcman
                 }
                 finally
                 {
-                    cmd.Connection.Close();
+                    cmd.Connection.Dispose();
                 }
                 cmd.Dispose();
             }
@@ -187,7 +187,7 @@ namespace drualcman
                 }
                 finally
                 {
-                    cmd.Connection.Close();
+                    cmd.Connection.Dispose();
                 }
                 cmd.Dispose();
             }
