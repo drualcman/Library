@@ -11,7 +11,7 @@ namespace drualcman
     /// <summary>
     /// Management of MS-SQL DataBases
     /// </summary>
-    public partial class dataBases 
+    public partial class dataBases
     {
 
         /// <summary>
@@ -85,49 +85,48 @@ namespace drualcman
                     }
                     else
                     {
-                        using (SqlConnection con = new SqlConnection(this.rutaDDBB))
+                        using SqlConnection con = new SqlConnection(this.rutaDDBB);
+
+                        try
                         {
+                            using SqlCommand cmd = new SqlCommand(querySQL, con);
+                            cmd.CommandTimeout = timeOut;
+                            con.Open();
+
                             try
                             {
-                                SqlCommand cmd = new SqlCommand(querySQL, con);
-                                cmd.CommandTimeout = timeOut;
-                                con.Open();
-
-                                try
-                                {
-                                    SqlDataReader dr = cmd.ExecuteReader();         // ejecutar el comando SQL
-                                    if (dr.Read())                                      // leer los datos
-                                        datoRetorno = dr.GetValue(colSQL).ToString();      // obtener el campo deseado
-                                    else
-                                        datoRetorno = string.Empty;
-                                    dr.Close();                                     // cerrar la consulta
-                                    dr.Dispose();                                   // cerrar la conexión
-                                }
-                                catch (Exception exReader)
-                                {
-                                    cmd.Dispose();              // cerrar la conexión
-                                    con.Close();
-                                    log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
-                                    log.Dispose();
-
-                                    throw;
-                                }
-                                cmd.Dispose();              // cerrar la conexión
+                                using SqlDataReader dr = cmd.ExecuteReader();         // ejecutar el comando SQL
+                                if (dr.Read())                                      // leer los datos
+                                    datoRetorno = dr.GetValue(colSQL).ToString();      // obtener el campo deseado
+                                else
+                                    datoRetorno = string.Empty;
                             }
-                            catch (Exception exConexion)
+                            catch (Exception exReader)
                             {
-                                con.Close();
-                                con.Dispose();
-                                log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
+                                log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
                                 log.Dispose();
 
                                 throw;
                             }
-                            // cerrar la conexión
-                            con.Close();
+                            finally
+                            {
+                                cmd.Connection.Dispose();
+                            }
+                        }
+                        catch (Exception exConexion)
+                        {
+                            log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
+                            log.Dispose();
+
+                            throw;
+                        }
+                        finally
+                        {
                             con.Dispose();
                         }
-                        if (this.LogError) log.end(datoRetorno, this.rutaDDBB);
+
+                        if (this.LogError)
+                            log.end(datoRetorno, this.rutaDDBB);
                         log.Dispose();
 
                         return datoRetorno;
@@ -179,7 +178,8 @@ namespace drualcman
 
                 throw;
             }
-            if (this.LogError) log.end(datoRetorno, this.rutaDDBB);
+            if (this.LogError)
+                log.end(datoRetorno, this.rutaDDBB);
             log.Dispose();
 
             return datoRetorno;
@@ -242,41 +242,32 @@ namespace drualcman
                         //int numReg = 0;
 
                         //realizar las acciones requeridas de la consulta SQL
-                        using (SqlConnection con = new SqlConnection(rutaDDBB))
-                        {
-                            try
-                            {
-                                con.Open();
-                                SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
-                                DataSet ds = new DataSet();
-                                da.Fill(ds);
-                                da.Dispose();
-                                if (ds.Tables[0].Rows.Count > 0)
-                                {
-                                    retorno = true;
-                                }
-                                else
-                                {
-                                    retorno = false;
-                                }
-                                ds.Dispose();
-                            }
-                            catch (Exception ex)
-                            {
-                                con.Close();
-                                log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
-                                log.Dispose();
+                        using SqlConnection con = new SqlConnection(rutaDDBB);
 
-                                throw;
-                            }
-                            con.Close();
+                        try
+                        {
+                            con.Open();
+                            using SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
+                            using DataSet ds = new DataSet();
+                            da.Fill(ds);
+
+                            retorno = ds.Tables[0].Rows.Count > 0;
+
+                        }
+                        catch (Exception ex)
+                        {
+                            log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
+                            log.Dispose();
+
+                            throw;
                         }
                     }
                 }
                 else
                     retorno = false;
             }
-            if (this.LogError) log.end(retorno, this.rutaDDBB);
+            if (this.LogError)
+                log.end(retorno, this.rutaDDBB);
             log.Dispose();
 
             return retorno;
@@ -351,7 +342,8 @@ namespace drualcman
                 {
                     ok = false;
                 }
-                else ok = true;
+                else
+                    ok = true;
 
                 // Comprobar que realmente se use SELECT, o EXEC
                 if (querySQL.ToUpper().IndexOf("SELECT") < 0 && ok == false)
@@ -363,27 +355,23 @@ namespace drualcman
                 }
                 else
                 {
-                    SqlConnection con = new SqlConnection(rutaDDBB);
-                    SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
+                    using SqlConnection con = new SqlConnection(rutaDDBB);
+                    using SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
                     da.SelectCommand.CommandTimeout = timeout;
-                    DataSet ds = new DataSet();
+                    using DataSet ds = new DataSet();
                     try
                     {
                         da.Fill(ds);
                     }
                     catch (Exception ex)
                     {
-                        da.Dispose();
-                        ds.Dispose();
-                        con.Close();
                         log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
                         log.Dispose();
 
                         throw;
                     }
-                    da.Dispose();
-                    con.Close();
-                    if (this.LogError) log.end(ds, this.rutaDDBB);
+                    if (this.LogError)
+                        log.end(ds, this.rutaDDBB);
                     log.Dispose();
 
                     return ds.GetXml();
@@ -458,7 +446,8 @@ namespace drualcman
 
                         throw;
                     }
-                    if (this.LogError) log.end(newId, this.rutaDDBB);
+                    if (this.LogError)
+                        log.end(newId, this.rutaDDBB);
                     log.Dispose();
 
                     return newId;
@@ -522,8 +511,10 @@ namespace drualcman
                     try
                     {
                         string dato = ObtenerDato(querySQL, 0);
-                        if (string.IsNullOrEmpty(dato)) newId = 0;
-                        else newId = Convert.ToInt32(dato);
+                        if (string.IsNullOrEmpty(dato))
+                            newId = 0;
+                        else
+                            newId = Convert.ToInt32(dato);
                         newId++;
                     }
                     catch (Exception ex)
@@ -534,7 +525,8 @@ namespace drualcman
                         throw;
                     }
 
-                    if (this.LogError) log.end(newId, this.rutaDDBB);
+                    if (this.LogError)
+                        log.end(newId, this.rutaDDBB);
                     log.Dispose();
 
                     return newId;
@@ -607,36 +599,28 @@ namespace drualcman
                     if ((querySQL.ToUpper().IndexOf("EXEC ") < 0))
                         querySQL = "EXEC " + querySQL;
 
-                    SqlConnection cnn = new SqlConnection(rutaDDBB);
-                    SqlCommand cmd = new SqlCommand(querySQL, cnn);
+                    using SqlConnection cnn = new SqlConnection(rutaDDBB);
+                    using SqlCommand cmd = new SqlCommand(querySQL, cnn);
 
                     string datoRetorno = string.Empty;
 
                     cnn.Open();
                     try
                     {
-                        SqlDataReader dr = cmd.ExecuteReader();         // ejecutar el comando SQL
+                        using SqlDataReader dr = cmd.ExecuteReader();         // ejecutar el comando SQL
                         if (dr.Read())                                      // leer los datos
                             datoRetorno = dr.GetValue(0).ToString();        // obtener el campo deseado               
                         else
                             datoRetorno = string.Empty;
-                        dr.Close();                                     // cerrar la consulta
-                        dr.Dispose();                                   // cerrar la conexión
                     }
                     catch (Exception exReader)
                     {
                         log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
-                        log.Dispose();
-
-                        cmd.Dispose();              // cerrar la conexión
-                        cnn.Close();
                         throw;
                     }
-                    if (this.LogError) log.end(datoRetorno, this.rutaDDBB);
+                    if (this.LogError)
+                        log.end(datoRetorno, this.rutaDDBB);
                     log.Dispose();
-
-                    cmd.Dispose();              // cerrar la conexión
-                    cnn.Close();
                     return datoRetorno;
                 }
             }
@@ -717,7 +701,7 @@ namespace drualcman
             {
                 try
                 {
-                    DataSet ds = ConsultarConDataSet(querySQL);
+                    using DataSet ds = ConsultarConDataSet(querySQL);
 
                     foreach (DataTable table in ds.Tables)
                     {
@@ -747,7 +731,8 @@ namespace drualcman
                     throw;
                 }
             }
-            if (this.LogError) log.end(retorno, this.rutaDDBB);
+            if (this.LogError)
+                log.end(retorno, this.rutaDDBB);
             log.Dispose();
 
             return retorno;
@@ -807,40 +792,36 @@ namespace drualcman
                     {
                         try
                         {
-                            using (SqlConnection con = new SqlConnection(rutaDDBB))
+                            using SqlConnection con = new SqlConnection(rutaDDBB);
+                            using SqlCommand cmd = new SqlCommand(querySQL, con);
+                            con.Open();
+                            using SqlDataReader ds = cmd.ExecuteReader();
+
+
+                            //localizar los datos en la base de datos
+                            try
                             {
-                                SqlCommand cmd = new SqlCommand(querySQL, con);
-                                SqlDataReader ds;
-
-                                con.Open();
-
-                                //localizar los datos en la base de datos
-                                ds = cmd.ExecuteReader();
-                                try
+                                if (ds.Read())
                                 {
-                                    if (ds.Read())
+                                    for (int i = 0; i < cols; i++)
                                     {
-                                        for (int i = 0; i < cols; i++)
+                                        try
                                         {
-                                            try
-                                            {
-                                                retorno.Add(ds.GetValue(i));
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                retorno.Add("GetValue(" + i.ToString() + "): " + ex.ToString());
-                                            }
+                                            retorno.Add(ds.GetValue(i));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            retorno.Add("GetValue(" + i.ToString() + "): " + ex.ToString());
                                         }
                                     }
                                 }
-                                catch (Exception exRead)
-                                {
-                                    retorno.Add("Error in READ: " + exRead.ToString());
-                                }
-
-                                ds.Close();
-                                con.Close();
                             }
+                            catch (Exception exRead)
+                            {
+                                retorno.Add("Error in READ: " + exRead.ToString());
+                            }
+
+
                         }
                         catch (Exception ex)
                         {
@@ -851,7 +832,8 @@ namespace drualcman
 
                         }
 
-                        if (this.LogError) log.end(retorno, this.rutaDDBB);
+                        if (this.LogError)
+                            log.end(retorno, this.rutaDDBB);
                         log.Dispose();
 
                         return retorno;

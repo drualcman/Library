@@ -87,9 +87,9 @@ namespace drualcman
                 if (f.existeFichero(file))
                 {
                     //append to actual log
-                    System.IO.StreamWriter z_varocioStreamWriter = new System.IO.StreamWriter(file, true, System.Text.Encoding.UTF8);
+                    using System.IO.StreamWriter z_varocioStreamWriter = new System.IO.StreamWriter(file, true, System.Text.Encoding.UTF8);
                     z_varocioStreamWriter.Write(log);
-                    z_varocioStreamWriter.Close();
+                    z_varocioStreamWriter.Close();                    
                 }
                 else
                 {

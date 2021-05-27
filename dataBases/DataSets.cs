@@ -91,27 +91,23 @@ namespace drualcman
                     // Comprobar que están indicando valores correctos (o casi)
                     CheckSqlInjection(querySQL, log);
 
-                    SqlConnection con = new SqlConnection(this.rutaDDBB);
-                    SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
+                    using SqlConnection con = new SqlConnection(this.rutaDDBB);
+                    using SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
                     da.SelectCommand.CommandTimeout = timeout;
-                    DataSet ds = new DataSet();
+                    using DataSet ds = new DataSet();                    
                     try
                     {
                         da.Fill(ds);
                     }
                     catch (Exception ex)
                     {
-                        ds.Dispose();
                         log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
                         log.Dispose();
-
                         throw;
                     }
                     finally
                     {
-                        da.Dispose();
                         con.Close();
-
                         if (this.LogError) log.end(ds, this.rutaDDBB);
                         log.Dispose();
                     }

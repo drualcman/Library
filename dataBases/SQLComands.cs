@@ -51,8 +51,8 @@ namespace drualcman
                 finally
                 {
                     cmd.Connection.Dispose();                    
+                    cmd.Dispose();
                 }
-                cmd.Dispose();
             }
             else
             {
@@ -104,8 +104,8 @@ namespace drualcman
                 finally
                 {
                     cmd.Connection.Dispose();
+                    cmd.Dispose();
                 }
-                cmd.Dispose();
             }
             else
             {
@@ -150,9 +150,9 @@ namespace drualcman
                 }
                 finally
                 {
-                    cmd.Connection.Dispose();
+                    _ = cmd.Connection.DisposeAsync();
+                    _ = cmd.DisposeAsync();
                 }
-                cmd.Dispose();
             }
             else
             {
@@ -187,9 +187,9 @@ namespace drualcman
                 }
                 finally
                 {
-                    cmd.Connection.Dispose();
+                    _ = cmd.Connection.DisposeAsync();
+                    _ = cmd.DisposeAsync();
                 }
-                cmd.Dispose();
             }
             else
             {

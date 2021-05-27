@@ -47,7 +47,7 @@ namespace drualcman
             int result;
             if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
             {
-                SqlCommand cmd = SetInsert(table, colName, colValue);
+                using SqlCommand cmd = SetInsert(table, colName, colValue);
                 if (returnScope)
                 {
                     cmd.CommandText += "; select SCOPE_IDENTITY()";
@@ -64,7 +64,7 @@ namespace drualcman
                 {
                     result = ExecuteCommand(cmd) ? 1 : 0;
                 }
-                cmd.Dispose();
+                cmd.Connection.Dispose();
             }
             else
             {
@@ -79,7 +79,7 @@ namespace drualcman
             int result;
             if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
             {
-                SqlCommand cmd = SetInsert(table, colName, colValue);
+                using SqlCommand cmd = SetInsert(table, colName, colValue);
                 cmd.Connection = this.cnnDDBB();                
                 if (returnScope)
                 {
@@ -95,9 +95,9 @@ namespace drualcman
                 }
                 else
                 {
-                    result = ExecuteCommand(cmd) ? 1 : 0;
+                    result = await ExecuteCommandAsync(cmd) ? 1 : 0;
                 }
-                cmd.Dispose();
+                _ = cmd.Connection.DisposeAsync();
             }
             else
             {
