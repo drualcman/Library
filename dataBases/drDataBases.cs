@@ -22,7 +22,7 @@ namespace drualcman
             if (!disposedValue)
             {
                 if (disposing)
-                {
+                {                    
                     this.rutaDDBB = null;
                     this.FolderLog = null;
                 }

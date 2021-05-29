@@ -81,86 +81,46 @@ namespace drualcman.Data.Extensions
         /// <returns></returns>
         public static List<TModel> ToList<TModel>(this DataTable dt, string[] columns) where TModel : new()
         {
-            List<TModel> result = new List<TModel>();
             if (dt.Rows.Count > 0)
             {
-                TModel item = new TModel();
-                Type model = item.GetType();
-                PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                List<TModel> result = new List<TModel>();
+                PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                string[] rowCols = dt.Rows[0].ColumnNamesToArray();
+                
+                List<PropertyInfo> columnas = new List<PropertyInfo>();
+                int p = properties.Length;
 
-                List<TableName> tables = new List<TableName>();
-                int tableCount = 0;
-                TableName newTable = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
-                tables.Add(newTable);
-
-                bool isDirectQuery = columns[0].IndexOf(".") < 0;
-                List<string> hasList = new List<string>();
-
-                foreach (DataRow row in dt.Rows)
-                {                    
-                    string[] rowCols = row.ColumnNamesToArray();
-                    bool hasData = false;
-                    int c = properties.Length;
-                    for (int i = 0; i < c; i++)
+                for (int i = 0; i < p; i++)
+                {
+                    if (columns.Contains(properties[i].Name, StringComparer.OrdinalIgnoreCase) &&
+                       rowCols.Contains(properties[i].Name, StringComparer.OrdinalIgnoreCase))
                     {
-                        DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
-                        string columName;
-                        if (field is not null)
-                        {
-                            if (!field.Ignore)
-                            {
-                                if (isDirectQuery)
-                                    columName = properties[i].Name;
-                                else if (field.Inner == InnerDirection.NONE)
-                                    columName = $"{tables[0].ShortName}.{properties[i].Name}";
-                                else
-                                {
-                                    columName = string.Empty;
+                        columnas.Add(properties[i]);
+                    }
+                }
 
-                                    if (Helpers.ObjectHelpers.IsGenericList(properties[i].PropertyType.FullName)&& 
-                                        !hasList.Contains(properties[i].PropertyType.Name))
-                                    {
-                                        hasList.Add(properties[i].PropertyType.Name);
-                                        Type[] genericType = properties[i].PropertyType.GetGenericArguments();
-                                        Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
-                                        properties[i].SetValue(item, Activator.CreateInstance(creatingCollectionType));
-                                    }
-                                    else
-                                    {
-                                        try
-                                        {
-                                            properties[i].SetValue(item,
-                                                ColumnToObject(ref columns, row, properties[i].PropertyType, ref tables, ref tableCount),
-                                                null);
-                                            hasData = true;
-                                        }
-                                        catch { }
-                                    }
-                                }
-                            }
-                            else
-                                columName = string.Empty;
-                        }
-                        else
+                int c = dt.Rows.Count;
+                for (int x = 0; x < c; x++)
+                {
+                    TModel item = new TModel();
+                    bool hasData = false;
+                    for (int i = 0; i < p; i++)
+                    {
+                        try
                         {
-                            if (isDirectQuery)
-                                columName = properties[i].Name;
+                            if (properties[i].PropertyType.Name == typeof(bool).Name)
+                                properties[i].SetValue(item, Convert.ToBoolean(dt.Rows[x][properties[i].Name]), null);
                             else
-                                columName = $"{tables[0].ShortName}.{properties[i].Name}";
+                                properties[i].SetValue(item, dt.Rows[x][properties[i].Name], null);
+                            hasData = true;
                         }
+                        catch
+                        {
 
-                        if (columns.Contains(columName, StringComparer.OrdinalIgnoreCase) &&
-                            rowCols.Contains(columName, StringComparer.OrdinalIgnoreCase))
-                        {
-                            try
-                            {
-                                properties[i].SetValue(item, row[columName], null);
-                                hasData = true;
-                            }
-                            catch { }
                         }
                     }
-                    if (hasData) result.Add(item);      //only add the item if have some to add
+                    if (hasData)
+                        result.Add(item);      //only add the item if have some to add
                 }
 
                 if (hasList.Any())

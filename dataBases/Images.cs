@@ -45,7 +45,7 @@ namespace drualcman
             bool result;
             if (image != null && image.Length > 0)
             {
-                SqlCommand cmd = new SqlCommand();
+                using SqlCommand cmd = new SqlCommand();
                 string sql = $@"update {table} set {imageColumn} = @photo where {indexColumn} = @index;";
                 cmd.CommandText = sql;
                 cmd.Parameters.Add("@photo", SqlDbType.Image);
@@ -53,7 +53,7 @@ namespace drualcman
                 cmd.Parameters["@photo"].Value = image;
                 cmd.Parameters["@index"].Value = index;
                 result = ExecuteCommand(cmd);
-                cmd.Dispose();
+                cmd.Connection.Dispose();
             }
             else result = false;
             return result;
@@ -72,14 +72,14 @@ namespace drualcman
             bool result;
             if (image != null)
             {
-                SqlCommand cmd = new SqlCommand();
+                using SqlCommand cmd = new SqlCommand();
                 string sql = $@"insert into {table} values ({imageColumn}) values (@photo);";
                 cmd.CommandText = sql;
                 cmd.Parameters.Add("@photo", SqlDbType.Image);
                 cmd.Parameters.Add("@index");
                 cmd.Parameters["@photo"].Value = image;
                 result = ExecuteCommand(cmd);
-                cmd.Dispose();
+                cmd.Connection.Dispose();
             }
             else result = false;
             return result;
@@ -136,7 +136,7 @@ namespace drualcman
             bool result;
             if (image != null)
             {
-                SqlCommand cmd = new SqlCommand();
+                using SqlCommand cmd = new SqlCommand();
                 string sql = $@"insert into {table} values ({indexColumn}, {imageColumn}) values (@index,@photo);";
                 cmd.CommandText = sql;
                 cmd.Parameters.Add("@photo", SqlDbType.Image);
@@ -144,7 +144,7 @@ namespace drualcman
                 cmd.Parameters["@photo"].Value = image;
                 cmd.Parameters["@index"].Value = index;
                 result = ExecuteCommand(cmd);
-                cmd.Dispose();
+                cmd.Connection.Dispose();
             }
             else result = false;
             return result;
@@ -188,7 +188,7 @@ namespace drualcman
             bool result;
             if (image != null && image.Length > 0)
             {
-                SqlCommand cmd = new SqlCommand();
+                using SqlCommand cmd = new SqlCommand();
                 string sql = $@"update {table} set {imageColumn} = @photo where {indexColumn} = @index;";
                 cmd.CommandText = sql;
                 cmd.Parameters.Add("@photo", SqlDbType.Image);
@@ -196,7 +196,7 @@ namespace drualcman
                 cmd.Parameters["@photo"].Value = image;
                 cmd.Parameters["@index"].Value = index;
                 result = await ExecuteCommandAsync(cmd);
-                cmd.Dispose();
+                _= cmd.Connection.DisposeAsync();
             }
             else result = false;
             return result;
@@ -215,14 +215,14 @@ namespace drualcman
             bool result;
             if (image != null)
             {
-                SqlCommand cmd = new SqlCommand();
+                using SqlCommand cmd = new SqlCommand();
                 string sql = $@"insert into {table} values ({imageColumn}) values (@photo);";
                 cmd.CommandText = sql;
                 cmd.Parameters.Add("@photo", SqlDbType.Image);
                 cmd.Parameters.Add("@index");
                 cmd.Parameters["@photo"].Value = image;
                 result = await ExecuteCommandAsync(cmd);
-                cmd.Dispose();
+                _ = cmd.Connection.DisposeAsync();
             }
             else result = false;
             return result;

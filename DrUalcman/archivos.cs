@@ -174,7 +174,7 @@ namespace drualcman
 
             try
             {
-                FileStream save = new FileStream(strRuta, FileMode.OpenOrCreate, FileAccess.Write);
+                using FileStream save = new FileStream(strRuta, FileMode.OpenOrCreate, FileAccess.Write);
                 save.Write(Archivo, 0, Archivo.Length);
                 save.Close();
                 return guardar;
@@ -225,14 +225,14 @@ namespace drualcman
         /// <returns></returns>
         public Stream GetStreamFile(string filePath)
         {
-            using (FileStream fileStream = File.OpenRead(filePath))
-            {
-                MemoryStream memStream = new MemoryStream();
-                memStream.SetLength(fileStream.Length);
-                fileStream.Read(memStream.GetBuffer(), 0, (int)fileStream.Length);
+            using FileStream fileStream = File.OpenRead(filePath);
 
-                return memStream;
-            }
+            MemoryStream memStream = new MemoryStream();
+            memStream.SetLength(fileStream.Length);
+            fileStream.Read(memStream.GetBuffer(), 0, (int)fileStream.Length);
+
+            return memStream;
+
         }
 
         public StreamReader GetStreamBytes(byte[] bytes)
@@ -281,7 +281,7 @@ namespace drualcman
         {
             try
             {
-                StreamReader sr = new StreamReader(GetStreamBytes(bytes).BaseStream);
+                using StreamReader sr = new StreamReader(GetStreamBytes(bytes).BaseStream);
                 string texto;
                 texto = sr.ReadToEnd();
                 sr.Close();
@@ -382,7 +382,7 @@ namespace drualcman
         {
             string randomNum = String.Empty;
             Random autoRand = new Random();
-
+            
             byte h;
 
             for (h = 1; h <= 5; h++)

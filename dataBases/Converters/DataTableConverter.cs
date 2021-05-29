@@ -11,7 +11,6 @@ namespace drualcman.Data.Converters
 {
     public class DataTableConverter
     {
-
         #region methods
         /// <summary>
         /// get aDataTable from Stream Data

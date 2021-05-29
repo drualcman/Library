@@ -80,9 +80,9 @@ namespace drualcman
             bool result;
             if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count() && indexColumn.Count() > 0)
             {
-                SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
+                using SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
                 result = ExecuteCommand(cmd);
-                cmd.Dispose();
+                cmd.Connection.Dispose();
             }
             else
             {
@@ -106,9 +106,9 @@ namespace drualcman
             bool result;
             if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count() && indexColumn.Count() > 0)
             {
-                SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
+                using SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
                 result = await ExecuteCommandAsync(cmd);
-                cmd.Dispose();
+                _ = cmd.Connection.DisposeAsync();
             }
             else
             {

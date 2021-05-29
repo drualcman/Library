@@ -47,7 +47,7 @@ namespace drualcman
 				string sql = $@"Delete FROM {table} WHERE ";
 				int i;
 				//check index columns
-				SqlCommand cmd = new SqlCommand();
+				using SqlCommand cmd = new SqlCommand();
 				cmd.Connection = this.cnnDDBB();
 				for (i = 0; i < indexColumn.Count(); i++)
 				{
@@ -57,6 +57,7 @@ namespace drualcman
 				}
 				cmd.CommandText = sql;
 				result = ExecuteCommand(cmd);
+				cmd.Connection.Dispose();
 			}
 			else result = false;
 			return result;
@@ -77,7 +78,7 @@ namespace drualcman
 				string sql = $@"Delete FROM {table} WHERE ";
 				int i;
 				//check index columns
-				SqlCommand cmd = new SqlCommand();
+				using SqlCommand cmd = new SqlCommand();
 				cmd.Connection = this.cnnDDBB();
 				for (i = 0; i < indexColumn.Count(); i++)
 				{
@@ -87,6 +88,7 @@ namespace drualcman
 				}
 				cmd.CommandText = sql;
 				result = ExecuteCommand(cmd);
+				cmd.Connection.Dispose();
 			}
 			else result = false;
 			return result;
@@ -114,7 +116,7 @@ namespace drualcman
 				string sql = $@"Delete FROM {table} WHERE ";
 				int i;
 				//check index columns
-				SqlCommand cmd = new SqlCommand();
+				using SqlCommand cmd = new SqlCommand();
 				cmd.Connection = this.cnnDDBB();
 				for (i = 0; i < indexColumn.Count(); i++)
 				{
@@ -124,6 +126,7 @@ namespace drualcman
 				}
 				cmd.CommandText = sql;
 				result = await ExecuteCommandAsync(cmd);
+				_ = cmd.Connection.DisposeAsync();
 			}
 			else result = false;
 			return result;
@@ -144,7 +147,7 @@ namespace drualcman
 				string sql = $@"Delete FROM {table} WHERE ";
 				int i;
 				//check index columns
-				SqlCommand cmd = new SqlCommand();
+				using SqlCommand cmd = new SqlCommand();
 				cmd.Connection = this.cnnDDBB();
 				for (i = 0; i < indexColumn.Count(); i++)
 				{
@@ -154,6 +157,7 @@ namespace drualcman
 				}
 				cmd.CommandText = sql;
 				result = await ExecuteCommandAsync(cmd);
+				_ = cmd.Connection.DisposeAsync();
 			}
 			else result = false;
 			return result;
