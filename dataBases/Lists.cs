@@ -122,12 +122,7 @@ namespace drualcman
 
             try
             {
-                using SqlConnection con = new SqlConnection(this.rutaDDBB);
-                await con.OpenAsync();                
-                using SqlCommand command = con.CreateCommand();
-                command.CommandText = sql;
-                command.CommandTimeout = timeout;
-                using SqlDataReader dr = await command.ExecuteReaderAsync();
+                using SqlDataReader dr = await this.ReaderAsync(sql, timeout);
 
                 List<TModel> result = new List<TModel>();
                 if (dr.HasRows)
