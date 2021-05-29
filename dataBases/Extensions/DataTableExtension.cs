@@ -81,9 +81,9 @@ namespace drualcman.Data.Extensions
         /// <returns></returns>
         public static List<TModel> ToList<TModel>(this DataTable dt, string[] columns) where TModel : new()
         {
+            List<TModel> result = new List<TModel>();
             if (dt.Rows.Count > 0)
             {
-                List<TModel> result = new List<TModel>();
                 PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 string[] rowCols = dt.Rows[0].ColumnNamesToArray();
                 
@@ -123,13 +123,13 @@ namespace drualcman.Data.Extensions
                         result.Add(item);      //only add the item if have some to add
                 }
 
-                if (hasList.Any())
-                {
-                    //need to create a list of object who is named in the list
-                    //1. create a list grouped by main model
-                    //List<TModel> mainModel = result.g;
+                //if (hasList.Any())
+                //{
+                //    //need to create a list of object who is named in the list
+                //    //1. create a list grouped by main model
+                //    //List<TModel> mainModel = result.g;
 
-                }
+                //}
             }
             return result;
         }

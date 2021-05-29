@@ -92,7 +92,7 @@ namespace drualcman
                     CheckSqlInjection(sql, log);
 
                     using SqlConnection con = new SqlConnection(this.rutaDDBB);
-                    using SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
+                    using SqlDataAdapter da = new SqlDataAdapter(sql, con);
                     da.SelectCommand.CommandTimeout = timeout;
                     using DataSet ds = new DataSet();                    
                     try

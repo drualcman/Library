@@ -507,7 +507,7 @@ namespace drualcman
                 else
                 {
                     using SqlConnection con = new SqlConnection(rutaDDBB);
-                    using SqlDataAdapter da = new SqlDataAdapter(querySQL, con);
+                    using SqlDataAdapter da = new SqlDataAdapter(sql, con);
                     da.SelectCommand.CommandTimeout = timeout;
                     using DataSet ds = new DataSet();
                     try
@@ -749,7 +749,7 @@ namespace drualcman
                         sql = "EXEC " + sql;
 
                     using SqlConnection cnn = new SqlConnection(rutaDDBB);
-                    using SqlCommand cmd = new SqlCommand(querySQL, cnn);
+                    using SqlCommand cmd = new SqlCommand(sql, cnn);
 
                     string datoRetorno = string.Empty;
 
@@ -850,7 +850,7 @@ namespace drualcman
             {
                 try
                 {
-                    using DataSet ds = ConsultarConDataSet(querySQL);
+                    using DataSet ds = ConsultarConDataSet(sql);
 
                     foreach (DataTable table in ds.Tables)
                     {
@@ -942,7 +942,7 @@ namespace drualcman
                         try
                         {
                             using SqlConnection con = new SqlConnection(rutaDDBB);
-                            using SqlCommand cmd = new SqlCommand(querySQL, con);
+                            using SqlCommand cmd = new SqlCommand(sql, con);
                             con.Open();
                             using SqlDataReader ds = cmd.ExecuteReader();
 
