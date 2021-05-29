@@ -106,29 +106,33 @@ namespace drualcman
         {
             defLog log = new defLog(this.FolderLog);
             log.start("ToList", sql, "");
+
+            #region query
             // If a query is empty create the query from the Model
             if (string.IsNullOrWhiteSpace(sql))
             {
                 sql = SetQuery<TModel>();
             }
+            else 
+            {
+                // check the sql if have some injection throw a exception
+                CheckSqlInjection(sql, log);
+            }
+            #endregion
 
             try
             {
-                // Comprobar que están indicando valores correctos (o casi)
-                CheckSqlInjection(sql, log);
-
                 using SqlConnection con = new SqlConnection(this.rutaDDBB);
-                con.Open();
-                using SqlCommand command = new SqlCommand(sql, con);
+                await con.OpenAsync();                
+                using SqlCommand command = con.CreateCommand();
+                command.CommandText = sql;
                 command.CommandTimeout = timeout;
                 using SqlDataReader dr = await command.ExecuteReaderAsync();
 
                 List<TModel> result = new List<TModel>();
                 if (dr.HasRows)
                 {
-                    TModel item = new TModel();
-                    Type model = item.GetType();
-                    PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    Type model = typeof(TModel);
 
                     List<TableName> tables = new List<TableName>();
                     int tableCount = 0;
@@ -138,71 +142,12 @@ namespace drualcman
                     List<string> hasList = new List<string>();
                     ReadOnlyCollection<DbColumn> columnNames = await dr.GetColumnSchemaAsync();
                     bool isDirectQuery = columnNames[0].ColumnName.IndexOf(".") < 0;
+                    List<Columns> columns = HaveColumns(columnNames, model);
 
-                    int c = properties.Length;
+                    int c = columns.Count;
                     while (await dr.ReadAsync())
                     {
-                        bool hasData = false;
-                        for (int i = 0; i < c; i++)
-                        {
-                            DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
-                            string columName;
-                            if (field is not null)
-                            {
-                                if (!field.Ignore)
-                                {
-                                    if (isDirectQuery)
-                                        columName = properties[i].Name;
-                                    else if (field.Inner == InnerDirection.NONE)
-                                        columName = $"{tables[0].ShortName}.{properties[i].Name}";
-                                    else
-                                    {
-                                        columName = string.Empty;
-
-                                        if (Helpers.ObjectHelpers.IsGenericList(properties[i].PropertyType.FullName) &&
-                                            !hasList.Contains(properties[i].PropertyType.Name))
-                                        {
-                                            hasList.Add(properties[i].PropertyType.Name);
-                                            Type[] genericType = properties[i].PropertyType.GetGenericArguments();
-                                            Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
-                                            properties[i].SetValue(item, Activator.CreateInstance(creatingCollectionType));
-                                        }
-                                        else
-                                        {
-                                            try
-                                            {
-                                                properties[i].SetValue(item,
-                                                    ColumnToObject(ref columnNames, dr, properties[i].PropertyType, ref tables, ref tableCount),
-                                                    null);
-                                                hasData = true;
-                                            }
-                                            catch { }
-                                        }
-                                    }
-                                }
-                                else
-                                    columName = string.Empty;
-                            }
-                            else
-                            {
-                                if (isDirectQuery)
-                                    columName = properties[i].Name;
-                                else
-                                    columName = $"{tables[0].ShortName}.{properties[i].Name}";
-                            }
-
-                            if (HaveColumn(ref columnNames, columName))
-                            {
-                                try
-                                {
-                                    properties[i].SetValue(item, dr[columName], null);
-                                    hasData = true;
-                                }
-                                catch { }
-                            }
-                        }
-                        if (hasData)
-                            result.Add(item);      //only add the item if have some to add
+                        result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref tables, ref tableCount, ref hasList, isDirectQuery));
                     }
 
                     //if (hasList.Any())
@@ -212,48 +157,67 @@ namespace drualcman
                     //    //List<TModel> mainModel = result.g;
 
                     //}
-                    dr.Close();                                     // cerrar la consulta
-                    con.Close();
                 }
                 return result;
             }
             catch (Exception ex)
             {
                 log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-                log.Dispose();
                 throw;
+            }
+            finally
+            {
+                log.Dispose();
             }
         }
         #endregion
 
         #region helpers
-        /// <summary>
-        /// Know if have a column name
-        /// </summary>
-        /// <param name="columns"></param>
-        /// <param name="columnName"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        private bool HaveColumn(ref ReadOnlyCollection<DbColumn> columns, string columnName, bool ignoreCase = true)
+        class Columns
         {
-            bool have;
-            int t = columns.Count;
-            int c = 0;
-            do
-            {
-                if (ignoreCase)
-                    have = columns[c].ColumnName.ToLower() == columnName.ToLower();
-                else
-                    have = columns[c].ColumnName == columnName;
-                c++;
-            } while (c < t && have == false);
-            return have;
+            public PropertyInfo Column { get; set; }
+            public DatabaseAttribute Options { get; set; }
         }
 
-        private object ColumnToObject(ref ReadOnlyCollection<DbColumn> columns, SqlDataReader row, Type model,
-            ref List<TableName> tables, ref int tableCount)
+        /// <summary>
+        /// Get all the columns properties need from the query used
+        /// </summary>
+        /// <param name="columns"></param>
+        /// <param name="model"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        private List<Columns> HaveColumns(ReadOnlyCollection<DbColumn> columns, Type model, bool ignoreCase = true)
         {
             PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            List<Columns> result = new List<Columns>();
+            int t = columns.Count;
+            int p = properties.Length;
+
+            for (int i = 0; i < p; i++)
+            {
+                int c = 0;
+                bool have;
+                do
+                {
+                    if (ignoreCase)
+                        have = columns[c].ColumnName.ToLower() == properties[i].Name.ToLower();
+                    else
+                        have = columns[c].ColumnName == properties[i].Name;
+                    c++;
+                } while (c < t && have == false);
+
+                if (have)
+                {
+                    result.Add(new Columns { Column = properties[i], Options = properties[i].GetCustomAttribute<DatabaseAttribute>() });
+                }
+            }            
+            return result;
+        }
+
+        private object ColumnToObject(ref ReadOnlyCollection<DbColumn> columnNames, SqlDataReader row, Type model,
+            ref List<TableName> tables, ref int tableCount, ref List<string> hasList, bool isDirectQuery)
+        {
+            List<Columns> columns = HaveColumns(columnNames, model);
 
             TableName table = tables.Where(t => t.Name == model.Name).FirstOrDefault();
             if (table is null)
@@ -265,26 +229,39 @@ namespace drualcman
 
             var item = Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
 
-            int c = properties.Length;
+            int c = columns.Count;
             for (int i = 0; i < c; i++)
             {
-                DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
                 string columName;
-                if (field is not null)
+                if (columns[i].Options is not null)
                 {
-                    if (!field.Ignore)
+                    if (!columns[i].Options.Ignore)
                     {
-                        if (field.Inner == InnerDirection.NONE)
-                            columName = $"{table.ShortName}.{properties[i].Name}";
+                        if (isDirectQuery)
+                            columName = columns[i].Column.Name;
+                        else if (columns[i].Options.Inner == InnerDirection.NONE)
+                            columName = $"{tables[0].ShortName}.{columns[i].Column.Name}";
                         else
                         {
                             columName = string.Empty;
-                            try
+                            if (Helpers.ObjectHelpers.IsGenericList(columns[i].Column.PropertyType.FullName) &&
+                                            !hasList.Contains(columns[i].Column.PropertyType.Name))
                             {
-                                properties[i].SetValue(item,
-                                    ColumnToObject(ref columns, row, properties[i].PropertyType, ref tables, ref tableCount), null);
+                                hasList.Add(columns[i].Column.PropertyType.Name);
+                                Type[] genericType = columns[i].Column.PropertyType.GetGenericArguments();
+                                Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
+                                columns[i].Column.SetValue(item, Activator.CreateInstance(creatingCollectionType));
                             }
-                            catch { }
+                            else
+                            {
+                                try
+                                {
+                                    columns[i].Column.SetValue(item,
+                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref tables, ref tableCount, ref hasList, isDirectQuery),
+                                        null);
+                                }
+                                catch { }
+                            }
                         }
                     }
                     else
@@ -292,17 +269,17 @@ namespace drualcman
                 }
                 else
                 {
-                    columName = $"{table.ShortName}.{properties[i].Name}";
+                    columName = $"{table.ShortName}.{columns[i].Column.Name}";
                 }
 
-                if (HaveColumn(ref columns, columName))
+                try
                 {
-                    try
-                    {
-                        properties[i].SetValue(item, row[columName], null);
-                    }
-                    catch { }
+                    if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
+                        columns[i].Column.SetValue(item, Convert.ToBoolean(row[columName]), null);
+                    else
+                        columns[i].Column.SetValue(item, row[columName], null);
                 }
+                catch { }
             }
             return item;
         }
