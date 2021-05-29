@@ -53,7 +53,7 @@ namespace drualcman
                 cmd.Parameters["@photo"].Value = image;
                 cmd.Parameters["@index"].Value = index;
                 result = ExecuteCommand(cmd);
-                cmd.Connection.Dispose();
+                
             }
             else result = false;
             return result;
@@ -79,7 +79,7 @@ namespace drualcman
                 cmd.Parameters.Add("@index");
                 cmd.Parameters["@photo"].Value = image;
                 result = ExecuteCommand(cmd);
-                cmd.Connection.Dispose();
+                
             }
             else result = false;
             return result;
@@ -144,7 +144,7 @@ namespace drualcman
                 cmd.Parameters["@photo"].Value = image;
                 cmd.Parameters["@index"].Value = index;
                 result = ExecuteCommand(cmd);
-                cmd.Connection.Dispose();
+                
             }
             else result = false;
             return result;
@@ -222,7 +222,7 @@ namespace drualcman
                 cmd.Parameters.Add("@index");
                 cmd.Parameters["@photo"].Value = image;
                 result = await ExecuteCommandAsync(cmd);
-                _ = cmd.Connection.DisposeAsync();
+                
             }
             else result = false;
             return result;

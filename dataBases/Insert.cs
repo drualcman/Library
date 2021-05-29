@@ -64,7 +64,7 @@ namespace drualcman
                 {
                     result = ExecuteCommand(cmd) ? 1 : 0;
                 }
-                cmd.Connection.Dispose();
+                
             }
             else
             {
@@ -80,7 +80,8 @@ namespace drualcman
             if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
             {
                 using SqlCommand cmd = SetInsert(table, colName, colValue);
-                cmd.Connection = this.cnnDDBB();                
+                await this.OpenConnectionAsync();
+                cmd.Connection = this.DbConnection;
                 if (returnScope)
                 {
                     cmd.CommandText += " select SCOPE_IDENTITY()";
@@ -97,7 +98,7 @@ namespace drualcman
                 {
                     result = await ExecuteCommandAsync(cmd) ? 1 : 0;
                 }
-                _ = cmd.Connection.DisposeAsync();
+                
             }
             else
             {
@@ -116,8 +117,7 @@ namespace drualcman
             StringBuilder values = new StringBuilder();
             int i;
 
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = cnnDDBB();
+            using SqlCommand cmd = new SqlCommand();
             //check columns
             for (i = 0; i < colName.Count(); i++)
             {

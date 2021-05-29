@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace drualcman
@@ -25,12 +26,22 @@ namespace drualcman
                 {                    
                     this.rutaDDBB = null;
                     this.FolderLog = null;
+
+                    if (this.DbConnection is not null)
+                        this.DbConnection.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
                 // TODO: set large fields to null
                 disposedValue = true;
             }
+        }
+
+        protected virtual async Task DisposeAsync()
+        {
+            if (this.DbConnection is not null)
+                await this.DbConnection.DisposeAsync();
+            Dispose();
         }
 
         // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources

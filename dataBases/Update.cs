@@ -82,7 +82,7 @@ namespace drualcman
             {
                 using SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
                 result = ExecuteCommand(cmd);
-                cmd.Connection.Dispose();
+                
             }
             else
             {
@@ -108,7 +108,7 @@ namespace drualcman
             {
                 using SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
                 result = await ExecuteCommandAsync(cmd);
-                _ = cmd.Connection.DisposeAsync();
+                
             }
             else
             {
@@ -123,8 +123,7 @@ namespace drualcman
         {
             int i;
 
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = cnnDDBB();
+            using SqlCommand cmd = new SqlCommand();
             StringBuilder sql = new StringBuilder($"UPDATE {table} SET ");
             //check columns
             for (i = 0; i < colName.Count(); i++)

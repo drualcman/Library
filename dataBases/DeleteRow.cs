@@ -47,8 +47,8 @@ namespace drualcman
 				string sql = $@"Delete FROM {table} WHERE ";
 				int i;
 				//check index columns
-				using SqlCommand cmd = new SqlCommand();
-				cmd.Connection = this.cnnDDBB();
+				this.OpenConnection();
+				using SqlCommand cmd = DbConnection.CreateCommand();
 				for (i = 0; i < indexColumn.Count(); i++)
 				{
 					sql += $"{indexColumn[i]} = @{indexColumn[i]}";
@@ -56,8 +56,7 @@ namespace drualcman
 					if (i + 1 < indexColumn.Count()) sql += " AND ";
 				}
 				cmd.CommandText = sql;
-				result = ExecuteCommand(cmd);
-				cmd.Connection.Dispose();
+				result = ExecuteCommand(cmd);				
 			}
 			else result = false;
 			return result;
@@ -78,8 +77,8 @@ namespace drualcman
 				string sql = $@"Delete FROM {table} WHERE ";
 				int i;
 				//check index columns
-				using SqlCommand cmd = new SqlCommand();
-				cmd.Connection = this.cnnDDBB();
+				this.OpenConnection();
+				using SqlCommand cmd = DbConnection.CreateCommand();
 				for (i = 0; i < indexColumn.Count(); i++)
 				{
 					sql += $"{indexColumn[i]} = @{indexColumn[i]}";
@@ -88,7 +87,7 @@ namespace drualcman
 				}
 				cmd.CommandText = sql;
 				result = ExecuteCommand(cmd);
-				cmd.Connection.Dispose();
+				
 			}
 			else result = false;
 			return result;
@@ -116,8 +115,8 @@ namespace drualcman
 				string sql = $@"Delete FROM {table} WHERE ";
 				int i;
 				//check index columns
-				using SqlCommand cmd = new SqlCommand();
-				cmd.Connection = this.cnnDDBB();
+				await this.OpenConnectionAsync();
+				using SqlCommand cmd = DbConnection.CreateCommand();
 				for (i = 0; i < indexColumn.Count(); i++)
 				{
 					sql += $"{indexColumn[i]} = @{indexColumn[i]}";
@@ -126,7 +125,7 @@ namespace drualcman
 				}
 				cmd.CommandText = sql;
 				result = await ExecuteCommandAsync(cmd);
-				_ = cmd.Connection.DisposeAsync();
+				
 			}
 			else result = false;
 			return result;
@@ -147,8 +146,8 @@ namespace drualcman
 				string sql = $@"Delete FROM {table} WHERE ";
 				int i;
 				//check index columns
-				using SqlCommand cmd = new SqlCommand();
-				cmd.Connection = this.cnnDDBB();
+				await this.OpenConnectionAsync();
+				using SqlCommand cmd = DbConnection.CreateCommand();
 				for (i = 0; i < indexColumn.Count(); i++)
 				{
 					sql += $"{indexColumn[i]} = @{indexColumn[i]}";
@@ -157,7 +156,7 @@ namespace drualcman
 				}
 				cmd.CommandText = sql;
 				result = await ExecuteCommandAsync(cmd);
-				_ = cmd.Connection.DisposeAsync();
+				
 			}
 			else result = false;
 			return result;
