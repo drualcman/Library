@@ -49,39 +49,7 @@ namespace drualcman
         /// <returns></returns>
         public object Execute(SqlCommand cmd, int timeout)
         {
-            defLog log = new defLog(this.FolderLog);
-            object result;
-
-            if (cmd != null)
-            {
-                log.start("Execute(cmd)", cmd.CommandText, this.rutaDDBB);
-                try
-                {
-                    if (cmd.Connection == null) cmd.Connection = this.cnnDDBB();
-                    cmd.Connection.Open();
-                    cmd.CommandTimeout = timeout;
-                    result = cmd.ExecuteScalar();
-                    if (this.LogError) log.end(result.ToString());
-                }
-                catch (Exception ex)
-                {
-                    result = null;
-                    log.end(result, ex);
-                }
-                finally
-                {
-                    cmd.Connection.Close();
-                }
-                cmd.Dispose();
-            }
-            else
-            {
-                log.start("Execute(cmd)", "", this.rutaDDBB);
-                result = null;
-                log.end(result.ToString(), "CMD is null");
-            }
-
-            return result;
+            return ExecuteAsync(cmd, timeout).Result;
         }
 
         /// <summary>
