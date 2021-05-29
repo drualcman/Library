@@ -11,6 +11,7 @@ using System.Data.Common;
 using System.Collections.ObjectModel;
 using drualcman.Attributes;
 using drualcman.Enums;
+using drualcman.Data;
 
 namespace drualcman
 {
@@ -168,11 +169,6 @@ namespace drualcman
         #endregion
 
         #region helpers
-        class Columns
-        {
-            public PropertyInfo Column { get; set; }
-            public DatabaseAttribute Options { get; set; }
-        }
 
         /// <summary>
         /// Get all the columns properties need from the query used
