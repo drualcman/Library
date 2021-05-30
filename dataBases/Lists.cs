@@ -132,18 +132,15 @@ namespace drualcman
 
                     List<TableName> tables = new List<TableName>();
                     int tableCount = 0;
-                    TableName newTable = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
-                    tables.Add(newTable);
+                    TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
+                    tables.Add(table);
 
                     List<string> hasList = new List<string>();
                     ReadOnlyCollection<DbColumn> columnNames = await dr.GetColumnSchemaAsync();
-                    bool isDirectQuery = columnNames[0].ColumnName.IndexOf(".") < 0;
-                    List<Columns> columns = HaveColumns(columnNames, model);
-
-                    int c = columns.Count;
+                    List<Columns> columns = HaveColumns(columnNames, model, table.ShortName, true);
                     while (await dr.ReadAsync())
                     {
-                        result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref tables, ref tableCount, ref hasList, isDirectQuery));
+                        result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref tables, ref tableCount, ref hasList, ref columns));
                     }
 
                     //if (hasList.Any())
@@ -177,38 +174,58 @@ namespace drualcman
         /// <param name="model"></param>
         /// <param name="ignoreCase"></param>
         /// <returns></returns>
-        private List<Columns> HaveColumns(ReadOnlyCollection<DbColumn> columns, Type model, bool ignoreCase = true)
+        private List<Columns> HaveColumns(ReadOnlyCollection<DbColumn> columns, Type model, string shortName, bool ignoreCase)
         {
             PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             List<Columns> result = new List<Columns>();
             int t = columns.Count;
             int p = properties.Length;
-
-            for (int i = 0; i < p; i++)
+            bool isDirectQuery = columns[0].ColumnName.IndexOf(".") < 0;
+            for (int r = 0; r < t; r++)
             {
-                int c = 0;
-                bool have;
-                do
+                int c = -1;
+                bool have = false;                
+                string columnCompare = string.Empty;
+                DatabaseAttribute options = null;
+                while (c < p && have == false)
                 {
-                    if (ignoreCase)
-                        have = columns[c].ColumnName.ToLower() == properties[i].Name.ToLower();
-                    else
-                        have = columns[c].ColumnName == properties[i].Name;
                     c++;
-                } while (c < t && have == false);
-
+                    options = properties[c].GetCustomAttribute<DatabaseAttribute>();
+                    if (isDirectQuery)
+                    {
+                        columnCompare = columns[r].ColumnName;
+                    }
+                    else
+                    {
+                        if (options is null)
+                        {
+                            columnCompare = columns[r].ColumnName.Replace($"{shortName}.", "");
+                        }
+                        else if (options.Inner == InnerDirection.NONE)
+                        {
+                            columnCompare = columns[r].ColumnName.Replace($"{shortName}.", "");
+                        }
+                        else
+                        {
+                            columnCompare = string.Empty;
+                        }
+                    }
+                    if (ignoreCase)
+                        have = columnCompare.ToLower() == properties[c].Name.ToLower();
+                    else
+                        have = columnCompare == properties[c].Name;
+                }
                 if (have)
                 {
-                    result.Add(new Columns { Column = properties[i], Options = properties[i].GetCustomAttribute<DatabaseAttribute>() });
+                    result.Add(new Columns { Column = properties[c], Options = options, TableName = shortName, ColumnName = columns[r].ColumnName });
                 }
-            }            
+            }
             return result;
         }
 
         private object ColumnToObject(ref ReadOnlyCollection<DbColumn> columnNames, SqlDataReader row, Type model,
-            ref List<TableName> tables, ref int tableCount, ref List<string> hasList, bool isDirectQuery)
+            ref List<TableName> tables, ref int tableCount, ref List<string> hasList, ref List<Columns> columns)
         {
-            List<Columns> columns = HaveColumns(columnNames, model);
 
             TableName table = tables.Where(t => t.Name == model.Name).FirstOrDefault();
             if (table is null)
@@ -218,23 +235,22 @@ namespace drualcman
                 tables.Add(table);
             }
 
+            if (columns.Where(t => t.TableName == table.ShortName).FirstOrDefault() == null)
+            {
+                columns = HaveColumns(columnNames, model, table.ShortName, true);
+            }
             var item = Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
 
             int c = columns.Count;
             for (int i = 0; i < c; i++)
             {
-                string columName;
-                if (columns[i].Options is not null)
+                if (!string.IsNullOrEmpty(columns[i].ColumnName))
                 {
-                    if (!columns[i].Options.Ignore)
+                    if (columns[i].Options is not null)
                     {
-                        if (isDirectQuery)
-                            columName = columns[i].Column.Name;
-                        else if (columns[i].Options.Inner == InnerDirection.NONE)
-                            columName = $"{tables[0].ShortName}.{columns[i].Column.Name}";
-                        else
+                        if (!columns[i].Options.Ignore)
                         {
-                            columName = string.Empty;
+
                             if (Helpers.ObjectHelpers.IsGenericList(columns[i].Column.PropertyType.FullName) &&
                                             !hasList.Contains(columns[i].Column.PropertyType.Name))
                             {
@@ -243,34 +259,31 @@ namespace drualcman
                                 Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
                                 columns[i].Column.SetValue(item, Activator.CreateInstance(creatingCollectionType));
                             }
-                            else
+                        }
+                        else
+                        {
+                            try
                             {
-                                try
-                                {
-                                    columns[i].Column.SetValue(item,
-                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref tables, ref tableCount, ref hasList, isDirectQuery),
-                                        null);
-                                }
-                                catch { }
+                                if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
+                                    columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
+                                else
+                                    columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
                             }
+                            catch { }
                         }
                     }
                     else
-                        columName = string.Empty;
+                    {
+                        try
+                        {
+                            if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
+                                columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
+                            else
+                                columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
+                        }
+                        catch { }
+                    }
                 }
-                else
-                {
-                    columName = $"{table.ShortName}.{columns[i].Column.Name}";
-                }
-
-                try
-                {
-                    if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
-                        columns[i].Column.SetValue(item, Convert.ToBoolean(row[columName]), null);
-                    else
-                        columns[i].Column.SetValue(item, row[columName], null);
-                }
-                catch { }
             }
             return item;
         }
