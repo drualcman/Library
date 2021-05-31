@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace drualcman
@@ -91,8 +92,13 @@ namespace drualcman
                     // Comprobar que están indicando valores correctos (o casi)
                     CheckSqlInjection(sql, log);
 
-                    using SqlConnection con = new SqlConnection(this.rutaDDBB);
-                    using SqlDataAdapter da = new SqlDataAdapter(sql, con);
+                    string input = sql;
+                    string pattern = "\\[t[0-9].";
+                    string replacement = "[";
+                    sql = Regex.Replace(input, pattern, replacement);
+
+                    this.OpenConnection();
+                    using SqlDataAdapter da = new SqlDataAdapter(sql, this.DbConnection);
                     da.SelectCommand.CommandTimeout = timeout;
                     using DataSet ds = new DataSet();                    
                     try
@@ -107,7 +113,6 @@ namespace drualcman
                     }
                     finally
                     {
-                        con.Close();
                         if (this.LogError) log.end(ds, this.rutaDDBB);
                         log.Dispose();
                     }
