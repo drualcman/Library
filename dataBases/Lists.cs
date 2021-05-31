@@ -126,30 +126,33 @@ namespace drualcman
                 using SqlDataReader dr = await this.ReaderAsync(sql, timeout);
 
                 List<TModel> result = new List<TModel>();
-                if (dr.HasRows)
+                if (dr is not null)
                 {
-                    Type model = typeof(TModel);
-
-                    List<TableName> tables = new List<TableName>();
-                    int tableCount = 0;
-                    TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
-                    tables.Add(table);
-
-                    List<string> hasList = new List<string>();
-                    ReadOnlyCollection<DbColumn> columnNames = await dr.GetColumnSchemaAsync();
-                    List<Columns> columns = HaveColumns(columnNames, model, table.ShortName, true);
-                    while (await dr.ReadAsync())
+                    if (dr.HasRows)
                     {
-                        result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref tables, ref tableCount, ref hasList, ref columns));
+                        Type model = typeof(TModel);
+
+                        List<TableName> tables = new List<TableName>();
+                        int tableCount = 0;
+                        TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
+                        tables.Add(table);
+
+                        List<string> hasList = new List<string>();
+                        ReadOnlyCollection<DbColumn> columnNames = await dr.GetColumnSchemaAsync();
+                        List<Columns> columns = HaveColumns(columnNames, model, table.ShortName, true);
+                        while (await dr.ReadAsync())
+                        {
+                            result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref tables, ref tableCount, ref hasList, ref columns));
+                        }
+
+                        //if (hasList.Any())
+                        //{
+                        //    //need to create a list of object who is named in the list
+                        //    //1. create a list grouped by main model
+                        //    //List<TModel> mainModel = result.g;
+
+                        //}
                     }
-
-                    //if (hasList.Any())
-                    //{
-                    //    //need to create a list of object who is named in the list
-                    //    //1. create a list grouped by main model
-                    //    //List<TModel> mainModel = result.g;
-
-                    //}
                 }
                 return result;
             }
@@ -181,11 +184,11 @@ namespace drualcman
             int t = columns.Count;
             int p = properties.Length;
             bool isDirectQuery = columns[0].ColumnName.IndexOf(".") < 0;
+            string columnCompare;
             for (int r = 0; r < t; r++)
             {
                 int c = -1;
                 bool have = false;                
-                string columnCompare = string.Empty;
                 DatabaseAttribute options = null;
                 while (c < p && have == false)
                 {
@@ -250,7 +253,6 @@ namespace drualcman
                     {
                         if (!columns[i].Options.Ignore)
                         {
-
                             if (Helpers.ObjectHelpers.IsGenericList(columns[i].Column.PropertyType.FullName) &&
                                             !hasList.Contains(columns[i].Column.PropertyType.Name))
                             {
@@ -259,17 +261,16 @@ namespace drualcman
                                 Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
                                 columns[i].Column.SetValue(item, Activator.CreateInstance(creatingCollectionType));
                             }
-                        }
-                        else
-                        {
-                            try
+                            else
                             {
-                                if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
-                                    columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
-                                else
-                                    columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
+                                try
+                                {
+                                    columns[i].Column.SetValue(item,
+                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref tables, ref tableCount, ref hasList, ref columns),
+                                        null);
+                                }
+                                catch { }
                             }
-                            catch { }
                         }
                     }
                     else

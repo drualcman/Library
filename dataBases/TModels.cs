@@ -19,8 +19,7 @@ namespace drualcman
         /// <returns></returns>
         public TModel Get<TModel>(string query) where TModel : new()
         {
-            DataTable dt = DataTable(query);                //execute the query
-            List<TModel> list = dt.ToList<TModel>();
+            List<TModel> list = List<TModel>(query);
             if (list.Any()) return list[0];
             else return new TModel();
         }
@@ -35,8 +34,7 @@ namespace drualcman
         /// <returns></returns>
         public async Task<TModel> GetAsync<TModel>(string query) where TModel : new()
         {
-            DataTable dt = await DataTableAsync(query);                //execute the query
-            List<TModel> list = await dt.ToListAsync<TModel>();
+            List<TModel> list = await ListAsync<TModel>(query);
             if (list.Any()) return list[0];
             else return new TModel();
         }
