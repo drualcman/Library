@@ -99,7 +99,7 @@ namespace drualcman.Data.Extensions
                 int c = columns.Count;
                 for (int i = 0; i < r; i++)
                 {
-                    result.Add((TModel)ColumnToObject(ref columnNames, dt.Rows[i], model, ref tables, ref tableCount, ref hasList, ref columns));
+                    result.Add((TModel)ColumnToObject(ref columnNames, dt.Rows[i], model, ref tables, ref tableCount, ref hasList, columns));
                 }
 
                 //if (hasList.Any())
@@ -432,7 +432,7 @@ namespace drualcman.Data.Extensions
         }
 
         private static object ColumnToObject(ref string[] columnNames, DataRow row, Type model,
-            ref List<TableName> tables, ref int tableCount, ref List<string> hasList, ref List<Columns> columns)
+            ref List<TableName> tables, ref int tableCount, ref List<string> hasList, List<Columns> columns)
         {
             TableName table = tables.Where(t => t.Name == model.Name).FirstOrDefault();
             if (table is null)
@@ -465,13 +465,24 @@ namespace drualcman.Data.Extensions
                                 Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
                                 columns[i].Column.SetValue(item, Activator.CreateInstance(creatingCollectionType));
                             }
-                            else
+                            else if (columns[i].Options.Inner != InnerDirection.NONE)
                             {
                                 try
                                 {
                                     columns[i].Column.SetValue(item,
-                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref tables, ref tableCount, ref hasList, ref columns),
+                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref tables, ref tableCount, ref hasList, columns),
                                         null);
+                                }
+                                catch { }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
+                                        columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
+                                    else
+                                        columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
                                 }
                                 catch { }
                             }

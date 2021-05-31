@@ -142,7 +142,7 @@ namespace drualcman
                         List<Columns> columns = HaveColumns(columnNames, model, table.ShortName, true);
                         while (await dr.ReadAsync())
                         {
-                            result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref tables, ref tableCount, ref hasList, ref columns));
+                            result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref tables, ref tableCount, ref hasList, columns));
                         }
 
                         //if (hasList.Any())
@@ -187,12 +187,11 @@ namespace drualcman
             string columnCompare;
             for (int r = 0; r < t; r++)
             {
-                int c = -1;
+                int c = 0;
                 bool have = false;                
                 DatabaseAttribute options = null;
                 while (c < p && have == false)
                 {
-                    c++;
                     options = properties[c].GetCustomAttribute<DatabaseAttribute>();
                     if (isDirectQuery)
                     {
@@ -217,9 +216,11 @@ namespace drualcman
                         have = columnCompare.ToLower() == properties[c].Name.ToLower();
                     else
                         have = columnCompare == properties[c].Name;
+                    c++;
                 }
                 if (have)
                 {
+                    c--;
                     result.Add(new Columns { Column = properties[c], Options = options, TableName = shortName, ColumnName = columns[r].ColumnName });
                 }
             }
@@ -227,7 +228,7 @@ namespace drualcman
         }
 
         private object ColumnToObject(ref ReadOnlyCollection<DbColumn> columnNames, SqlDataReader row, Type model,
-            ref List<TableName> tables, ref int tableCount, ref List<string> hasList, ref List<Columns> columns)
+            ref List<TableName> tables, ref int tableCount, ref List<string> hasList, List<Columns> columns)
         {
 
             TableName table = tables.Where(t => t.Name == model.Name).FirstOrDefault();
@@ -261,13 +262,24 @@ namespace drualcman
                                 Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
                                 columns[i].Column.SetValue(item, Activator.CreateInstance(creatingCollectionType));
                             }
-                            else
+                            else if (columns[i].Options.Inner != InnerDirection.NONE)
                             {
                                 try
                                 {
                                     columns[i].Column.SetValue(item,
-                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref tables, ref tableCount, ref hasList, ref columns),
+                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref tables, ref tableCount, ref hasList, columns),
                                         null);
+                                }
+                                catch { }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
+                                        columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
+                                    else
+                                        columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
                                 }
                                 catch { }
                             }
