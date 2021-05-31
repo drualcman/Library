@@ -91,11 +91,7 @@ namespace drualcman
                 {
                     // Comprobar que están indicando valores correctos (o casi)
                     CheckSqlInjection(sql, log);
-
-                    string input = sql;
-                    string pattern = "\\[t[0-9].";
-                    string replacement = "[";
-                    sql = Regex.Replace(input, pattern, replacement);
+                    sql = CleanSqlDataColumns(sql);
 
                     this.OpenConnection();
                     using SqlDataAdapter da = new SqlDataAdapter(sql, this.DbConnection);

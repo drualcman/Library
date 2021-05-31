@@ -325,5 +325,12 @@ namespace drualcman
 
             }
         }
+
+        protected string CleanSqlDataColumns(string input)
+        {
+            string pattern = "\\[t[0-9].";
+            string replacement = "[";
+            return Regex.Replace(input, pattern, replacement);
+        }
     }
 }

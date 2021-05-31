@@ -146,13 +146,13 @@ namespace drualcman
                     }
                     else
                     {
-                        using SqlConnection con = new SqlConnection(this.rutaDDBB);
+                        this.OpenConnection();
 
                         try
                         {
-                            using SqlCommand cmd = new SqlCommand(sql, con);
+                            sql = CleanSqlDataColumns(sql);
+                            using SqlCommand cmd = new SqlCommand(sql, this.DbConnection);
                             cmd.CommandTimeout = timeOut;
-                            con.Open();
                             try
                             {
                                 using SqlDataReader dr = await cmd.ExecuteReaderAsync();         // ejecutar el comando SQL
@@ -181,10 +181,6 @@ namespace drualcman
                             log.Dispose();
 
                             throw;
-                        }
-                        finally
-                        {
-                            con.Close();
                         }
 
                         if (this.LogError)
@@ -255,13 +251,12 @@ namespace drualcman
                     }
                     else
                     {
-                        using SqlConnection con = new SqlConnection(this.rutaDDBB);
+                        this.OpenConnection();
 
                         try
                         {
-                            using SqlCommand cmd = new SqlCommand(sql, con);
+                            using SqlCommand cmd = new SqlCommand(sql, this.DbConnection);
                             cmd.CommandTimeout = timeOut;
-                            con.Open();
                             try
                             {
                                 using SqlDataReader dr = await cmd.ExecuteReaderAsync();         // ejecutar el comando SQL
@@ -290,10 +285,6 @@ namespace drualcman
                             log.Dispose();
 
                             throw;
-                        }
-                        finally
-                        {
-                            con.Close();
                         }
 
                         if (this.LogError)
@@ -391,11 +382,10 @@ namespace drualcman
                     else
                     {
                         //realizar las acciones requeridas de la consulta SQL
-                        using SqlConnection con = new SqlConnection(rutaDDBB);
+                        this.OpenConnection();
                         try
                         {
-                            con.Open();
-                            using SqlCommand command = new SqlCommand(sql, con);
+                            using SqlCommand command = new SqlCommand(sql, this.DbConnection);
                             command.CommandTimeout = timeout;
                             using SqlDataReader dr = await command.ExecuteReaderAsync();
                             retorno = dr.HasRows;
@@ -407,10 +397,6 @@ namespace drualcman
                             log.Dispose();
 
                             throw;
-                        }
-                        finally
-                        {
-                            con.Close();
                         }
                     }
                 }
@@ -506,8 +492,8 @@ namespace drualcman
                 }
                 else
                 {
-                    using SqlConnection con = new SqlConnection(rutaDDBB);
-                    using SqlDataAdapter da = new SqlDataAdapter(sql, con);
+                    this.OpenConnection();
+                    using SqlDataAdapter da = new SqlDataAdapter(sql, this.DbConnection);
                     da.SelectCommand.CommandTimeout = timeout;
                     using DataSet ds = new DataSet();
                     try
@@ -748,12 +734,10 @@ namespace drualcman
                     if ((sql.ToUpper().IndexOf("EXEC ") < 0))
                         sql = "EXEC " + sql;
 
-                    using SqlConnection cnn = new SqlConnection(rutaDDBB);
-                    using SqlCommand cmd = new SqlCommand(sql, cnn);
+                    this.OpenConnection();
+                    using SqlCommand cmd = new SqlCommand(sql, this.DbConnection);
 
                     string datoRetorno = string.Empty;
-
-                    cnn.Open();
                     try
                     {
                         using SqlDataReader dr = cmd.ExecuteReader();         // ejecutar el comando SQL
@@ -941,11 +925,9 @@ namespace drualcman
                     {
                         try
                         {
-                            using SqlConnection con = new SqlConnection(rutaDDBB);
-                            using SqlCommand cmd = new SqlCommand(sql, con);
-                            con.Open();
+                            this.OpenConnection();
+                            using SqlCommand cmd = new SqlCommand(sql, this.DbConnection);
                             using SqlDataReader ds = cmd.ExecuteReader();
-
 
                             //localizar los datos en la base de datos
                             try
