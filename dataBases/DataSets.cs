@@ -96,7 +96,7 @@ namespace drualcman
                     this.OpenConnection();
                     using SqlDataAdapter da = new SqlDataAdapter(sql, this.DbConnection);
                     da.SelectCommand.CommandTimeout = timeout;
-                    using DataSet ds = new DataSet();                    
+                    DataSet ds = new DataSet();                    
                     try
                     {
                         da.Fill(ds);
@@ -104,12 +104,11 @@ namespace drualcman
                     catch (Exception ex)
                     {
                         log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
-                        log.Dispose();
                         throw;
                     }
                     finally
                     {
-                        if (this.LogError) log.end(ds, this.rutaDDBB);
+                        if (this.LogResults) log.end(ds, this.rutaDDBB);
                         log.Dispose();
                     }
 

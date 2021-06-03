@@ -101,13 +101,12 @@ namespace drualcman
         /// </returns>
         public async Task<string> GetColAync(string sql, string colSQL, int timeOut)
         {
-            defLog log = new defLog(this.FolderLog);
+            using defLog log = new defLog(this.FolderLog);
             log.start("GetColAync(sql, colSQL, timeOut)", sql, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -119,28 +118,24 @@ namespace drualcman
                     if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                        log.Dispose();
 
                         throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
@@ -183,7 +178,7 @@ namespace drualcman
                             throw;
                         }
 
-                        if (this.LogError)
+                        if (this.LogResults)
                             log.end(datoRetorno, this.rutaDDBB);
                         log.Dispose();
                     }
@@ -287,7 +282,7 @@ namespace drualcman
                             throw;
                         }
 
-                        if (this.LogError)
+                        if (this.LogResults)
                             log.end(datoRetorno, this.rutaDDBB);
                         log.Dispose();
 
@@ -403,7 +398,7 @@ namespace drualcman
                 else
                     retorno = false;
             }
-            if (this.LogError)
+            if (this.LogResults)
                 log.end(retorno, this.rutaDDBB);
             log.Dispose();
 
@@ -507,7 +502,7 @@ namespace drualcman
 
                         throw;
                     }
-                    if (this.LogError)
+                    if (this.LogResults)
                         log.end(ds, this.rutaDDBB);
                     log.Dispose();
 
@@ -583,7 +578,7 @@ namespace drualcman
 
                         throw;
                     }
-                    if (this.LogError)
+                    if (this.LogResults)
                         log.end(newId, this.rutaDDBB);
                     log.Dispose();
 
@@ -660,7 +655,7 @@ namespace drualcman
                         throw;
                     }
 
-                    if (this.LogError)
+                    if (this.LogResults)
                         log.end(newId, this.rutaDDBB);
                     log.Dispose();
 
@@ -751,7 +746,7 @@ namespace drualcman
                         log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
                         throw;
                     }
-                    if (this.LogError)
+                    if (this.LogResults)
                         log.end(datoRetorno, this.rutaDDBB);
                     log.Dispose();
                     return datoRetorno;
@@ -864,7 +859,7 @@ namespace drualcman
                     throw;
                 }
             }
-            if (this.LogError)
+            if (this.LogResults)
                 log.end(retorno, this.rutaDDBB);
             log.Dispose();
 
@@ -963,7 +958,7 @@ namespace drualcman
 
                         }
 
-                        if (this.LogError)
+                        if (this.LogResults)
                             log.end(retorno, this.rutaDDBB);
                         log.Dispose();
 

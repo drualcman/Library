@@ -117,7 +117,7 @@ namespace drualcman
             StringBuilder values = new StringBuilder();
             int i;
 
-            using SqlCommand cmd = new SqlCommand();
+            SqlCommand cmd = new SqlCommand();
             //check columns
             for (i = 0; i < colName.Count(); i++)
             {

@@ -76,14 +76,12 @@ namespace drualcman
                         await this .OpenConnectionAsync();
                         cmd.Connection = this.DbConnection;
                     }
-                    else
-                    {
-                        if (cmd.Connection.State != System.Data.ConnectionState.Open) cmd.Connection.Open();
-                    }
+                    if (cmd.Connection.State != System.Data.ConnectionState.Open) 
+                        await cmd.Connection.OpenAsync();
                     cmd.CommandTimeout = timeout;
                     await cmd.ExecuteNonQueryAsync();
                     result = true;
-                    if (this.LogError) log.end(result.ToString());
+                    if (this.LogResults) log.end(result.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -92,7 +90,7 @@ namespace drualcman
                 }
                 finally
                 {                    
-                    _ = cmd.DisposeAsync();
+                    await cmd.DisposeAsync();
                 }
             }
             else
@@ -121,11 +119,11 @@ namespace drualcman
                 else
                 {
                     if (cmd.Connection.State != System.Data.ConnectionState.Open)
-                        cmd.Connection.Open();
+                        await cmd.Connection.OpenAsync();
                 }
                 cmd.CommandTimeout = timeout;
                 result = await cmd.ExecuteScalarAsync();
-                if (this.LogError) log.end(result.ToString());
+                if (this.LogResults) log.end(result.ToString());
             }
             catch (Exception ex)
             {
@@ -135,7 +133,7 @@ namespace drualcman
             finally
             {
 
-                _ = cmd.DisposeAsync();
+                await cmd.DisposeAsync();
             }
 
 
@@ -189,11 +187,11 @@ namespace drualcman
                 else
                 {
                     if (cmd.Connection.State != System.Data.ConnectionState.Open)
-                        cmd.Connection.Open();
+                        await cmd.Connection.OpenAsync();
                 }
                 cmd.CommandTimeout = timeout;
                 result = await cmd.ExecuteReaderAsync();
-                if (this.LogError) log.end(result.ToString());
+                if (this.LogResults) log.end(result.ToString());
             }
             catch (Exception ex)
             {
@@ -202,7 +200,7 @@ namespace drualcman
             }
             finally
             {
-                _ = cmd.DisposeAsync();
+                await cmd.DisposeAsync();
             }
             return result;
         }

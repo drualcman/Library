@@ -92,7 +92,7 @@ namespace drualcman
                     else
                     {
                         bool retorno = ExecuteCommand(sql);
-                        if (this.LogError) log.end(retorno, this.rutaDDBB);
+                        if (this.LogResults) log.end(retorno, this.rutaDDBB);
                         log.Dispose();
                         return retorno;
                     }

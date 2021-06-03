@@ -80,13 +80,13 @@ namespace drualcman
                 }
             }
         }
+        public bool LogResults { get; set; }
         #endregion
 
         #region management variables
         private string FolderLog;
         private bool ChrControl;
         private bool dbControl;
-        private bool LogError;
         Dictionary<string, object> WhereRequired;
         #endregion
 
@@ -101,7 +101,7 @@ namespace drualcman
             this.FolderLog = string.Empty;
             this.dbControl = true;
             this.rutaDDBB = string.Empty;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x=> x.Key, x=> x.Value);
         }
 
@@ -117,7 +117,7 @@ namespace drualcman
             this.rutaDDBB = string.Empty; // cadenaConexion(source, catalog, user, pass);
             this.FolderLog = string.Empty;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -134,7 +134,7 @@ namespace drualcman
             this.FolderLog = string.Empty;
             this.ChrControl = ControlCHR;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -151,7 +151,7 @@ namespace drualcman
             this.FolderLog = folder;
             this.ChrControl = true;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -169,7 +169,7 @@ namespace drualcman
             this.FolderLog = string.Empty;
             this.ChrControl = ControlCHR;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -187,7 +187,7 @@ namespace drualcman
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -207,7 +207,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -226,7 +226,7 @@ namespace drualcman
             this.FolderLog = string.Empty;
             this.ChrControl = true;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -246,7 +246,7 @@ namespace drualcman
             this.FolderLog = string.Empty;
             this.ChrControl = true;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -264,7 +264,7 @@ namespace drualcman
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -284,7 +284,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -305,7 +305,7 @@ namespace drualcman
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -327,7 +327,7 @@ namespace drualcman
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -350,7 +350,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -375,7 +375,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -397,7 +397,7 @@ namespace drualcman
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -421,7 +421,7 @@ namespace drualcman
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -445,7 +445,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -471,7 +471,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -494,7 +494,7 @@ namespace drualcman
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -519,7 +519,7 @@ namespace drualcman
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
             this.dbControl = true;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -544,7 +544,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -570,7 +570,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -596,7 +596,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -624,7 +624,7 @@ namespace drualcman
             this.ChrControl = ControlCHR;
             this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogError = false;
+            this.LogResults = false;
             WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
         #endregion

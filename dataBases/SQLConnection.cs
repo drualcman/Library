@@ -21,10 +21,10 @@ namespace drualcman
         /// Open a connection with a DB
         /// </summary>
         /// <param name="connectionString">Ruta alternativa de base de datos</param>
-        protected /*async*/ void OpenConnection(string connectionString)
+        protected void OpenConnection(string connectionString)
         {
             //bool b = await OpenConnectionAsync();
-            defLog log = new defLog(this.FolderLog);
+            using defLog log = new defLog(this.FolderLog);
             log.start("cnnDDBB(RutaDDBB)", connectionString, "");
             try
             {
@@ -38,13 +38,11 @@ namespace drualcman
                     if (this.DbConnection.State != System.Data.ConnectionState.Open)
                         this.DbConnection.Open();
                 }
-                if (this.LogError) log.end(this.DbConnection, this.rutaDDBB);
-                log.Dispose();
+                if (this.LogResults) log.end(this.DbConnection, this.rutaDDBB);
             }
             catch (Exception ex)
             {
                 log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
-                log.Dispose();
                 throw;
             }
         }
@@ -52,41 +50,19 @@ namespace drualcman
         /// <summary>
         /// Open a connection with a DB
         /// </summary>
-        protected async Task<bool> OpenConnectionAsync()
+        protected Task OpenConnectionAsync()
         {
-            return await this.OpenConnectionAsync(this.rutaDDBB);
+            return this.OpenConnectionAsync(this.rutaDDBB);            
         }
 
         /// <summary>
         /// Open a connection with a DB
         /// </summary>
         /// <param name="connectionString">Ruta alternativa de base de datos</param>
-        protected async Task<bool> OpenConnectionAsync(string connectionString)
+        protected Task OpenConnectionAsync(string connectionString)
         {
-            defLog log = new defLog(this.FolderLog);
-            log.start("cnnDDBB(RutaDDBB)", connectionString, "");
-            try
-            {
-                if (this.DbConnection is null)
-                {
-                    this.DbConnection = new SqlConnection(connectionString);
-                    await this.DbConnection.OpenAsync();
-                }
-                else
-                {
-                    if (this.DbConnection.State != System.Data.ConnectionState.Open)
-                        await this.DbConnection.OpenAsync();
-                }
-                if (this.LogError) log.end(this.DbConnection, this.rutaDDBB);
-                log.Dispose();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
-                log.Dispose();
-                throw;
-            }
+            this.OpenConnection(connectionString);
+            return Task.CompletedTask;
         }
         #endregion
 
