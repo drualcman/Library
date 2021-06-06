@@ -547,10 +547,17 @@ namespace drualcman
                 throw new ArgumentException(info);
             }
         }
-        public void CopyFile(string originPath, string destinationPath)
+
+        /// <summary>
+        /// Copy files. default overwrite if exists
+        /// </summary>
+        /// <param name="originPath"></param>
+        /// <param name="destinationPath"></param>
+        /// <param name="overwrite"></param>
+        public void CopyFile(string originPath, string destinationPath, bool overwrite = true)
         {
             if (existeFichero(originPath) && existeFichero(destinationPath))
-                File.Copy(originPath, destinationPath);
+                File.Copy(originPath, destinationPath, overwrite);
             else
             {
                 throw new Exception("Some file are missing, can't be copied.");
