@@ -253,9 +253,9 @@ namespace drualcman
         /// <param name="str">string a convertir</param>
         /// <param name="enc">Encoding a utilizar, por defecto UTF8</param>
         /// <returns></returns>
-        public Stream ToStream(string str, System.Text.Encoding enc = null)
+        public Stream ToStream(string str, Encoding enc = null)
         {
-            enc = enc ?? System.Text.Encoding.UTF8;
+            enc = enc ?? Encoding.UTF8;
             return new MemoryStream(enc.GetBytes(str ?? ""));
         }
 
@@ -499,6 +499,64 @@ namespace drualcman
                 }
             }
         }
+
+        public Stream FileToStream(string filename, string folder)
+        {
+            folder = checkCarpeta(folder);
+            string path = folder + filename;
+            return FileToStream(path);
+        }
+
+        public Stream FileToStream(string path)
+        {
+            Stream data = ToStream(FileToBytes(path));
+            return data;
+        }
+
+        public byte[] FileToBytes(string path)
+        {
+            try
+            {
+                byte[] bytes;
+                using (FileStream fsSource = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    // Read the source file into a byte array.
+                    bytes = new byte[fsSource.Length];
+                    int numBytesToRead = (int)fsSource.Length;
+                    int numBytesRead = 0;
+                    while (numBytesToRead > 0)
+                    {
+                        // Read may return anything from 0 to numBytesToRead.
+                        int n = fsSource.Read(bytes, numBytesRead, numBytesToRead);
+
+                        // Break when the end of the file is reached.
+                        if (n == 0)
+                            break;
+
+                        numBytesRead += n;
+                        numBytesToRead -= n;
+                    }
+                    numBytesToRead = bytes.Length;
+                }
+                return bytes;
+            }
+            catch (Exception ex)
+            {
+                string info = "We can't read the file: " + path +
+                                " \r\n " + ex.Message + " \r\n " + ex.StackTrace;
+                throw new ArgumentException(info);
+            }
+        }
+        public void CopyFile(string originPath, string destinationPath)
+        {
+            if (existeFichero(originPath) && existeFichero(destinationPath))
+                File.Copy(originPath, destinationPath);
+            else
+            {
+                throw new Exception("Some file are missing, can't be copied.");
+            }
+        }
+
     }
 
 }
