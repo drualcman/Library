@@ -165,15 +165,14 @@ namespace drualcman
         }
 
         #region task
-        public async Task<object> ExecuteAsync(string query) => await ExecuteAsync(query, 30);
-        public async Task<object> ExecuteAsync(string query, int timeout) 
+        public async Task<object> ExecuteAsync(string query, int timeout = 30) 
         {
             object result;
             if (!string.IsNullOrEmpty(query))
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = query;
-                result = await ExecuteAsync(cmd);
+                result = await ExecuteAsync(cmd, timeout);
                 cmd.Dispose();
             }
             else
@@ -182,13 +181,14 @@ namespace drualcman
             }
             return result;
         }
+       
         /// <summary>
         /// Execute SQL query Asynchronous
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="timeout">default 30</param>
         /// <returns></returns>
-        public async Task<bool> ExecuteCommandAsync(string query) => await ExecuteCommandAsync(query,30);
-        public async Task<bool> ExecuteCommandAsync(string query, int timeout) 
+        public async Task<bool> ExecuteCommandAsync(string query, int timeout = 30) 
         {
             bool result;
             if (!string.IsNullOrEmpty(query))
