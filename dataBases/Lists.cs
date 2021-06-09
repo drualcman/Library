@@ -21,59 +21,19 @@ namespace drualcman
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
-        /// <returns>
-        /// Devuelve los datos de la consulta en un DataSet
-        /// Si hay error devuelve el mensaje con el error
-        /// </returns>
-        public List<TModel> List<TModel>() where TModel : new() =>
-            List<TModel>("", 30);
-
-
-        /// <summary>
-        /// Devuelve datos de la consulta
-        /// </summary>
-        /// <param name="timeout">time out in seconds</param>
-        /// <returns>
-        /// Devuelve los datos de la consulta en un DataSet
-        /// Si hay error devuelve el mensaje con el error
-        /// </returns>
-        public List<TModel> List<TModel>(int timeout) where TModel : new() =>
-            List<TModel>("", timeout);
-
-        /// <summary>
-        /// Devuelve datos de la consulta
-        /// </summary>
-        /// <param name="sql">Consulta SQL a ejecutar</param>
-        /// <returns>
-        /// Devuelve los datos de la consulta en un DataSet
-        /// Si hay error devuelve el mensaje con el error
-        /// </returns>
-        public List<TModel> List<TModel>(string sql) where TModel : new() =>
-            List<TModel>(sql, 30);
-
-        /// <summary>
-        /// Devuelve datos de la consulta
-        /// </summary>
         /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public List<TModel> List<TModel>(string sql, int timeout) where TModel : new()
+        public List<TModel> List<TModel>(string sql = "", int timeout = 30) where TModel : new()
         {
             return ListAsync<TModel>(sql, timeout).Result;
         }
         #endregion
 
         #region async
-        /// <summary>
-        /// Executer query and return List of model send
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <returns></returns>
-        public async Task<List<TModel>> ListAsync<TModel>() where TModel : new() =>
-            await ListAsync<TModel>(SetQuery<TModel>());
 
         /// <summary>
         /// Executer query and return List of model send
@@ -81,18 +41,8 @@ namespace drualcman
         /// <typeparam name="TModel"></typeparam>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public async Task<List<TModel>> ListAsync<TModel>(int timeout) where TModel : new() =>
+        public async Task<List<TModel>> ListAsync<TModel>(int timeout = 30) where TModel : new() =>
             await ListAsync<TModel>(SetQuery<TModel>(), timeout);
-
-        /// <summary>
-        /// Executer query and return List of model send
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public async Task<List<TModel>> ListAsync<TModel>(string query) where TModel : new() =>
-            await ListAsync<TModel>(query, 30);
-
 
         /// <summary>
         /// Devuelve datos de la consulta
@@ -103,7 +53,7 @@ namespace drualcman
         /// Devuelve los datos de la consulta en un DataSet
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public async Task<List<TModel>> ListAsync<TModel>(string sql, int timeout) where TModel : new()
+        public async Task<List<TModel>> ListAsync<TModel>(string sql, int timeout = 30) where TModel : new()
         {
             defLog log = new defLog(this.FolderLog);
             log.start("ToList", sql, "");
