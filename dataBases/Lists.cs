@@ -89,10 +89,11 @@ namespace drualcman
 
                         List<string> hasList = new List<string>();
                         ReadOnlyCollection<DbColumn> columnNames = await dr.GetColumnSchemaAsync();
-                        List<Columns> columns = HaveColumns(columnNames, model, table.ShortName, true);
+                        int c = 0;
+                        List<Columns> columns = HaveColumns(columnNames, model, table.ShortName, true, 0, ref tables, ref tableCount, out c);
                         while (await dr.ReadAsync())
                         {
-                            result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref tables, ref tableCount, ref hasList, columns));
+                            result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref hasList, columns, ref tables));
                         }
 
                         //if (hasList.Any())
@@ -127,7 +128,8 @@ namespace drualcman
         /// <param name="model"></param>
         /// <param name="ignoreCase"></param>
         /// <returns></returns>
-        private List<Columns> HaveColumns(ReadOnlyCollection<DbColumn> columns, Type model, string shortName, bool ignoreCase)
+        private List<Columns> HaveColumns(ReadOnlyCollection<DbColumn> columns, Type model, string shortName, 
+            bool ignoreCase, int row, ref List<TableName> tables, ref int tableCount, out int counter)
         {
             PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             List<Columns> result = new List<Columns>();
@@ -135,12 +137,14 @@ namespace drualcman
             int p = properties.Length;
             bool isDirectQuery = columns[0].ColumnName.IndexOf(".") < 0;
             string columnCompare;
-            for (int r = 0; r < t; r++)
+            counter = 0;
+            for (int r = row; r < t; r++)
             {
                 int c = 0;
-                bool have = false;                
+                bool have = false;
+                bool escape = false;
                 DatabaseAttribute options = null;
-                while (c < p && have == false)
+                while (c < p && have == false && escape == false)
                 {
                     options = properties[c].GetCustomAttribute<DatabaseAttribute>();
                     if (isDirectQuery)
@@ -149,54 +153,69 @@ namespace drualcman
                     }
                     else
                     {
-                        if (options is null)
-                        {
-                            columnCompare = columns[r].ColumnName.Replace($"{shortName}.", "");
-                        }
-                        else if (options.Inner == InnerDirection.NONE)
+                        if (options is null || options.Inner == InnerDirection.NONE)
                         {
                             columnCompare = columns[r].ColumnName.Replace($"{shortName}.", "");
                         }
                         else
                         {
+                            TableName table = tables.Where(t => t.Name == properties[c].Name).FirstOrDefault();
+                            if (table is null)
+                            {
+                                tableCount++;
+                                shortName = $"t{tableCount}";
+                                table = new TableName(properties[c].Name, shortName, $"t{tableCount-1}", options.Inner, options.InnerColumn, options.InnerIndex, properties[c]);
+                                tables.Add(table);                                
+                                result.AddRange(HaveColumns(columns, properties[c].PropertyType, shortName, ignoreCase, r, ref tables, ref tableCount, out r));                                
+                                escape = true;
+                                have = false;
+                            }
+                            else shortName = table.ShortName;
                             columnCompare = string.Empty;
                         }
                     }
-                    if (ignoreCase)
-                        have = columnCompare.ToLower() == properties[c].Name.ToLower();
-                    else
-                        have = columnCompare == properties[c].Name;
+                    if (!escape)
+                    {
+                        if (ignoreCase)
+                            have = columnCompare.ToLower() == properties[c].Name.ToLower();
+                        else
+                            have = columnCompare == properties[c].Name;
+                    }
                     c++;
                 }
                 if (have)
                 {
                     c--;
-                    result.Add(new Columns { Column = properties[c], Options = options, TableName = shortName, ColumnName = columns[r].ColumnName });
+                    string propertyType;
+                    if (properties[c].PropertyType.Name == typeof(bool).Name) propertyType = "bool";
+                    else if (properties[c].PropertyType.Name == typeof(int).Name) propertyType = "number";
+                    else if (properties[c].PropertyType.Name == typeof(long).Name) propertyType = "number";
+                    else if (properties[c].PropertyType.Name == typeof(double).Name) propertyType = "number";
+                    else if (properties[c].PropertyType.Name == typeof(decimal).Name) propertyType = "number";
+                    else if (properties[c].PropertyType.Name == typeof(DateTime).Name) propertyType = "date";
+                    else propertyType = "text";
+
+                    result.Add(new Columns { Column = properties[c], Options = options, TableShortName = shortName, ColumnName = columns[r].ColumnName, PropertyType = propertyType, TableIndex = tableCount });
                 }
             }
             return result;
         }
 
-        private object ColumnToObject(ref ReadOnlyCollection<DbColumn> columnNames, SqlDataReader row, Type model,
-            ref List<TableName> tables, ref int tableCount, ref List<string> hasList, List<Columns> columns)
+        private object ColumnToObject(ref ReadOnlyCollection<DbColumn> columnNames, 
+            SqlDataReader row, Type model,ref List<string> hasList, 
+            List<Columns> columns, ref List<TableName> tables)
         {
+            var item = Activator.CreateInstance(model);// Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
 
-            TableName table = tables.Where(t => t.Name == model.Name).FirstOrDefault();
-            if (table is null)
+            int t = tables.Count;
+            int i;
+            for (i = 1; i < t; i++)
             {
-                tableCount++;
-                table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
-                tables.Add(table);
+                tables[i].Instance.SetValue(item, Activator.CreateInstance(tables[i].Instance.PropertyType), null);
             }
-
-            if (columns.Where(t => t.TableName == table.ShortName).FirstOrDefault() == null)
-            {
-                columns = HaveColumns(columnNames, model, table.ShortName, true);
-            }
-            var item = Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
 
             int c = columns.Count;
-            for (int i = 0; i < c; i++)
+            for (i = 0; i < c; i++)
             {
                 if (!string.IsNullOrEmpty(columns[i].ColumnName))
                 {
@@ -217,7 +236,7 @@ namespace drualcman
                                 try
                                 {
                                     columns[i].Column.SetValue(item,
-                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref tables, ref tableCount, ref hasList, columns),
+                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref hasList, columns, ref tables),
                                         null);
                                 }
                                 catch { }
@@ -226,12 +245,23 @@ namespace drualcman
                             {
                                 try
                                 {
-                                    if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
-                                        columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
-                                    else
-                                        columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
+                                    switch (columns[i].PropertyType)
+                                    {
+                                        case "bool":
+                                            columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]));
+                                            break;
+                                        case "number":
+                                            columns[i].Column.SetValue(item, row[columns[i].ColumnName]);
+                                            break;
+                                        case "date":
+                                            columns[i].Column.SetValue(item, Convert.ToDateTime(row[columns[i].ColumnName]));
+                                            break;
+                                        default:
+                                            columns[i].Column.SetValue(item, row[columns[i].ColumnName].ToString());
+                                            break;
+                                    }
                                 }
-                                catch { }
+                                catch (Exception ex) { string err = ex.Message; }
                             }
                         }
                     }
@@ -239,12 +269,53 @@ namespace drualcman
                     {
                         try
                         {
-                            if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
-                                columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
+                            if (columns[i].TableIndex > 0)
+                            {
+                                item.GetPropValue(tables[columns[i].TableIndex].Name)
+                                    .GetType().GetProperty(columns[i].Column.Name)
+                                    .SetValue(item, row[columns[i].ColumnName]);
+
+
+                                //switch (columns[i].PropertyType)
+                                //{
+                                //    case "bool":
+                                //        item.GetType().GetMember(tables[columns[i].TableIndex].Name)[0].ReflectedType.GetProperty("register_type")
+                                //            .SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]));
+                                //        break;
+                                //    case "number":
+                                //        item.GetType().GetMember(tables[columns[i].TableIndex].Name)[0].ReflectedType.GetProperty("register_type")
+                                //            .SetValue(item, row[columns[i].ColumnName]);
+                                //        break;
+                                //    case "date":
+                                //        item.GetType().GetMember(tables[columns[i].TableIndex].Name)[0].ReflectedType.GetProperty("register_type")
+                                //            .SetValue(item, Convert.ToDateTime(row[columns[i].ColumnName]));
+                                //        break;
+                                //    default:
+                                //        item.GetType().GetMember(tables[columns[i].TableIndex].Name)[0].ReflectedType.GetProperty("register_type")
+                                //            .SetValue(item, row[columns[i].ColumnName].ToString());
+                                //        break;
+                                //}
+                            }
                             else
-                                columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
+                            {
+                                switch (columns[i].PropertyType)
+                                {
+                                    case "bool":    
+                                        columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]));
+                                        break;
+                                    case "number":
+                                        columns[i].Column.SetValue(item, row[columns[i].ColumnName]);
+                                        break;
+                                    case "date":
+                                        columns[i].Column.SetValue(item, Convert.ToDateTime(row[columns[i].ColumnName]));
+                                        break;
+                                    default:
+                                        columns[i].Column.SetValue(item, row[columns[i].ColumnName].ToString());
+                                        break;
+                                }
+                            }
                         }
-                        catch { }
+                        catch (Exception ex){ string err = ex.Message; }
                     }
                 }
             }

@@ -425,7 +425,7 @@ namespace drualcman.Data.Extensions
                 }
                 if (have)
                 {
-                    result.Add(new Columns { Column = properties[c], Options = options, TableName = shortName, ColumnName = columns[r] });
+                    result.Add(new Columns { Column = properties[c], Options = options, TableShortName = shortName, ColumnName = columns[r] });
                 }
             }
             return result;
@@ -441,7 +441,7 @@ namespace drualcman.Data.Extensions
                 table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
                 tables.Add(table);
             }
-            if (columns.Where(t => t.TableName == table.ShortName).FirstOrDefault() == null)
+            if (columns.Where(t => t.TableShortName == table.ShortName).FirstOrDefault() == null)
             {
                 columns = HaveColumns(columnNames, model, table.ShortName, true);
             }

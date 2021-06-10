@@ -30,11 +30,11 @@ namespace drualcman.Attributes
         /// </summary>
         public InnerDirection Inner { get; set; } = InnerDirection.NONE;
         /// <summary>
-        /// Column table to join (table model to join)
+        /// Column name to join in a 2nd table
         /// </summary>
         public string InnerColumn { get; set; }
         /// <summary>
-        /// Column from table join if it's different about innerColumn (table this table model)
+        /// Column name to join in a 1st table
         /// </summary>
         public string InnerIndex { get; set; }
     }

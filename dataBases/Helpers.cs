@@ -14,7 +14,9 @@ namespace drualcman
     /// <summary>
     /// Setup inner model relationship
     /// </summary>
-    public record TableName(string Name, string ShortName, string ShortReference, InnerDirection Inner, string Column, string Index);
+    public record TableName(string Name, string ShortName, 
+        string ShortReference, InnerDirection Inner, string Column, 
+        string Index, PropertyInfo Instance = null);
 
     public partial class dataBases
     {
