@@ -247,39 +247,11 @@ namespace drualcman
                                 {
                                     if (columns[i].TableIndex > 0)
                                     {
-                                        switch (columns[i].PropertyType)
-                                        {
-                                            case "bool":
-                                                columns[i].Column.SetValue(item.GetPropValue(tables[columns[i].TableIndex].Name), Convert.ToBoolean(row[columns[i].ColumnName]));
-                                                break;
-                                            case "number":
-                                                columns[i].Column.SetValue(item.GetPropValue(tables[columns[i].TableIndex].Name), row[columns[i].ColumnName]);
-                                                break;
-                                            case "date":
-                                                columns[i].Column.SetValue(item.GetPropValue(tables[columns[i].TableIndex].Name), Convert.ToDateTime(row[columns[i].ColumnName]));
-                                                break;
-                                            default:
-                                                columns[i].Column.SetValue(item.GetPropValue(tables[columns[i].TableIndex].Name), row[columns[i].ColumnName].ToString());
-                                                break;
-                                        }
+                                        SetValue(columns[i].PropertyType, columns[i].Column, item.GetPropValue(tables[columns[i].TableIndex].Name), row[columns[i].ColumnName]);
                                     }
                                     else
                                     {
-                                        switch (columns[i].PropertyType)
-                                        {
-                                            case "bool":
-                                                columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]));
-                                                break;
-                                            case "number":
-                                                columns[i].Column.SetValue(item, row[columns[i].ColumnName]);
-                                                break;
-                                            case "date":
-                                                columns[i].Column.SetValue(item, Convert.ToDateTime(row[columns[i].ColumnName]));
-                                                break;
-                                            default:
-                                                columns[i].Column.SetValue(item, row[columns[i].ColumnName].ToString());
-                                                break;
-                                        }
+                                        SetValue(columns[i].PropertyType, columns[i].Column, item, row[columns[i].ColumnName]);
                                     }
                                 }
                                 catch (Exception ex) { string err = ex.Message; }
@@ -292,39 +264,11 @@ namespace drualcman
                         {
                             if (columns[i].TableIndex > 0)
                             {
-                                switch (columns[i].PropertyType)
-                                {
-                                    case "bool":
-                                        columns[i].Column.SetValue(item.GetPropValue(tables[columns[i].TableIndex].Name), Convert.ToBoolean(row[columns[i].ColumnName]));
-                                        break;
-                                    case "number":
-                                        columns[i].Column.SetValue(item.GetPropValue(tables[columns[i].TableIndex].Name), row[columns[i].ColumnName]);
-                                        break;
-                                    case "date":
-                                        columns[i].Column.SetValue(item.GetPropValue(tables[columns[i].TableIndex].Name), Convert.ToDateTime(row[columns[i].ColumnName]));
-                                        break;
-                                    default:
-                                        columns[i].Column.SetValue(item.GetPropValue(tables[columns[i].TableIndex].Name), row[columns[i].ColumnName].ToString());
-                                        break;
-                                }
+                                SetValue(columns[i].PropertyType, columns[i].Column, item.GetPropValue(tables[columns[i].TableIndex].Name), row[columns[i].ColumnName]);
                             }
                             else
                             {
-                                switch (columns[i].PropertyType)
-                                {
-                                    case "bool":    
-                                        columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]));
-                                        break;
-                                    case "number":
-                                        columns[i].Column.SetValue(item, row[columns[i].ColumnName]);
-                                        break;
-                                    case "date":
-                                        columns[i].Column.SetValue(item, Convert.ToDateTime(row[columns[i].ColumnName]));
-                                        break;
-                                    default:
-                                        columns[i].Column.SetValue(item, row[columns[i].ColumnName].ToString());
-                                        break;
-                                }
+                                SetValue(columns[i].PropertyType, columns[i].Column, item, row[columns[i].ColumnName]);
                             }
                         }
                         catch (Exception ex){ string err = ex.Message; }
@@ -332,6 +276,25 @@ namespace drualcman
                 }
             }
             return item;
+        }
+
+        private void SetValue(string propertyType, PropertyInfo sender, object destination, object value)
+        {
+            switch (propertyType)
+            {
+                case "bool":
+                    sender.SetValue(destination, Convert.ToBoolean(value));
+                    break;
+                case "number":
+                    sender.SetValue(destination, value);
+                    break;
+                case "date":
+                    sender.SetValue(destination, Convert.ToDateTime(value));
+                    break;
+                default:
+                    sender.SetValue(destination, value.ToString());
+                    break;
+            }
         }
         #endregion
     }

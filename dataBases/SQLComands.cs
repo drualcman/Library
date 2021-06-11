@@ -36,7 +36,7 @@ namespace drualcman
                     cmd.CommandTimeout = timeout;
                     cmd.ExecuteNonQuery();
                     result = true;
-                    if (this.LogResults) log.end(result.ToString());
+                    if (this.LogResults) log.end(result?.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -84,7 +84,7 @@ namespace drualcman
                 }
                 cmd.CommandTimeout = timeout;
                 result = cmd.ExecuteScalar();
-                if (this.LogResults) log.end(result.ToString());
+                if (this.LogResults) log.end(result?.ToString());
             }
             catch (Exception ex)
             {
@@ -127,7 +127,7 @@ namespace drualcman
                     cmd.CommandTimeout = timeout;
                     await cmd.ExecuteNonQueryAsync();
                     result = true;
-                    if (this.LogResults) log.end(result.ToString());
+                    if (this.LogResults) log.end(result?.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -169,7 +169,7 @@ namespace drualcman
                 }
                 cmd.CommandTimeout = timeout;
                 result = await cmd.ExecuteScalarAsync();
-                if (this.LogResults) log.end(result.ToString());
+                if (this.LogResults) log.end(result?.ToString());
             }
             catch (Exception ex)
             {
@@ -235,7 +235,7 @@ namespace drualcman
                 }
                 cmd.CommandTimeout = timeout;
                 result = await cmd.ExecuteReaderAsync();
-                if (this.LogResults) log.end(result.ToString());
+                if (this.LogResults) log.end(result?.ToString());
             }
             catch (Exception ex)
             {
