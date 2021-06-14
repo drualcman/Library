@@ -482,7 +482,16 @@ namespace drualcman.Data.Extensions
                                     if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
                                         columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
                                     else
-                                        columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
+                                    {
+                                        try
+                                        {
+                                            columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            //TODO some control
+                                        }
+                                    }
                                 }
                                 catch { }
                             }
