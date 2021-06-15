@@ -354,7 +354,7 @@ namespace drualcman
             try
             {
                 DateTime MiNacimiento = fechashoras.ConvertToDateTime(dNacido);
-                TimeSpan Difference = DateTime.Now.Subtract(MiNacimiento);
+                TimeSpan Difference = dFin.Subtract(MiNacimiento);
                 // 1 year have 365 days
                 // every 4 years have 1 day more
                 // that's why divide by 365.25
