@@ -358,7 +358,7 @@ namespace drualcman
                 // 1 year have 365 days
                 // every 4 years have 1 day more
                 // that's why divide by 365.25
-                Anos = (int)(Difference.Days / 365.25);
+                Anos = (int)Math.Ceiling(Difference.Days / 365.25);
 
                 //Anos = dFin.Year - MiNacimiento.Year;
                 //if (dFin.Month <= MiNacimiento.Month)
