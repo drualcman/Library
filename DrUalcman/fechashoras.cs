@@ -354,17 +354,23 @@ namespace drualcman
             try
             {
                 DateTime MiNacimiento = fechashoras.ConvertToDateTime(dNacido);
-                Anos = dFin.Year - MiNacimiento.Year;
-                if (dFin.Month <= MiNacimiento.Month)
-                {
-                    if (dFin.Day < MiNacimiento.Day) Anos--;
-                }
-                return Anos;
+                TimeSpan Difference = DateTime.Now.Subtract(MiNacimiento);
+                // 1 year have 365 days
+                // every 4 years have 1 day more
+                // that's why divide by 365.25
+                Anos = (int)(Difference.Days / 365.25);
+
+                //Anos = dFin.Year - MiNacimiento.Year;
+                //if (dFin.Month <= MiNacimiento.Month)
+                //{
+                //    if (dFin.Day < MiNacimiento.Day) Anos--;
+                //}
             }
             catch
             {
-                return 0;
+                Anos = 0;
             }
+            return Anos;
         }
 
         /// <summary>
