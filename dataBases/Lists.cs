@@ -286,7 +286,15 @@ namespace drualcman
                     sender.SetValue(destination, Convert.ToBoolean(value));
                     break;
                 case "number":
-                    sender.SetValue(destination, value);
+                    string tName = sender.PropertyType.Name;
+                    if (tName == typeof(int).Name) sender.SetValue(destination, Convert.ToInt32(value));
+                    else if (tName == typeof(double).Name) sender.SetValue(destination, Convert.ToDouble(value));
+                    else if (tName == typeof(float).Name) sender.SetValue(destination, Convert.ToSingle(value));
+                    else if (tName == typeof(decimal).Name) sender.SetValue(destination, Convert.ToDecimal(value));
+                    else if (tName == typeof(long).Name) sender.SetValue(destination, Convert.ToInt64(value));
+                    else if (tName == typeof(short).Name) sender.SetValue(destination, Convert.ToInt16(value));
+                    else if (tName == typeof(byte).Name) sender.SetValue(destination, Convert.ToByte(value));
+                    else sender.SetValue(destination, value);
                     break;
                 case "date":
                     sender.SetValue(destination, Convert.ToDateTime(value));
