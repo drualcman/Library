@@ -8,7 +8,7 @@ namespace drualcman
     /// <summary>
     /// Summary description for loggin
     /// </summary>
-    public class loggin : IDisposable
+    public class loggin 
     {
         public string date { get; set; }
         public string starttime { get; set; }
@@ -54,21 +54,6 @@ namespace drualcman
             this.error = string.Empty;
             //comprobar que el nombre de archivo tiene extension
             if (string.IsNullOrEmpty(archivos.GetFileExtension(this.LogFile))) this.LogFile += ".log";
-        }
-
-        public void Dispose()
-        {
-            this.date = null;
-            this.starttime = null;
-            this.function = null;
-            this.sql = null;
-            this.vars = null;
-            this.endtime = null;
-            this.user = null;
-            this.error = null;
-            this.info = null;
-            this.LogFile = null;
-            this.LogFolder = null;
         }
 
         private void writeLog()

@@ -33,7 +33,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -70,7 +70,7 @@ namespace drualcman
                                                     "ALTER TABLE < tabla > < definicion >" + "\r\n" +
                                                     "SQL: " + sql + "\n" + this.rutaDDBB;
                                                 log.end(null, err);
-                                                log.Dispose();
+                                                
 
                                                 throw new ArgumentException(err);
                                             }
@@ -85,7 +85,7 @@ namespace drualcman
                     if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
@@ -93,7 +93,7 @@ namespace drualcman
                     {
                         bool retorno = ExecuteCommand(sql);
                         if (this.LogResults) log.end(retorno, this.rutaDDBB);
-                        log.Dispose();
+                        
                         return retorno;
                     }
 

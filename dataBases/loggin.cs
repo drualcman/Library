@@ -11,7 +11,7 @@ namespace drualcman
     /// </summary>
     public partial class dataBases 
     {
-        internal class defLog : IDisposable
+        internal class defLog 
         {
             public string date { get; set; }
             public string starttime { get; set; }
@@ -22,19 +22,6 @@ namespace drualcman
             public object result { get; set; }
             public string error { get; set; }
             public string folder { get; set; }
-
-            public void Dispose()
-            {
-                this.date = null;
-                this.starttime = null;
-                this.function = null;
-                this.sql = null;
-                this.vars = null;
-                this.endtime = null;
-                this.error = null;
-                this.result = null;
-                this.folder = null;
-            }
 
             private void writeLog()
             {
@@ -48,7 +35,7 @@ namespace drualcman
                     Log.sql = this.sql;
                     Log.vars = this.vars;
                     Log.end(this.result, this.error);
-                    Log.Dispose();
+                    
 
                 }
                 catch

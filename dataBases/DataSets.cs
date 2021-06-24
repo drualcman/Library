@@ -81,7 +81,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("Query can't be null");
             }
@@ -109,7 +109,7 @@ namespace drualcman
                     finally
                     {
                         if (this.LogResults) log.end(ds, this.rutaDDBB);
-                        log.Dispose();
+                        
                     }
 
                     return ds;
@@ -117,7 +117,7 @@ namespace drualcman
                 catch (Exception ex)
                 {
                     log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
                     throw;
                 }
             }

@@ -209,10 +209,6 @@ namespace drualcman
                 result = null;
                 log.end(result, ex);
             }
-            finally
-            {
-                log.Dispose();
-            }
             return result;
         }
 

@@ -24,7 +24,7 @@ namespace drualcman
         protected void OpenConnection(string connectionString)
         {
             //bool b = await OpenConnectionAsync();
-            using defLog log = new defLog(this.FolderLog);
+            defLog log = new defLog(this.FolderLog);
             log.start("cnnDDBB(RutaDDBB)", connectionString, "");
             try
             {

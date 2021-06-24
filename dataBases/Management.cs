@@ -32,7 +32,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -44,28 +44,28 @@ namespace drualcman
                     if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
@@ -94,7 +94,7 @@ namespace drualcman
                             catch (Exception exReader)
                             {
                                 log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
-                                log.Dispose();
+                                
 
                                 throw;
                             }
@@ -102,14 +102,14 @@ namespace drualcman
                         catch (Exception exConexion)
                         {
                             log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
-                            log.Dispose();
+                            
 
                             throw;
                         }
 
                         if (this.LogResults)
                             log.end(datoRetorno, this.rutaDDBB);
-                        log.Dispose();
+                        
 
                     }
                 }
@@ -137,7 +137,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -149,28 +149,28 @@ namespace drualcman
                     if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
@@ -199,7 +199,7 @@ namespace drualcman
                             catch (Exception exReader)
                             {
                                 log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
-                                log.Dispose();
+                                
 
                                 throw;
                             }
@@ -207,14 +207,14 @@ namespace drualcman
                         catch (Exception exConexion)
                         {
                             log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
-                            log.Dispose();
+                            
 
                             throw;
                         }
 
                         if (this.LogResults)
                             log.end(datoRetorno, this.rutaDDBB);
-                        log.Dispose();
+                        
 
                     }
                 }
@@ -236,7 +236,7 @@ namespace drualcman
         /// </returns>
         public async Task<string> GetColAync(string sql, string colSQL, int timeOut = 30)
         {
-            using defLog log = new defLog(this.FolderLog);
+            defLog log = new defLog(this.FolderLog);
             log.start("GetColAync(sql, colSQL, timeOut)", sql, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
             if (string.IsNullOrWhiteSpace(sql))
@@ -300,7 +300,7 @@ namespace drualcman
                             catch (Exception exReader)
                             {
                                 log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
-                                log.Dispose();
+                                
 
                                 throw;
                             }
@@ -308,14 +308,14 @@ namespace drualcman
                         catch (Exception exConexion)
                         {
                             log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
-                            log.Dispose();
+                            
 
                             throw;
                         }
 
                         if (this.LogResults)
                             log.end(datoRetorno, this.rutaDDBB);
-                        log.Dispose();
+                        
                     }
                 }
                 else
@@ -342,7 +342,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -354,28 +354,28 @@ namespace drualcman
                     if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
@@ -404,7 +404,7 @@ namespace drualcman
                             catch (Exception exReader)
                             {
                                 log.end(null, exReader.ToString() + "\n" + this.rutaDDBB);
-                                log.Dispose();
+                                
 
                                 throw;
                             }
@@ -412,14 +412,14 @@ namespace drualcman
                         catch (Exception exConexion)
                         {
                             log.end(null, exConexion.ToString() + "\n" + this.rutaDDBB);
-                            log.Dispose();
+                            
 
                             throw;
                         }
 
                         if (this.LogResults)
                             log.end(datoRetorno, this.rutaDDBB);
-                        log.Dispose();
+                        
 
                     }
                 }
@@ -453,7 +453,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -465,28 +465,28 @@ namespace drualcman
                     if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
@@ -505,7 +505,7 @@ namespace drualcman
                         catch (Exception ex)
                         {
                             log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-                            log.Dispose();
+                            
 
                             throw;
                         }
@@ -516,7 +516,7 @@ namespace drualcman
             }
             if (this.LogResults)
                 log.end(retorno, this.rutaDDBB);
-            log.Dispose();
+            
 
             return retorno;
         }
@@ -535,7 +535,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -547,28 +547,28 @@ namespace drualcman
                     if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
@@ -587,7 +587,7 @@ namespace drualcman
                         catch (Exception ex)
                         {
                             log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-                            log.Dispose();
+                            
 
                             throw;
                         }
@@ -598,7 +598,7 @@ namespace drualcman
             }
             if (this.LogResults)
                 log.end(retorno, this.rutaDDBB);
-            log.Dispose();
+            
 
             return retorno;
         }
@@ -617,7 +617,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula.\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
@@ -633,28 +633,28 @@ namespace drualcman
                 if (sql.IndexOf("--") > -1)
                 {
                     log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
@@ -669,7 +669,7 @@ namespace drualcman
                 if (sql.ToUpper().IndexOf("SELECT") < 0 && ok == false)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla / EXEC Storage Proces and variables.SQL: " + sql + "\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla / EXEC Storage Proces and variables. SQL: " + sql);
                 }
@@ -686,13 +686,13 @@ namespace drualcman
                     catch (Exception ex)
                     {
                         log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw;
                     }
                     if (this.LogResults)
                         log.end(ds, this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     return ds.GetXml();
                 }
@@ -700,7 +700,7 @@ namespace drualcman
             else
             {
                 log.end(null, "No ha superado la prueba de comando correcto.\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 return "<NewDataSet />";
             }
@@ -722,28 +722,28 @@ namespace drualcman
                 if (sql.IndexOf("--") > -1)
                 {
                     log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
@@ -762,13 +762,13 @@ namespace drualcman
                     catch (Exception ex)
                     {
                         log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw;
                     }
                     if (this.LogResults)
                         log.end(newId, this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     return newId;
                 }
@@ -776,7 +776,7 @@ namespace drualcman
             else
             {
                 log.end(null, "No ha superado la prueba de comando correcto.\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 return -1;      //devuelve un valor que al intentar usar como ID no se puede ya que ha habido un intento que ataque por injeccion de codigo
             }
@@ -800,28 +800,28 @@ namespace drualcman
                 if (sql.IndexOf("--") > -1)
                 {
                     log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
@@ -838,14 +838,14 @@ namespace drualcman
                     catch (Exception ex)
                     {
                         log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw;
                     }
 
                     if (this.LogResults)
                         log.end(newId, this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     return newId;
                 }
@@ -853,7 +853,7 @@ namespace drualcman
             else
             {
                 log.end(null, "No ha superado la prueba de comando correcto.\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 return -1;      //devuelve un valor que al intentar usar como ID no se puede ya que ha habido un intento que ataque por injeccion de codigo
             }
@@ -876,7 +876,7 @@ namespace drualcman
             if (string.IsNullOrEmpty(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
@@ -887,28 +887,28 @@ namespace drualcman
                 if (sql.IndexOf("--") > -1)
                 {
                     log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
                 else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                 }
@@ -936,7 +936,7 @@ namespace drualcman
                     }
                     if (this.LogResults)
                         log.end(datoRetorno, this.rutaDDBB);
-                    log.Dispose();
+                    
                     return datoRetorno;
                 }
             }
@@ -1009,7 +1009,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -1042,14 +1042,14 @@ namespace drualcman
                 catch (Exception ex)
                 {
                     log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw;
                 }
             }
             if (this.LogResults)
                 log.end(retorno, this.rutaDDBB);
-            log.Dispose();
+            
 
             return retorno;
         }
@@ -1067,7 +1067,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                log.Dispose();
+                
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -1079,28 +1079,28 @@ namespace drualcman
                     if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP TABLE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
                     else if (sql.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                     {
                         log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + sql);
                     }
@@ -1140,7 +1140,7 @@ namespace drualcman
                         catch (Exception ex)
                         {
                             log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-                            log.Dispose();
+                            
 
                             throw;
 
@@ -1148,7 +1148,7 @@ namespace drualcman
 
                         if (this.LogResults)
                             log.end(retorno, this.rutaDDBB);
-                        log.Dispose();
+                        
 
                         return retorno;
                     }
@@ -1156,7 +1156,7 @@ namespace drualcman
                 else
                 {
                     log.end(null, "No ha superado la prueba de validacion\n" + this.rutaDDBB);
-                    log.Dispose();
+                    
 
                     throw new ArgumentException("La cadena no puede ser nula");
                 }
