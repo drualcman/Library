@@ -392,12 +392,11 @@ namespace drualcman.Data.Extensions
             string columnCompare;
             for (int r = 0; r < t; r++)
             {
-                int c = -1;
+                int c = 0;
                 bool have = false;
                 DatabaseAttribute options = null;
                 while (c < p && have == false)
                 {
-                    c++;
                     options = properties[c].GetCustomAttribute<DatabaseAttribute>();
                     if (isDirectQuery)
                     {
@@ -422,6 +421,8 @@ namespace drualcman.Data.Extensions
                         have = columnCompare.ToLower() == properties[c].Name.ToLower();
                     else
                         have = columnCompare == properties[c].Name;
+                    
+                    c++;
                 }
                 if (have)
                 {
@@ -499,19 +500,43 @@ namespace drualcman.Data.Extensions
                     }
                     else
                     {
+                        //sergi check
                         if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
-                            columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].Column.Name]), null);
+                        {
+                            try
+                            {
+                                columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
+                            }
+                            catch
+                            {
+                                columns[i].Column.SetValue(item, false, null);
+                            }
+                        }
                         else
                         {
                             try
                             {
-                                columns[i].Column.SetValue(item, row[columns[i].Column.Name], null);
+                                columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
                             }
                             catch (Exception ex)
                             {
                                 //TODO some control
+                                columns[i].Column.SetValue(item, ex.Message, null);
                             }
                         }
+                        //if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
+                        //    columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].Column.Name]), null);
+                        //else
+                        //{
+                        //    try
+                        //    {
+                        //        columns[i].Column.SetValue(item, row[columns[i].Column.Name], null);
+                        //    }
+                        //    catch (Exception ex)
+                        //    {
+                        //        //TODO some control
+                        //    }
+                        //}
                     }
                 }               
             }
