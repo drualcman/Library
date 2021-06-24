@@ -160,7 +160,7 @@ namespace drualcman
                         else if (options.Inner == InnerDirection.NONE)
                         {
                             if (options.Name == columns[r].ColumnName.Replace($"{shortName}.", "")) columnCompare = properties[c].Name;
-                            else columnCompare = string.Empty;
+                            else columnCompare = columns[r].ColumnName.Replace($"{shortName}.", "");
                         }
                         else
                         {
