@@ -114,7 +114,7 @@ namespace drualcman
             }
             finally
             {
-                log.Dispose();
+                
             }
         }
         #endregion
@@ -153,9 +153,14 @@ namespace drualcman
                     }
                     else
                     {
-                        if (options is null || options.Inner == InnerDirection.NONE)
+                        if (options is null)
                         {
                             columnCompare = columns[r].ColumnName.Replace($"{shortName}.", "");
+                        }
+                        else if (options.Inner == InnerDirection.NONE)
+                        {
+                            if (options.Name == columns[r].ColumnName.Replace($"{shortName}.", "")) columnCompare = properties[c].Name;
+                            else columnCompare = string.Empty;
                         }
                         else
                         {
@@ -188,10 +193,13 @@ namespace drualcman
                     c--;
                     string propertyType;
                     if (properties[c].PropertyType.Name == typeof(bool).Name) propertyType = "bool";
-                    else if (properties[c].PropertyType.Name == typeof(int).Name) propertyType = "number";
-                    else if (properties[c].PropertyType.Name == typeof(long).Name) propertyType = "number";
-                    else if (properties[c].PropertyType.Name == typeof(double).Name) propertyType = "number";
-                    else if (properties[c].PropertyType.Name == typeof(decimal).Name) propertyType = "number";
+                    else if (properties[c].PropertyType.Name == typeof(int).Name) propertyType = "int";
+                    else if (properties[c].PropertyType.Name == typeof(long).Name) propertyType = "long";
+                    else if (properties[c].PropertyType.Name == typeof(double).Name) propertyType = "double";
+                    else if (properties[c].PropertyType.Name == typeof(decimal).Name) propertyType = "decimal";
+                    else if (properties[c].PropertyType.Name == typeof(float).Name) propertyType = "float";
+                    else if (properties[c].PropertyType.Name == typeof(short).Name) propertyType = "short";
+                    else if (properties[c].PropertyType.Name == typeof(byte).Name) propertyType = "byte";
                     else if (properties[c].PropertyType.Name == typeof(DateTime).Name) propertyType = "date";
                     else propertyType = "text";
 
@@ -283,19 +291,37 @@ namespace drualcman
             switch (propertyType)
             {
                 case "bool":
-                    sender.SetValue(destination, Convert.ToBoolean(value));
+                    if (int.TryParse(value.ToString(), out int test))
+                    {
+                        if (test == 0) sender.SetValue(destination, false);
+                        else sender.SetValue(destination, true);
+                    }
+                    else sender.SetValue(destination, Convert.ToBoolean(value));
                     break;
-                case "number":
-                    string tName = sender.PropertyType.Name;
-                    if (tName == typeof(int).Name) sender.SetValue(destination, Convert.ToInt32(value));
-                    else if (tName == typeof(double).Name) sender.SetValue(destination, Convert.ToDouble(value));
-                    else if (tName == typeof(float).Name) sender.SetValue(destination, Convert.ToSingle(value));
-                    else if (tName == typeof(decimal).Name) sender.SetValue(destination, Convert.ToDecimal(value));
-                    else if (tName == typeof(long).Name) sender.SetValue(destination, Convert.ToInt64(value));
-                    else if (tName == typeof(short).Name) sender.SetValue(destination, Convert.ToInt16(value));
-                    else if (tName == typeof(byte).Name) sender.SetValue(destination, Convert.ToByte(value));
-                    else sender.SetValue(destination, value);
+                case "int":
+                    sender.SetValue(destination, Convert.ToInt32(value));
                     break;
+                case "double":
+                    sender.SetValue(destination, Convert.ToDouble(value));
+                    break;
+                case "float":
+                    sender.SetValue(destination, Convert.ToSingle(value));
+                    break;
+                case "decimal":
+                    sender.SetValue(destination, Convert.ToDecimal(value));
+                    break;
+                case "long":
+                    sender.SetValue(destination, Convert.ToInt64(value));
+                    break;
+                case "short":
+                    sender.SetValue(destination, Convert.ToInt16(value));
+                    break;
+                case "byte":
+                    sender.SetValue(destination, Convert.ToByte(value));
+                    break;
+                //case "number":
+                //    sender.SetValue(destination, value);
+                //    break;
                 case "date":
                     sender.SetValue(destination, Convert.ToDateTime(value));
                     break;
