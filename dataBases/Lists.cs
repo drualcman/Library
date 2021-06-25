@@ -211,9 +211,10 @@ namespace drualcman
 
         private TModel ColumnToObject<TModel>(ReadOnlyCollection<DbColumn> columnNames,
                                         SqlDataReader row, Type model, List<string> hasList,
-                                        List<Columns> columns, List<TableName> tables)
+                                        List<Columns> columns, List<TableName> tables) where TModel: new()
         {
-            var item = Activator.CreateInstance(model);// Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
+            TModel item = new TModel();
+            //var item = Activator.CreateInstance(model);// Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
 
             int t = tables.Count;
             int i;
@@ -283,7 +284,7 @@ namespace drualcman
                     }
                 }
             }
-            return (TModel)item;
+            return item;
         }
 
 
@@ -292,7 +293,7 @@ namespace drualcman
             List<Columns> columns, ref List<TableName> tables)
         {
             var item = Activator.CreateInstance(model);// Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
-
+            Console.WriteLine(DateTime.Now.Ticks);
             int t = tables.Count;
             int i;
             for (i = 1; i < t; i++)
