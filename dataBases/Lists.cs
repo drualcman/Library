@@ -93,7 +93,7 @@ namespace drualcman
                         List<Columns> columns = HaveColumns(columnNames, model, table.ShortName, true, 0, ref tables, ref tableCount, out c);
                         while (await dr.ReadAsync())
                         {
-                            result.Add((TModel)ColumnToObject(ref columnNames, dr, model, ref hasList, columns, ref tables));
+                            result.Add(ColumnToObject<TModel>(columnNames, dr, model, hasList, columns,  tables));
                         }
 
                         //if (hasList.Any())
@@ -209,7 +209,85 @@ namespace drualcman
             return result;
         }
 
-        private object ColumnToObject(ref ReadOnlyCollection<DbColumn> columnNames, 
+        private TModel ColumnToObject<TModel>(ReadOnlyCollection<DbColumn> columnNames,
+                                        SqlDataReader row, Type model, List<string> hasList,
+                                        List<Columns> columns, List<TableName> tables)
+        {
+            var item = Activator.CreateInstance(model);// Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
+
+            int t = tables.Count;
+            int i;
+            for (i = 1; i < t; i++)
+            {
+                tables[i].Instance.SetValue(item, Activator.CreateInstance(tables[i].Instance.PropertyType), null);
+            }
+
+            int c = columns.Count;
+            for (i = 0; i < c; i++)
+            {
+                if (!string.IsNullOrEmpty(columns[i].ColumnName))
+                {
+                    if (columns[i].Options is not null)
+                    {
+                        if (!columns[i].Options.Ignore)
+                        {
+                            if (Helpers.ObjectHelpers.IsGenericList(columns[i].Column.PropertyType.FullName) &&
+                                            !hasList.Contains(columns[i].Column.PropertyType.Name))
+                            {
+                                hasList.Add(columns[i].Column.PropertyType.Name);
+                                Type[] genericType = columns[i].Column.PropertyType.GetGenericArguments();
+                                Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
+                                columns[i].Column.SetValue(item, Activator.CreateInstance(creatingCollectionType));
+                            }
+                            else if (columns[i].Options.Inner != InnerDirection.NONE)
+                            {
+                                try
+                                {
+                                    columns[i].Column.SetValue(item,
+                                        ColumnToObject<TModel>(columnNames, row, columns[i].Column.PropertyType, hasList, columns, tables),
+                                        null);
+                                }
+                                catch { }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    if (columns[i].TableIndex > 0)
+                                    {
+                                        SetValue(columns[i].PropertyType, columns[i].Column, item.GetPropValue(tables[columns[i].TableIndex].Name), row[columns[i].ColumnName]);
+                                    }
+                                    else
+                                    {
+                                        SetValue(columns[i].PropertyType, columns[i].Column, item, row[columns[i].ColumnName]);
+                                    }
+                                }
+                                catch (Exception ex) { string err = ex.Message; }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (columns[i].TableIndex > 0)
+                            {
+                                SetValue(columns[i].PropertyType, columns[i].Column, item.GetPropValue(tables[columns[i].TableIndex].Name), row[columns[i].ColumnName]);
+                            }
+                            else
+                            {
+                                SetValue(columns[i].PropertyType, columns[i].Column, item, row[columns[i].ColumnName]);
+                            }
+                        }
+                        catch (Exception ex) { string err = ex.Message; }
+                    }
+                }
+            }
+            return (TModel)item;
+        }
+
+
+        private object ColumnToObject1(ref ReadOnlyCollection<DbColumn> columnNames, 
             SqlDataReader row, Type model,ref List<string> hasList, 
             List<Columns> columns, ref List<TableName> tables)
         {
@@ -244,7 +322,7 @@ namespace drualcman
                                 try
                                 {
                                     columns[i].Column.SetValue(item,
-                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref hasList, columns, ref tables),
+                                        ColumnToObject1(ref columnNames, row, columns[i].Column.PropertyType, ref hasList, columns, ref tables),
                                         null);
                                 }
                                 catch { }
