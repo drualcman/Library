@@ -40,10 +40,9 @@ namespace drualcman
         /// <param name="table">Table name in DB</param>
         /// <param name="colName">Columns name in DB to be updated</param>
         /// <param name="colValue">Values to insert in DB</param>
-        /// <param name="returnScope">Return the scope_id</param>
-        /// <param name="columnWithId">if table don't have auto id then give the column to return last id modified</param>
+        /// <param name="returnScope">Return a column name</param>
         /// <returns></returns>
-        public int InsertInDB(string table, string[] colName, object[] colValue, bool returnScope, string columnWithId = "")
+        public int InsertInDB(string table, string[] colName, object[] colValue, bool returnScope)
         {
             int result;
             if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
@@ -51,17 +50,7 @@ namespace drualcman
                 using SqlCommand cmd = SetInsert(table, colName, colValue);
                 if (returnScope)
                 {
-                    if (string.IsNullOrEmpty(columnWithId)) cmd.CommandText += "; select SCOPE_IDENTITY()";
-                    else
-                    {
-                        string sql = $@"DECALRE @mytable AS TABLE
-                                        (
-                                          Id INT
-                                        )
-                                    {cmd.CommandText}
-                                    OUTPUT INSERTED.{columnWithId} INTO @mytable
-                                    SELECT Id FROM @mytable";
-                    }
+                    cmd.CommandText += "; select SCOPE_IDENTITY()";
                     try
                     {
                         result = Convert.ToInt32(Execute(cmd));
@@ -85,17 +74,7 @@ namespace drualcman
         }
 
         #region tasks
-
-        /// <summary>
-        /// Insert into a DB
-        /// </summary>
-        /// <param name="table">Table name in DB</param>
-        /// <param name="colName">Columns name in DB to be updated</param>
-        /// <param name="colValue">Values to insert in DB</param>
-        /// <param name="returnScope">Return the scope_id</param>
-        /// <param name="columnWithId">if table don't have auto id then give the column to return last id modified</param>
-        /// <returns></returns>
-        public async Task<int> InsertInDBAsync(string table, string[] colName, object[] colValue, bool returnScope, string columnWithId = "")
+        public async Task<int> InsertInDBAsync(string table, string[] colName, object[] colValue, bool returnScope)
         {
             int result;
             if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
@@ -105,17 +84,7 @@ namespace drualcman
                 cmd.Connection = this.DbConnection;
                 if (returnScope)
                 {
-                    if (string.IsNullOrEmpty(columnWithId)) cmd.CommandText += "; select SCOPE_IDENTITY()";
-                    else
-                    {
-                        string sql = $@"DECALRE @mytable AS TABLE
-                                        (
-                                          Id INT
-                                        )
-                                    {cmd.CommandText}
-                                    OUTPUT INSERTED.{columnWithId} INTO @mytable
-                                    SELECT Id FROM @mytable";
-                    }
+                    cmd.CommandText += " select SCOPE_IDENTITY()";
                     try
                     {
                         result = Convert.ToInt32(await ExecuteAsync(cmd));
