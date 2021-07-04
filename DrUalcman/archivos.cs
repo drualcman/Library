@@ -540,6 +540,18 @@ namespace drualcman
                 }
                 return bytes;
             }
+            catch (FileLoadException ex)
+            {
+                string info = "We can't read the file: " + path +
+                                " \r\n " + ex.Message + " \r\n " + ex.StackTrace;
+                throw new ArgumentException(info);
+            }
+            catch (FileNotFoundException ex)
+            {
+                string info = "We can't read the file: " + path +
+                                " \r\n " + ex.Message + " \r\n " + ex.StackTrace;
+                throw new ArgumentException(info);
+            }
             catch (Exception ex)
             {
                 string info = "We can't read the file: " + path +
