@@ -427,7 +427,9 @@ namespace drualcman.Data.Extensions
                 }
                 if (have)
                 {
+                    c--;
                     result.Add(new Columns { Column = properties[c], Options = options, TableShortName = shortName, ColumnName = columns[r] });
+                    //result.Add(new Columns { Column = properties.First(n => n.Name == columns[r]), Options = options, TableShortName = shortName, ColumnName = columns[r] });
                 }
             }
             return result;
