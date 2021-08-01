@@ -18,7 +18,7 @@ namespace drualcman.Attributes
         /// </summary>
         public bool IndexKey { get; set; }
         /// <summary>
-        /// Column name about the index key is it's different from the property name
+        /// Column name about the index key if it's different from the property name
         /// </summary>
         public string IndexedName { get; set; }
         /// <summary>

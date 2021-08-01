@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using drualcman.Data.Extensions;
 
@@ -44,15 +42,6 @@ namespace drualcman.Data.Converters
             => dt.ToList<TModel>();
 
         /// <summary>
-        /// Get list of object send from data table
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static List<TModel> ToList<TModel>(DataTable dt, string[] columns) where TModel : new() 
-            => dt.ToList<TModel>(columns);
-
-        /// <summary>
         /// Convert DataTable to Json
         /// </summary>
         /// <param name="dt"></param>
@@ -82,14 +71,6 @@ namespace drualcman.Data.Converters
         public static async Task<List<TModel>> ToListAsync<TModel>(DataTable dt) where TModel : new()
             => await dt.ToListAsync<TModel>();
 
-        /// <summary>
-        /// Get list of object send from data table
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static async Task<List<TModel>> ToListAsync<TModel>(DataTable dt, string[] columns) where TModel : new()
-            => await dt.ToListAsync<TModel>(columns);
         #endregion
     }
 }

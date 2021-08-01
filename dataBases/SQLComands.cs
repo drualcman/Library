@@ -230,8 +230,8 @@ namespace drualcman
                         await cmd.Connection.OpenAsync();
                 }
                 cmd.CommandTimeout = timeout;
-                result = await cmd.ExecuteReaderAsync();
-                if (this.LogResults) log.end(result?.ToString());
+                result =  cmd.ExecuteReader();
+                if (this.LogResults) log.end(result);
             }
             catch (Exception ex)
             {

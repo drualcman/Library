@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace drualcman
@@ -60,30 +61,33 @@ namespace drualcman
         {
             try
             {
-                const string tag = "|";
-                string log = Environment.NewLine + this.date + tag + this.starttime + tag + this.function +
-                                tag + (string.IsNullOrEmpty(this.sql) ? "" : this.sql.Replace(Environment.NewLine, " ")) +
-                                tag + this.vars + tag + this.endtime + tag + this.user +
-                                tag + (string.IsNullOrEmpty(this.error) ? "" : this.error.Replace(Environment.NewLine, " ")) +
-                                tag + this.info;
+                Task.Run(()=> 
+                {                
+                    const string tag = "|";
+                    string log = Environment.NewLine + this.date + tag + this.starttime + tag + this.function +
+                                    tag + (string.IsNullOrEmpty(this.sql) ? "" : this.sql.Replace(Environment.NewLine, " ")) +
+                                    tag + this.vars + tag + this.endtime + tag + this.user +
+                                    tag + (string.IsNullOrEmpty(this.error) ? "" : this.error.Replace(Environment.NewLine, " ")) +
+                                    tag + this.info;
 
-                archivos f = new archivos();
-                string file = f.checkCarpeta(this.LogFolder) + this.LogFile;
-                if (f.existeFichero(file))
-                {
-                    //append to actual log
-                    using System.IO.StreamWriter z_varocioStreamWriter = new System.IO.StreamWriter(file, true, System.Text.Encoding.UTF8);
-                    z_varocioStreamWriter.Write(log);
-                    z_varocioStreamWriter.Close();                    
-                }
-                else
-                {
-                    log = "DATE" + tag + "Start Time" + tag + "Function" + tag + "SQL" +
-                            tag + "Variables" + tag + "End Time" + tag + "USER" + 
-                            tag + "Error Trace" + tag + "Info" + tag + log;
-                    f.guardaDato(this.LogFile, log, this.LogFolder);
-                }
-                f = null;
+                    archivos f = new archivos();
+                    string file = f.checkCarpeta(this.LogFolder) + this.LogFile;
+                    if (f.existeFichero(file))
+                    {
+                        //append to actual log
+                        using System.IO.StreamWriter z_varocioStreamWriter = new System.IO.StreamWriter(file, true, System.Text.Encoding.UTF8);
+                        z_varocioStreamWriter.Write(log);
+                        z_varocioStreamWriter.Close();                    
+                    }
+                    else
+                    {
+                        log = "DATE" + tag + "Start Time" + tag + "Function" + tag + "SQL" +
+                                tag + "Variables" + tag + "End Time" + tag + "USER" + 
+                                tag + "Error Trace" + tag + "Info" + tag + log;
+                        f.guardaDato(this.LogFile, log, this.LogFolder);
+                    }
+                    f = null;
+                });
             }
             catch
             {

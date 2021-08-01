@@ -1,8 +1,6 @@
 ﻿using drualcman.Data.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 
 namespace drualcman
 {
@@ -27,16 +25,17 @@ namespace drualcman
             {
                 try
                 {
-                    loggin Log = new loggin(this.folder, DateTime.Today.ToShortDateString().Replace("/", "") + ".log");
-                    Log.date = this.date;
-                    Log.starttime = this.starttime;
-                    Log.user = "drualcman.databases";
-                    Log.function = this.function;
-                    Log.sql = this.sql;
-                    Log.vars = this.vars;
-                    Log.end(this.result, this.error);
-                    
-
+                    Task writeLog = Task.Run(() =>
+                    {
+                        loggin Log = new loggin(this.folder, DateTime.Today.ToShortDateString().Replace("/", "") + ".log");
+                        Log.date = this.date;
+                        Log.starttime = this.starttime;
+                        Log.user = "drualcman.databases";
+                        Log.function = this.function;
+                        Log.sql = this.sql;
+                        Log.vars = this.vars;
+                        Log.end(this.result, this.error);
+                    });
                 }
                 catch
                 {
@@ -111,30 +110,12 @@ namespace drualcman
 
             public void end(object Result)
             {
-                string _result;
-                try
-                {
-                    _result = Result.ToJson();
-                }
-                catch
-                {
-                    _result = string.Empty;
-                }
-                end(_result, string.Empty);
+                end(Result, string.Empty);
             }
 
             public void end(object Result, object Err)
             {
-                string _result;
                 string _err;
-                try
-                {
-                    _result = Result.ToJson();
-                }
-                catch
-                {
-                    _result = string.Empty;
-                }
                 try
                 {
                     _err = Err.ToString();
@@ -143,7 +124,7 @@ namespace drualcman
                 {
                     _err = string.Empty;
                 }
-                end(_result, _err);
+                end(Result, _err);
             }
 
 

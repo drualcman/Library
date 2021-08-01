@@ -1,11 +1,9 @@
-﻿using drualcman.Attributes;
-using drualcman.Enums;
+﻿using drualcman.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +11,8 @@ namespace drualcman.Data.Extensions
 {
     public static class DataTableExtension
     {
+        //static Mutex mutexRow = new Mutex();
+
         #region columns
         #region methods
 
@@ -77,57 +77,58 @@ namespace drualcman.Data.Extensions
         /// </summary>
         /// <typeparam name="TModel"></typeparam>
         /// <param name="dt"></param>
-        /// <param name="columns">columns name to parse</param>
         /// <returns></returns>
-        public static List<TModel> ToList<TModel>(this DataTable dt, string[] columnNames) where TModel : new()
+        public static List<TModel> ToList<TModel>(this DataTable dt) where TModel : new()
         {
+            string[] columnNames = dt.ColumnNamesToArray();
             List<TModel> result = new List<TModel>();
-            int r = dt.Rows.Count;
-            if (r > 0)
+            int rows = dt.Rows.Count;
+            if (rows > 0)
             {
                 Type model = typeof(TModel);
 
                 List<TableName> tables = new List<TableName>();
                 int tableCount = 0;
-                TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
+                TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
                 tables.Add(table);
 
                 List<string> hasList = new List<string>();
-                bool isDirectQuery = columnNames[0].IndexOf(".") < 0;
-                List<Columns> columns = HaveColumns(columnNames, model, table.ShortName, true);
+                ColumnsHelpers ch = new ColumnsHelpers();
+                List<Columns> columns = ch.HaveColumns(columnNames, model, table.ShortName, tables);
 
-                int c = columns.Count;
-                for (int i = 0; i < r; i++)
+                for (int index = 0; index < rows; index++)
                 {
-                    result.Add((TModel)ColumnToObject(ref columnNames, dt.Rows[i], model, ref tables, ref tableCount, ref hasList, columns));
+                    TModel dat = ch.ColumnToObject<TModel>(dt.Rows[index], model, tables, tableCount, hasList, columns);
+                    result.Add(dat);
                 }
 
-                //if (hasList.Any())
+                //ConcurrentQueue<int> rowsQueue = new ConcurrentQueue<int>(Enumerable.Range(0, rows));
+                //CountdownEvent countdownEvent = new CountdownEvent(rowsQueue.Count);
+                //Action processRows = () =>
                 //{
-                //    //need to create a list of object who is named in the list
-                //    //1. create a list grouped by main model
-                //    //List<TModel> mainModel = result.g;
+                //    int index;
+                //    while (rowsQueue.TryDequeue(out index))
+                //    {
+                //        TModel dat = ch.ColumnToObject<TModel>(dt.Rows[index], model, tables, tableCount, hasList, columns);
+                //        mutexRow.WaitOne();
+                //        result.Add(dat);
+                //        mutexRow.ReleaseMutex();
+                //        countdownEvent.Signal();
+                //    }
+                //};
 
-                //}
+                //Task.Run(processRows);
+                //Task.Run(processRows);
+                //Task.Run(processRows);
+                //Task.Run(processRows);
+                //Task.Run(processRows);
+
+                //countdownEvent.Wait();
+                //countdownEvent.Dispose();
             }
             return result;
         }
 
-        /// <summary>
-        /// Get list of object send from data table
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static List<TModel> ToList<TModel>(this DataTable dt) where TModel : new()
-        {
-            if (dt.Rows.Count > 0)
-            {
-                string[] columns = dt.ColumnNamesToArray();                
-                return  dt.ToList<TModel>(columns);
-            }
-            else return new List<TModel>();          //no results
-        }
 
         /// <summary>
         /// Convert DataTable to Json
@@ -285,29 +286,13 @@ namespace drualcman.Data.Extensions
         /// <typeparam name="TModel"></typeparam>
         /// <param name="dt"></param>
         /// <returns></returns>
-        public static Task<List<TModel>> ToListAsync<TModel>(this DataTable dt, string[] columns) where TModel : new()
+        public static Task<List<TModel>> ToListAsync<TModel>(this DataTable dt) where TModel : new()
         {
             if (dt.Rows.Count > 0)
             {
-                return Task.FromResult(dt.ToList<TModel>(columns));
+                return Task.FromResult(dt.ToList<TModel>());
             }
             else return Task.FromResult(new List<TModel>());          //no results
-        }
-
-        /// <summary>
-        /// Get list of object send from data table
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static async Task<List<TModel>> ToListAsync<TModel>(this DataTable dt) where TModel : new()
-        {
-            if (dt.Rows.Count > 0)
-            {
-                string[] columns = await dt.ColumnNamesToArrayAsync();
-                return await dt.ToListAsync<TModel>(columns);
-            }
-            else return new List<TModel>();          //no results
         }
 
         /// <summary>
@@ -373,171 +358,7 @@ namespace drualcman.Data.Extensions
         #endregion
         #endregion
 
-        #region Helpers
-        /// <summary>
-        /// Get all the columns properties need from the query used
-        /// </summary>
-        /// <param name="columns"></param>
-        /// <param name="model"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        static private List<Columns> HaveColumns(string[] columns, Type model, string shortName, bool ignoreCase)
-        {
-            PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            List<Columns> result = new List<Columns>();
-            int t = columns.Length;
-            int p = properties.Length;
-
-            bool isDirectQuery = columns[0].IndexOf(".") < 0;
-            string columnCompare;
-            for (int r = 0; r < t; r++)
-            {
-                int c = 0;
-                bool have = false;
-                DatabaseAttribute options = null;
-                while (c < p && have == false)
-                {
-                    options = properties[c].GetCustomAttribute<DatabaseAttribute>();
-                    if (isDirectQuery)
-                    {
-                        columnCompare = columns[r];
-                    }
-                    else
-                    {
-                        if (options is null)
-                        {
-                            columnCompare = columns[r].Replace($"{shortName}.", "");
-                        }
-                        else if (options.Inner == InnerDirection.NONE)
-                        {
-                            if (options.Name == columns[r].Replace($"{shortName}.", "")) columnCompare = properties[c].Name;
-                            else columnCompare = columns[r].Replace($"{shortName}.", "");
-                        }
-                        else
-                        {
-                            columnCompare = string.Empty;
-                        }
-                    }
-                    if (ignoreCase)
-                        have = columnCompare.ToLower() == properties[c].Name.ToLower();
-                    else
-                        have = columnCompare == properties[c].Name;
-                    
-                    c++;
-                }
-                if (have)
-                {
-                    c--;
-                    result.Add(new Columns { Column = properties[c], Options = options, TableShortName = shortName, ColumnName = columns[r] });
-                    //result.Add(new Columns { Column = properties.First(n => n.Name == columns[r]), Options = options, TableShortName = shortName, ColumnName = columns[r] });
-                }
-            }
-            return result;
-        }
-
-        private static object ColumnToObject(ref string[] columnNames, DataRow row, Type model,
-            ref List<TableName> tables, ref int tableCount, ref List<string> hasList, List<Columns> columns)
-        {
-            TableName table = tables.Where(t => t.Name == model.Name).FirstOrDefault();
-            if (table is null)
-            {
-                tableCount++;
-                table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty);
-                tables.Add(table);
-            }
-            if (columns.Where(t => t.TableShortName == table.ShortName).FirstOrDefault() == null)
-            {
-                columns = HaveColumns(columnNames, model, table.ShortName, true);
-            }
-            var item = Assembly.GetAssembly(model).CreateInstance(model.FullName, true);
-
-            string[] rowCols = row.ColumnNamesToArray();
-            int c = columns.Count;
-            for (int i = 0; i < c; i++)
-            {
-                if (!string.IsNullOrEmpty(columns[i].ColumnName)) 
-                {
-                    if (columns[i].Options is not null)
-                    {
-                        if (!columns[i].Options.Ignore)
-                        {
-                            if (Helpers.ObjectHelpers.IsGenericList(columns[i].Column.PropertyType.FullName) &&
-                                            !hasList.Contains(columns[i].Column.PropertyType.Name))
-                            {
-                                hasList.Add(columns[i].Column.PropertyType.Name);
-                                Type[] genericType = columns[i].Column.PropertyType.GetGenericArguments();
-                                Type creatingCollectionType = typeof(List<>).MakeGenericType(genericType);
-                                columns[i].Column.SetValue(item, Activator.CreateInstance(creatingCollectionType));
-                            }
-                            else if (columns[i].Options.Inner != InnerDirection.NONE)
-                            {
-                                try
-                                {
-                                    columns[i].Column.SetValue(item,
-                                        ColumnToObject(ref columnNames, row, columns[i].Column.PropertyType, ref tables, ref tableCount, ref hasList, columns),
-                                        null);
-                                }
-                                catch { }
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
-                                        columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].ColumnName]), null);
-                                    else
-                                    {
-                                        try
-                                        {
-                                            columns[i].Column.SetValue(item, row[columns[i].ColumnName], null);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            //TODO some control
-                                        }
-                                    }
-                                }
-                                catch { }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (columns[i].Column.PropertyType.Name == typeof(bool).Name)
-                        {
-                            try
-                            {
-                                if (int.TryParse(row[columns[i].Column.Name].ToString(), out int test))
-                                {
-                                    if (test == 0) columns[i].Column.SetValue(item, false, null);
-                                    else columns[i].Column.SetValue(item, true, null);
-                                }
-                                else
-                                    columns[i].Column.SetValue(item, Convert.ToBoolean(row[columns[i].Column.Name]), null);
-                            }
-                            catch
-                            {
-                                columns[i].Column.SetValue(item, false, null);
-                            }
-                        }
-                        else
-                        {
-                            try
-                            {
-                                columns[i].Column.SetValue(item, row[columns[i].Column.Name], null);
-                            }
-                            catch (Exception ex)
-                            {
-                                //TODO some control
-                            }
-                        }
-                    }
-                }               
-            }
-
-            return item;
-        }
-
+        #region Helpers   
         private static string GenerateJsonProperty(DataTable dt, int row, int col, bool isLast = false)
         {
             // IF LAST PROPERTY THEN REMOVE 'COMMA'  IF NOT LAST PROPERTY THEN ADD 'COMMA'
