@@ -20,98 +20,126 @@ namespace drualcman
         /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
-        /// Devuelve los datos de la consulta en un DataSet
+        /// Devuelve los datos de la consulta en un  List<T>
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public List<TModel> List<TModel>(string sql = "", int timeout = 30) where TModel : new()
-        {
-            DataTable dt;
-            if (string.IsNullOrEmpty(sql)) dt = this.DataTable<TModel>(timeout);
-            else dt = this.DataTable(sql, timeout);
-            return dt.ToList<TModel>();
-            //defLog log = new defLog(this.FolderLog);
-            //log.start("ToList", sql, "");
+        public List<TModel> List<TModel>(string sql = "", int timeout = 30) where TModel : new() =>
+            ListAsync<TModel>(sql, timeout).Result;
 
-            //#region query
-            //// If a query is empty create the query from the Model
-            //if (string.IsNullOrWhiteSpace(sql))
-            //{
-            //    sql = SetQuery<TModel>();
-            //}
-            //#endregion
-
-            //try
-            //{
-            //    using SqlDataReader dr = Reader(sql, timeout);
-
-            //    List<TModel> result = new List<TModel>();
-            //    if (dr is not null)
-            //    {
-            //        if (dr.HasRows)
-            //        {
-            //            Type model = typeof(TModel);
-
-            //            int tableCount = 0;
-            //            if (TableNames is null)
-            //            {
-            //                TableNames = new List<TableName>();
-            //                TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
-            //                TableNames.Add(table);
-            //            }
-
-            //            ColumnsHelpers ch = new ColumnsHelpers();
-
-            //            List<string> hasList = new List<string>();
-            //            ReadOnlyCollection<DbColumn> columnNames = dr.GetColumnSchema();
-            //            List<Columns> columns = ch.HaveColumns(columnNames, model, $"t{tableCount}", TableNames);
-
-            //            while (dr.Read())
-            //            {
-            //                TModel dat = ch.ColumnToObject<TModel>(dr, model, TableNames, tableCount, hasList, columns);
-            //                result.Add(dat);
-            //            }
-
-            //            //if (hasList.Any())
-            //            //{
-            //            //    //need to create a list of object who is named in the list
-            //            //    //1. create a list grouped by main model
-            //            //    //List<TModel> mainModel = result.g;
-
-            //            //}
-            //        }
-            //    }
-            //    return result;
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-            //    throw;
-            //}
-        }
+        /// <summary>
+        /// Devuelve datos de la consulta
+        /// </summary>
+        /// <param name="cmd">Comando a ejecutar</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un  List<T>
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public List<TModel> List<TModel>(SqlCommand cmd, int timeout = 30) where TModel : new() =>
+            ListAsync<TModel>(cmd, timeout).Result;
         #endregion
 
         #region async
-
-        /// <summary>
-        /// Executer query and return List of model send
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
-        public async Task<List<TModel>> ListAsync<TModel>(int timeout = 30) where TModel : new() =>
-            await ListAsync<TModel>(SetQuery<TModel>(), timeout);
-
         /// <summary>
         /// Devuelve datos de la consulta
         /// </summary>
         /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
-        /// Devuelve los datos de la consulta en un DataSet
+        /// Devuelve los datos de la consulta en un  List<T>
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public async Task<List<TModel>> ListAsync<TModel>(string sql, int timeout = 30) where TModel : new() =>
-            await Task.FromResult(List<TModel>(sql, timeout));
+        public async Task<List<TModel>> ListAsync<TModel>(string sql = "", int timeout = 30) where TModel : new()
+        {
+            defLog log = new defLog(this.FolderLog);
+            log.start("ToList", sql, "");
+
+            #region query
+            // If a query is empty create the query from the Model
+            if (string.IsNullOrWhiteSpace(sql))
+            {
+                sql = SetQuery<TModel>();
+            }
+            #endregion
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandTimeout = timeout;
+            cmd.CommandText = sql;
+            List<TModel> result = await ListAsync<TModel>(cmd);
+            await cmd.DisposeAsync();
+            return result;
+
+        }
+
+        /// <summary>
+        /// Devuelve datos de la consulta
+        /// </summary>
+        /// <param name="cmd">Comando a ejecutar</param>
+        /// <param name="timeout">time out in seconds</param>
+        /// <returns>
+        /// Devuelve los datos de la consulta en un List<T>
+        /// Si hay error devuelve el mensaje con el error
+        /// </returns>
+        public async Task<List<TModel>> ListAsync<TModel>(SqlCommand cmd, int timeout = 30) where TModel : new()
+        {
+            defLog log = new defLog(this.FolderLog);
+            log.start("ToList", "with command",  cmd.CommandText);
+
+            try
+            {
+                using SqlConnection cn = new SqlConnection(this.connectionString);
+                cmd.Connection = cn;
+                cmd.CommandTimeout = timeout;
+                await cmd.Connection.OpenAsync();
+                using SqlDataReader dr = await cmd.ExecuteReaderAsync();
+
+                List<TModel> result = new List<TModel>();
+                if (dr is not null)
+                {
+                    if (dr.HasRows)
+                    {
+                        Type model = typeof(TModel);
+
+                        int tableCount = 0;
+                        if (TableNames is null)
+                        {
+                            TableNames = new List<TableName>();
+                            TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
+                            TableNames.Add(table);
+                        }
+                        else tableCount = TableNames.Count;
+
+
+                        ColumnsHelpers ch = new ColumnsHelpers();
+
+                        List<string> hasList = new List<string>();
+                        ReadOnlyCollection<DbColumn> columnNames = await dr.GetColumnSchemaAsync();
+                        List<Columns> columns = ch.HaveColumns(columnNames, model, $"t{tableCount}", TableNames);
+
+                        while (await dr.ReadAsync())
+                        {
+                            TModel dat = ch.ColumnToObject<TModel>(dr, model, TableNames, tableCount, hasList, columns);
+                            result.Add(dat);
+                        }
+
+                        //if (hasList.Any())
+                        //{
+                        //    //need to create a list of object who is named in the list
+                        //    //1. create a list grouped by main model
+                        //    //List<TModel> mainModel = result.g;
+
+                        //}
+                    }
+                }
+                await cmd.Connection.CloseAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                log.end(cmd.CommandText, ex.ToString() + "\n" + this.rutaDDBB);
+                throw;
+            }
+        }
         #endregion
     }
 }
