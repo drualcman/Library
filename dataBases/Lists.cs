@@ -60,13 +60,17 @@ namespace drualcman
             {
                 sql = SetQuery<TModel>();
             }
+            else
+            {
+                CheckSqlInjection(sql, log);
+            }
             #endregion
 
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandTimeout = timeout;
             cmd.CommandText = sql;
-            List<TModel> result = await ListAsync<TModel>(cmd);
-            await cmd.DisposeAsync();
+            cmd.CommandTimeout = timeout;
+            List<TModel> result = await ListAsync<TModel>(cmd, timeout);
+            cmd.Dispose();
             return result;
 
         }
@@ -80,7 +84,7 @@ namespace drualcman
         /// Devuelve los datos de la consulta en un List<T>
         /// Si hay error devuelve el mensaje con el error
         /// </returns>
-        public async Task<List<TModel>> ListAsync<TModel>(SqlCommand cmd, int timeout = 30) where TModel : new()
+        public Task<List<TModel>> ListAsync<TModel>(SqlCommand cmd, int timeout = 30) where TModel : new()
         {
             defLog log = new defLog(this.FolderLog);
             log.start("ToList", "with command",  cmd.CommandText);
@@ -90,8 +94,8 @@ namespace drualcman
                 using SqlConnection cn = new SqlConnection(this.connectionString);
                 cmd.Connection = cn;
                 cmd.CommandTimeout = timeout;
-                await cmd.Connection.OpenAsync();
-                using SqlDataReader dr = await cmd.ExecuteReaderAsync();
+                cmd.Connection.Open();
+                using SqlDataReader dr = cmd.ExecuteReader();
 
                 List<TModel> result = new List<TModel>();
                 if (dr is not null)
@@ -113,10 +117,10 @@ namespace drualcman
                         ColumnsHelpers ch = new ColumnsHelpers();
 
                         List<string> hasList = new List<string>();
-                        ReadOnlyCollection<DbColumn> columnNames = await dr.GetColumnSchemaAsync();
+                        ReadOnlyCollection<DbColumn> columnNames = dr.GetColumnSchema();
                         List<Columns> columns = ch.HaveColumns(columnNames, model, $"t{tableCount}", TableNames);
 
-                        while (await dr.ReadAsync())
+                        while (dr.Read())
                         {
                             TModel dat = ch.ColumnToObject<TModel>(dr, model, TableNames, tableCount, hasList, columns);
                             result.Add(dat);
@@ -131,8 +135,8 @@ namespace drualcman
                         //}
                     }
                 }
-                await cmd.Connection.CloseAsync();
-                return result;
+                cmd.Connection.Close();
+                return Task.FromResult(result);
             }
             catch (Exception ex)
             {
