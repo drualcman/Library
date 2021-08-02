@@ -111,7 +111,7 @@ namespace drualcman
                             TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
                             TableNames.Add(table);
                         }
-                        else tableCount = TableNames.Count;
+                        else tableCount = 0;
 
 
                         ColumnsHelpers ch = new ColumnsHelpers();
