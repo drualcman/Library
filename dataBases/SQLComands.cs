@@ -26,15 +26,13 @@ namespace drualcman
                 log.start("ExecuteCommand(cmd)", cmd.CommandText, this.rutaDDBB);
                 try
                 {
-                    if (cmd.Connection is null)
-                    {
-                        this.OpenConnection();
-                        cmd.Connection = this.DbConnection;
-                    }
-                    if (cmd.Connection.State != System.Data.ConnectionState.Open)
-                        cmd.Connection.Open();
+                    using SqlConnection cn = new SqlConnection(this.connectionString);
+                    cmd.Connection = cn;
+                    cmd.CommandTimeout = timeout;
+                    cmd.Connection.Open();
                     cmd.CommandTimeout = timeout;
                     cmd.ExecuteNonQuery();
+                    cmd.Connection.Close();
                     result = true;
                     if (this.LogResults) log.end(result.ToString());
                 }
@@ -72,18 +70,13 @@ namespace drualcman
             log.start("Execute(cmd)", cmd.CommandText, this.rutaDDBB);
             try
             {
-                if (cmd.Connection == null)
-                {
-                    this.OpenConnection();
-                    cmd.Connection = this.DbConnection;
-                }
-                else
-                {
-                    if (cmd.Connection.State != System.Data.ConnectionState.Open)
-                        cmd.Connection.Open();
-                }
+                using SqlConnection cn = new SqlConnection(this.connectionString);
+                cmd.Connection = cn;
+                cmd.CommandTimeout = timeout;
+                cmd.Connection.Open();
                 cmd.CommandTimeout = timeout;
                 result = cmd.ExecuteScalar();
+                cmd.Connection.Close();
                 if (this.LogResults) log.end(result?.ToString());
             }
             catch (Exception ex)
@@ -113,8 +106,7 @@ namespace drualcman
 
             try
             {
-                this.OpenConnection();
-                using SqlCommand cmd = this.DbConnection.CreateCommand();
+                using SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = sql;
                 result = Reader(cmd, timeout);
             }
@@ -133,18 +125,13 @@ namespace drualcman
             log.start("Reader(cmd)", cmd.CommandText, this.rutaDDBB);
             try
             {
-                if (cmd.Connection == null)
-                {
-                    this.OpenConnection();
-                    cmd.Connection = this.DbConnection;
-                }
-                else
-                {
-                    if (cmd.Connection.State != System.Data.ConnectionState.Open)
-                        cmd.Connection.Open();
-                }
+                using SqlConnection cn = new SqlConnection(this.connectionString);
+                cmd.Connection = cn;
+                cmd.CommandTimeout = timeout;
+                cmd.Connection.Open();
                 cmd.CommandTimeout = timeout;
                 result = cmd.ExecuteReader();
+                cmd.Connection.Close();
                 if (this.LogResults) log.end(result);
             }
             catch (Exception ex)
@@ -171,16 +158,14 @@ namespace drualcman
                 log.start("ExecuteCommand(cmd)", cmd.CommandText, this.rutaDDBB);
                 try
                 {
-                    if (cmd.Connection is null)
-                    {
-                        await this .OpenConnectionAsync();
-                        cmd.Connection = this.DbConnection;
-                    }
-                    if (cmd.Connection.State != System.Data.ConnectionState.Open) 
-                        await cmd.Connection.OpenAsync();
+                    using SqlConnection cn = new SqlConnection(this.connectionString);
+                    cmd.Connection = cn;
+                    cmd.CommandTimeout = timeout;
+                    await cmd.Connection.OpenAsync();
                     cmd.CommandTimeout = timeout;
                     await cmd.ExecuteNonQueryAsync();
                     result = true;
+                    await cmd.Connection.CloseAsync();
                     if (this.LogResults) log.end(result.ToString());
                 }
                 catch (Exception ex)
@@ -211,18 +196,14 @@ namespace drualcman
             log.start("Execute(cmd)", cmd.CommandText, this.rutaDDBB);
             try
             {
-                if (cmd.Connection == null)
-                {
-                    await this.OpenConnectionAsync();
-                    cmd.Connection = this.DbConnection;
-                }
-                else
-                {
-                    if (cmd.Connection.State != System.Data.ConnectionState.Open)
-                        await cmd.Connection.OpenAsync();
-                }
+
+                using SqlConnection cn = new SqlConnection(this.connectionString);
+                cmd.Connection = cn;
+                cmd.CommandTimeout = timeout;
+                await cmd.Connection.OpenAsync();
                 cmd.CommandTimeout = timeout;
                 result = await cmd.ExecuteScalarAsync();
+                await cmd.Connection.CloseAsync();
                 if (this.LogResults) log.end(result?.ToString());
             }
             catch (Exception ex)
