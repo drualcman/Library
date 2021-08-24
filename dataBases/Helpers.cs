@@ -258,7 +258,7 @@ namespace drualcman
 
             tableCount++;
             shortName = $"t{tableCount}";
-            TableName newTable = new TableName(tableName, shortName, shortReference, origin.Inner,
+            TableName newTable = new TableName(string.IsNullOrEmpty(origin.IndexedName) ? tableName : origin.IndexedName, shortName, shortReference, origin.Inner,
                 origin.InnerColumn ?? origin.Name ?? "", origin.InnerIndex ?? origin.Name ?? origin.InnerColumn ?? "", t.Name, column);
             TableNames.Add(newTable);
             InnerColumns(properties, shortName, retorno,  ref tableCount);

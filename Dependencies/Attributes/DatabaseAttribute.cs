@@ -6,7 +6,7 @@ namespace drualcman.Attributes
     public class DatabaseAttribute : Attribute
     {
         /// <summary>
-        /// Column name if it's different from the property name
+        /// Column name or table name if it's different from the property name
         /// </summary>
         public string Name { get; set; }
         /// <summary>
