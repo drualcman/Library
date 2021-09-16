@@ -137,29 +137,32 @@ namespace drualcman.Data.Extensions
         /// <returns></returns>
         public static string ToJson(this DataTable dt)
         {
-            //https://stackoverflow.com/questions/17398019/convert-datatable-to-json-in-c-sharp                
-            StringBuilder jsonString = new StringBuilder();
-            int r = dt.Rows.Count;
-            int c = dt.Columns.Count;
-            if (r > 0)
+            if (dt is not null)
             {
-                jsonString.Append("[");
-                for (int row = 0; row < r; row++)
+                //https://stackoverflow.com/questions/17398019/convert-datatable-to-json-in-c-sharp                
+                StringBuilder jsonString = new StringBuilder();
+                int r = dt.Rows.Count;
+                int c = dt.Columns.Count;
+                if (r > 0)
                 {
-                    jsonString.Append("{");
-                    for (int col = 0; col < c; col++)
+                    jsonString.Append("[");
+                    for (int row = 0; row < r; row++)
                     {
-                        jsonString.Append("\"");
-                        jsonString.Append(dt.Columns[col].ColumnName);
-                        jsonString.Append("\":");
+                        jsonString.Append("{");
+                        for (int col = 0; col < c; col++)
+                        {
+                            jsonString.Append("\"");
+                            jsonString.Append(dt.Columns[col].ColumnName);
+                            jsonString.Append("\":");
 
-                        bool last = !(col < c - 1);
-                        jsonString.Append(GenerateJsonProperty(dt, row, col, last));
+                            bool last = !(col < c - 1);
+                            jsonString.Append(GenerateJsonProperty(dt, row, col, last));
+                        }
+                        jsonString.Append(row == dt.Rows.Count - 1 ? "}" : "},");
                     }
-                    jsonString.Append(row == dt.Rows.Count - 1 ? "}" : "},");
+                    jsonString.Append("]");
+                    return jsonString.ToString();
                 }
-                jsonString.Append("]");
-                return jsonString.ToString();
             }
             return string.Empty;
         }

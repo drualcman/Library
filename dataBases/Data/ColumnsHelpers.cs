@@ -415,12 +415,22 @@ namespace drualcman.Data
                         sender.SetValue(destination, Convert.ToByte(value));
                         break;
                     case "date":
-                        sender.SetValue(destination, Convert.ToDateTime(value));
+                        DateTime date;
+                        if (!DateTime.TryParse(value.ToString(), out date))
+                        {
+                            TimeSpan time;
+                            if (!TimeSpan.TryParse(value.ToString(), out time))
+                            {
+                                time = new TimeSpan(DateTime.Now.Ticks);
+                            }
+                            date = new DateTime(time.Ticks);
+                        }
+                        sender.SetValue(destination, date);
                         break;
                     case "nullable":
                         sender.SetValue(destination, value);
                         break;
-                    default:
+                    default:                        
                         sender.SetValue(destination, value.ToString());
                         break;
                 }
