@@ -430,8 +430,15 @@ namespace drualcman.Data
                     case "nullable":
                         sender.SetValue(destination, value);
                         break;
-                    default:                        
-                        sender.SetValue(destination, value.ToString());
+                    default:
+                        if (sender.PropertyType.Equals(value.GetType())) sender.SetValue(destination, value);
+                        else
+                        {
+                            if (sender.PropertyType.BaseType == typeof(Enum)) 
+                                sender.SetValue(destination, value);
+                            else
+                                sender.SetValue(destination, Convert.ChangeType(value, sender.PropertyType));
+                        }
                         break;
                 }
             }
