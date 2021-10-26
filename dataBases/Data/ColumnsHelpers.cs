@@ -434,8 +434,17 @@ namespace drualcman.Data
                         if (sender.PropertyType.Equals(value.GetType())) sender.SetValue(destination, value);
                         else
                         {
-                            if (sender.PropertyType.BaseType == typeof(Enum)) 
-                                sender.SetValue(destination, value);
+                            if (sender.PropertyType.BaseType == typeof(Enum))
+							{
+                                if (int.TryParse(value.ToString(), out int index))
+                                {
+                                    sender.SetValue(destination, index);
+                                }
+                                else
+                                {
+                                    sender.SetValue(destination, Enum.Parse(sender.PropertyType, value.ToString()));
+                                }
+							} 
                             else
                                 sender.SetValue(destination, Convert.ChangeType(value, sender.PropertyType));
                         }
