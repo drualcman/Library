@@ -126,14 +126,6 @@ namespace drualcman
                             TModel dat = ch.ColumnToObject<TModel>(dr, model, TableNames, tableCount, hasList, columns);
                             result.Add(dat);
                         }
-
-                        //if (hasList.Any())
-                        //{
-                        //    //need to create a list of object who is named in the list
-                        //    //1. create a list grouped by main model
-                        //    //List<TModel> mainModel = result.g;
-
-                        //}
                     }
                 }
                 cmd.Connection.Close();
