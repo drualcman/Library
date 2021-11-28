@@ -360,11 +360,11 @@ namespace drualcman
                 // that's why divide by 365.25
                 Anos = (int)Math.Ceiling(Difference.Days / 365.25);
 
-                //Anos = dFin.Year - MiNacimiento.Year;
-                //if (dFin.Month <= MiNacimiento.Month)
-                //{
-                //    if (dFin.Day < MiNacimiento.Day) Anos--;
-                //}
+                Anos = dFin.Year - MiNacimiento.Year;
+                if (dFin.Month <= MiNacimiento.Month)
+                {
+                    if (dFin.Day < MiNacimiento.Day) Anos--;
+                }
             }
             catch
             {

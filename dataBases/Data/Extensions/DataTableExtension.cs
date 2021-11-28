@@ -1,4 +1,5 @@
-﻿using drualcman.Enums;
+﻿using drualcman.Data.Helpers;
+using drualcman.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -93,38 +94,17 @@ namespace drualcman.Data.Extensions
                 tables.Add(table);
 
                 List<string> hasList = new List<string>();
-                ColumnsHelpers ch = new ColumnsHelpers();
-                List<Columns> columns = ch.HaveColumns(columnNames, model, table.ShortName, tables);
-
+                //ColumnsHelpers ch = new ColumnsHelpers();
+                ColumnsNames ch = new ColumnsNames(columnNames, tables);
+                IEnumerable<Columns> columns = ch.HaveColumns(model, table.ShortName);
+                ColumnToObject co = new ColumnToObject(ch, new InstanceModel(tables), tables);
+                
                 for (int index = 0; index < rows; index++)
                 {
-                    TModel dat = ch.ColumnToObject<TModel>(dt.Rows[index], model, tables, tableCount, hasList, columns);
+                    TModel dat = new();
+                    co.SetColumnToObject(new ColumnValue(tables, dat), dt.Rows[index], model, $"t{tableCount}");
                     result.Add(dat);
                 }
-
-                //ConcurrentQueue<int> rowsQueue = new ConcurrentQueue<int>(Enumerable.Range(0, rows));
-                //CountdownEvent countdownEvent = new CountdownEvent(rowsQueue.Count);
-                //Action processRows = () =>
-                //{
-                //    int index;
-                //    while (rowsQueue.TryDequeue(out index))
-                //    {
-                //        TModel dat = ch.ColumnToObject<TModel>(dt.Rows[index], model, tables, tableCount, hasList, columns);
-                //        mutexRow.WaitOne();
-                //        result.Add(dat);
-                //        mutexRow.ReleaseMutex();
-                //        countdownEvent.Signal();
-                //    }
-                //};
-
-                //Task.Run(processRows);
-                //Task.Run(processRows);
-                //Task.Run(processRows);
-                //Task.Run(processRows);
-                //Task.Run(processRows);
-
-                //countdownEvent.Wait();
-                //countdownEvent.Dispose();
             }
             return result;
         }

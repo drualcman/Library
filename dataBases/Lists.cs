@@ -9,6 +9,8 @@ using drualcman.Data;
 using System.Data;
 using drualcman.Data.Extensions;
 using System.Diagnostics;
+using System.Linq;
+using drualcman.Data.Helpers;
 
 namespace drualcman
 {
@@ -101,8 +103,10 @@ namespace drualcman
                 List<TModel> result = new List<TModel>();
                 if (dr is not null)
                 {
-                    if (dr.HasRows)
+                    bool canRead = dr.Read();
+                    if (canRead)
                     {
+
                         Type model = typeof(TModel);
 
                         int tableCount = 0;
@@ -114,19 +118,66 @@ namespace drualcman
                         }
                         else tableCount = 0;
 
-
-                        ColumnsHelpers ch = new ColumnsHelpers();
-
                         List<string> hasList = new List<string>();
                         ReadOnlyCollection<DbColumn> columnNames = dr.GetColumnSchema();
-                        List<Columns> columns = ch.HaveColumns(columnNames, model, $"t{tableCount}", TableNames);
+                        //ColumnsNames ch = new ColumnsNames(columnNames, TableNames);
+                        InstanceModel instanceModel = new InstanceModel(TableNames);
 
-                        while (dr.Read())
+                        ColumnToObject columnToObject = new ColumnToObject(new ColumnsNames(columnNames, TableNames),
+                                                        instanceModel, TableNames);
+
+                        object currentRow = new String("");
+                        int t = TableNames.Count;
+                        do
                         {
-                            TModel dat = ch.ColumnToObject<TModel>(dr, model, TableNames, tableCount, hasList, columns);
+                            TModel dat = new();
+                            instanceModel.InstanceProperties(dat);
+                            ColumnValue columnValue = new ColumnValue(TableNames, dat);
+                            ColumnToObjectResponse response = new ColumnToObjectResponse
+                            {
+                                InUse = dat
+                            };
+                            ////first iteration
+                            //response = columnToObject
+                            //    .SetColumnToObject(new ColumnValue(TableNames, dat), dr, dat, "t0");
+                            currentRow = dr[0];//know what is the first column asume it's the key column and no repeated
+                            int i = 0;
+                            do
+                            {                        
+                                response = columnToObject.SetColumnToObject(new ColumnValue(TableNames, response.InUse),
+                                                    dr, response.InUse, TableNames[i].ShortName);
+
+                                if (response.IsList)
+                                {
+                                    object listInstance = response.PropertyListInstance;
+                                    string listName = response.PropertyListName;
+                                    //check if have some other object like a property
+                                    TableName tableList = TableNames.Where(t => t.ShortReference == response.ActualTable).FirstOrDefault();
+                                    if (tableList != null)
+                                    {
+                                        response = columnToObject.SetColumnToObject(new ColumnValue(TableNames, response.PropertyListData),
+                                                       dr, response.PropertyListData, tableList.ShortName);
+                                    }
+
+                                    listInstance.GetPropValue(listName).GetType()
+                                        .GetMethod("Add").Invoke(listInstance.GetPropValue(listName),
+                                                                            new[] { response.InUse });
+                                    response.InUse = listInstance;
+                                }
+                             
+                                i++;
+                                if (i >= t)
+                                {
+                                    i = 0;
+                                    canRead = canRead = dr.Read();
+                                }
+                            } while (canRead && currentRow.ToString() == dr[0].ToString());
+
                             result.Add(dat);
-                        }
+                            columnValue = null;
+                        } while (canRead);
                     }
+
                 }
                 cmd.Connection.Close();
                 return Task.FromResult(result);
@@ -138,5 +189,6 @@ namespace drualcman
             }
         }
         #endregion
+
     }
 }
