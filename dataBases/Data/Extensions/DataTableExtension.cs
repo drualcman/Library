@@ -93,16 +93,13 @@ namespace drualcman.Data.Extensions
                 TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
                 tables.Add(table);
 
-                List<string> hasList = new List<string>();
-                //ColumnsHelpers ch = new ColumnsHelpers();
-                ColumnsNames ch = new ColumnsNames(columnNames, tables);
-                IEnumerable<Columns> columns = ch.HaveColumns(model, table.ShortName);
-                ColumnToObject co = new ColumnToObject(ch, new InstanceModel(tables), tables);
+                ColumnToObject co = new ColumnToObject(new ColumnsNames(columnNames, tables),
+                    new InstanceModel(tables), tables);
                 
                 for (int index = 0; index < rows; index++)
                 {
                     TModel dat = new();
-                    co.SetColumnToObject(new ColumnValue(tables, dat), dt.Rows[index], model, $"t{tableCount}");
+                    co.SetColumnToObject(new ColumnValue(tables, dat), dt.Rows[index], dat, $"t{tableCount}");
                     result.Add(dat);
                 }
             }
