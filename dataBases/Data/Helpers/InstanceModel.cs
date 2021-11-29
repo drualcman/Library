@@ -38,7 +38,6 @@ namespace drualcman.Data.Helpers
                         property.SetValue(item, activation, null);
                         InstanceProperties(activation);
                     }
-                    else property.SetValue(item, default, null);
                 }
             }
 
