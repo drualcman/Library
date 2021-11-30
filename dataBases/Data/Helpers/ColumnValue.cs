@@ -40,15 +40,19 @@ namespace drualcman.Data.Helpers
                     SetValue(column.PropertyType, column.Column, Item.GetPropValue(Tables[column.TableIndex].Instance.Name), row);
                 }
                 else
-                {
-                    SetValue(column.PropertyType, column.Column, Item, row);
+                {   
+                    if (column.Column.DeclaringType.Name.ToLower() == Item.GetType().Name.ToLower())
+                        SetValue(column.PropertyType, column.Column, Item, row);
+                    else
+                        SetValue(column.PropertyType, column.Column, Item.GetPropValue(column.Column.DeclaringType.Name), row);
                 }
             }
             catch (Exception ex)
             {
                 string err = ex.Message;
                 Console.WriteLine("ex 2 {0}", err);
-                SetValue(column.Column, Item, row);
+                //SetValue(column.Column, Item, row);
+                SetValue(column.PropertyType, column.Column, Item.GetPropValue(column.Column.DeclaringType.Name), row);
             }
 
         }

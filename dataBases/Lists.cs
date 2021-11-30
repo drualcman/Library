@@ -106,7 +106,6 @@ namespace drualcman
                     bool canRead = dr.Read();
                     if (canRead)
                     {
-
                         Type model = typeof(TModel);
 
                         int tableCount = 0;
@@ -120,7 +119,7 @@ namespace drualcman
 
                         ReadOnlyCollection<DbColumn> columnNames = dr.GetColumnSchema();
                         //ColumnsNames ch = new ColumnsNames(columnNames, TableNames);
-                        InstanceModel instanceModel = new InstanceModel(TableNames);
+                        InstanceModel instanceModel = new InstanceModel();
 
                         ColumnToObject columnToObject = new ColumnToObject(new ColumnsNames(columnNames, TableNames),
                                                         instanceModel, TableNames);

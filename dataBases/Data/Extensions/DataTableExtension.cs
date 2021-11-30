@@ -94,7 +94,7 @@ namespace drualcman.Data.Extensions
                 tables.Add(table);
 
                 ColumnToObject co = new ColumnToObject(new ColumnsNames(columnNames, tables),
-                    new InstanceModel(tables), tables);
+                    new InstanceModel(), tables);
                 
                 for (int index = 0; index < rows; index++)
                 {

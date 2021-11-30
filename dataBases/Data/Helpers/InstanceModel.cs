@@ -10,13 +10,6 @@ namespace drualcman.Data.Helpers
 {
     internal class InstanceModel
     {
-        readonly ReadOnlyCollection<TableName> Tables;
-
-        public InstanceModel(IList<TableName> tables)
-        {
-            Tables = new ReadOnlyCollection<TableName>(tables);
-        }
-
         public void InstanceProperties<TModel>(TModel item)
         {
             PropertyInfo[] properties = item.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -31,10 +24,9 @@ namespace drualcman.Data.Helpers
                 }
                 else
                 {
-                    TableName table = Tables.FirstOrDefault(i => i.Instance == property);
-                    if (table != null)
+                    if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
                     {
-                        object activation = Activator.CreateInstance(table.Instance.PropertyType);
+                        object activation = Activator.CreateInstance(property.PropertyType);
                         property.SetValue(item, activation, null);
                         InstanceProperties(activation);
                     }

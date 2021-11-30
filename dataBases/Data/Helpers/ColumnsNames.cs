@@ -47,8 +47,6 @@ namespace drualcman.Data.Helpers
         {
             PropertyInfo[] properties = model.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             List<Columns> result = new List<Columns>();
-            int totalDbColumns = Columns.Count;
-            int propertyCount = properties.Length;
             bool isDirectQuery = Columns[0].IndexOf(".") < 0;
             int c = properties.Length;
 
@@ -56,13 +54,23 @@ namespace drualcman.Data.Helpers
             {
                 string columnName;
 
-                if (isDirectQuery) columnName = properties[propertyIndex].Name.ToLower();
-                else columnName = $"{shortName}.{properties[propertyIndex].Name}".ToLower();
-
-                if (Columns.Contains(columnName))
+                if (properties[propertyIndex].PropertyType.IsClass && 
+                    !properties[propertyIndex].PropertyType.IsArray &&
+                    properties[propertyIndex].PropertyType != typeof(string))
                 {
-                    result.Add(SetColumn(properties[propertyIndex], shortName, columnName));
+                    result.AddRange(HaveColumns(properties[propertyIndex].PropertyType, shortName));
                 }
+                else
+                {
+                    if (isDirectQuery) columnName = properties[propertyIndex].Name.ToLower();
+                    else columnName = $"{shortName}.{properties[propertyIndex].Name}".ToLower();
+                    if (Columns.Contains(columnName))
+                    {
+                        result.Add(SetColumn(properties[propertyIndex], shortName, columnName));
+                    }
+                }
+
+                
             }
             return result;
         }
