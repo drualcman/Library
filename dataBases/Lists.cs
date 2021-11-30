@@ -118,7 +118,6 @@ namespace drualcman
                         }
                         else tableCount = 0;
 
-                        List<string> hasList = new List<string>();
                         ReadOnlyCollection<DbColumn> columnNames = dr.GetColumnSchema();
                         //ColumnsNames ch = new ColumnsNames(columnNames, TableNames);
                         InstanceModel instanceModel = new InstanceModel(TableNames);
@@ -130,6 +129,7 @@ namespace drualcman
                         int t = TableNames.Count;
                         do
                         {
+                            bool hasList = false;
                             TModel dat = new();
                             instanceModel.InstanceProperties(dat);
                             ColumnValue columnValue = new ColumnValue(TableNames, dat);
@@ -149,6 +149,7 @@ namespace drualcman
 
                                 if (response.IsList)
                                 {
+                                    hasList = true;
                                     object listInstance = response.PropertyListInstance;
                                     string listName = response.PropertyListName;
                                     //check if have some other object like a property
@@ -170,6 +171,7 @@ namespace drualcman
                                 {
                                     i = 0;
                                     canRead = canRead = dr.Read();
+                                    if (!hasList) currentRow = -1;
                                 }
                             } while (canRead && currentRow.ToString() == dr[0].ToString());
 
