@@ -124,20 +124,9 @@ namespace drualcman
         public string SetQuery<TModel>()
         {
             PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            
-            TableNames = new List<TableName>();
-            string tableName;
-            DatabaseAttribute table = typeof(TModel).GetCustomAttribute<DatabaseAttribute>();
-            if (table is not null)
-            {
-                if (string.IsNullOrEmpty(table.Name)) tableName = typeof(TModel).Name;
-                else tableName = table.Name;
-            }
-            else tableName = typeof(TModel).Name;
-            int tableCount = 0;
-            string shortName = $"t{tableCount}";
-            TableName newTable = new TableName(tableName, shortName, string.Empty, InnerDirection.NONE, string.Empty, string.Empty, typeof(TModel).Name);
-            TableNames.Add(newTable);
+
+            AddTableNames<TModel>();
+            string shortName = TableNames[0].ShortName;
 
             StringBuilder retorno = new StringBuilder("SELECT ");
             int c = properties.Length;
@@ -152,7 +141,7 @@ namespace drualcman
                         if (field.Inner != InnerDirection.NONE)
                         {
                             //add columns from the property model
-                            InnerColumns(properties[i], retorno, field,  ref tableCount, shortName);
+                            InnerColumns(properties[i], retorno, field, shortName);
                             fieldName = string.Empty;
                         }
                         else
@@ -233,38 +222,28 @@ namespace drualcman
             return retorno.ToString(); 
         }
 
-        private void InnerColumns(PropertyInfo column, StringBuilder retorno, DatabaseAttribute origin, 
-            ref int tableCount, string shortReference)
+        private void InnerColumns(PropertyInfo column, StringBuilder retorno, 
+            DatabaseAttribute origin, string shortReference)
         {
             Type t = column.PropertyType;
-            string tableName;
-            string shortName;
             PropertyInfo[] properties;
             DatabaseAttribute table;
             if (Helpers.ObjectHelpers.IsGenericList(column.PropertyType.FullName))
             {
                 properties = column.PropertyType.GetGenericArguments()[0].GetProperties();
                 table = column.PropertyType.GetGenericArguments()[0].GetCustomAttribute<DatabaseAttribute>();
-                if (table is not null && !string.IsNullOrEmpty(table.Name)) tableName = table.Name;
-                else tableName = column.PropertyType.GetGenericArguments()[0].Name;
             }
             else
             {
                 properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);                
                 table = t.GetCustomAttribute<DatabaseAttribute>();
-                if (table is not null && !string.IsNullOrEmpty(table.Name)) tableName = table.Name;
-                else tableName = t.Name;
             }
 
-            tableCount++;
-            shortName = $"t{tableCount}";
-            TableName newTable = new TableName(string.IsNullOrEmpty(origin.IndexedName) ? tableName : origin.IndexedName, shortName, shortReference, origin.Inner,
-                origin.InnerColumn ?? origin.Name ?? "", origin.InnerIndex ?? origin.Name ?? origin.InnerColumn ?? "", t.Name, column);
-            TableNames.Add(newTable);
-            InnerColumns(properties, shortName, retorno,  ref tableCount);
+            TableName father = TableNames.Find(r => r.ShortReference == shortReference);
+            InnerColumns(properties, father?.ShortName, retorno);
         }
 
-        private void InnerColumns(PropertyInfo[] properties, string shortName, StringBuilder retorno, ref int tableCount)
+        private void InnerColumns(PropertyInfo[] properties, string shortName, StringBuilder retorno)
         {            
             int c = properties.Length;
             for (int i = 0; i < c; i++)
@@ -278,7 +257,7 @@ namespace drualcman
                         if (field.Inner != InnerDirection.NONE)
                         {
                             //add columns from the property model
-                            InnerColumns(properties[i], retorno, field, ref tableCount, shortName);
+                            InnerColumns(properties[i], retorno, field, shortName);
                             fieldName = string.Empty;
                         }
                         else

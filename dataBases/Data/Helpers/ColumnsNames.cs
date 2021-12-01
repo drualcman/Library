@@ -69,8 +69,6 @@ namespace drualcman.Data.Helpers
                         result.Add(SetColumn(properties[propertyIndex], shortName, columnName));
                     }
                 }
-
-                
             }
             return result;
         }

@@ -59,12 +59,14 @@ namespace drualcman
 
             #region query
             // If a query is empty create the query from the Model
+
             if (string.IsNullOrWhiteSpace(sql))
             {
                 sql = SetQuery<TModel>();
             }
             else
             {
+                AddTableNames<TModel>();
                 CheckSqlInjection(sql, log);
             }
             #endregion
@@ -90,7 +92,7 @@ namespace drualcman
         public Task<List<TModel>> ListAsync<TModel>(SqlCommand cmd, int timeout = 30) where TModel : new()
         {
             defLog log = new defLog(this.FolderLog);
-            log.start("ToList", "with command",  cmd.CommandText);
+            log.start("ToList", "with command", cmd.CommandText);
 
             try
             {
@@ -142,7 +144,7 @@ namespace drualcman
                             currentRow = dr[0];//know what is the first column asume it's the key column and no repeated
                             int i = 0;
                             do
-                            {                        
+                            {
                                 response = columnToObject.SetColumnToObject(new ColumnValue(TableNames, response.InUse),
                                                     dr, response.InUse, TableNames[i].ShortName);
 
@@ -164,7 +166,7 @@ namespace drualcman
                                                                             new[] { response.InUse });
                                     response.InUse = listInstance;
                                 }
-                             
+
                                 i++;
                                 if (i >= t)
                                 {
@@ -190,6 +192,5 @@ namespace drualcman
             }
         }
         #endregion
-
     }
 }
