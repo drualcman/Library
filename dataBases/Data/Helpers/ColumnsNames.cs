@@ -53,20 +53,29 @@ namespace drualcman.Data.Helpers
             for (int propertyIndex = 0; propertyIndex < c; propertyIndex++)
             {
                 string columnName;
-
-                if (properties[propertyIndex].PropertyType.IsClass && 
-                    !properties[propertyIndex].PropertyType.IsArray &&
-                    properties[propertyIndex].PropertyType != typeof(string))
+                DatabaseAttribute field = properties[propertyIndex].GetCustomAttribute<DatabaseAttribute>();
+                bool notIgnored;
+                if (field is not null)
                 {
-                    result.AddRange(HaveColumns(properties[propertyIndex].PropertyType, shortName));
+                    notIgnored = !field.Ignore;
                 }
-                else
+                else notIgnored = true;
+                if (notIgnored)
                 {
-                    if (isDirectQuery) columnName = properties[propertyIndex].Name.ToLower();
-                    else columnName = $"{shortName}.{properties[propertyIndex].Name}".ToLower();
-                    if (Columns.Contains(columnName))
+                    if (properties[propertyIndex].PropertyType.IsClass &&
+                        !properties[propertyIndex].PropertyType.IsArray &&
+                        properties[propertyIndex].PropertyType != typeof(string))
                     {
-                        result.Add(SetColumn(properties[propertyIndex], shortName, columnName));
+                        result.AddRange(HaveColumns(properties[propertyIndex].PropertyType, shortName));
+                    }
+                    else
+                    {
+                        if (isDirectQuery) columnName = properties[propertyIndex].Name.ToLower();
+                        else columnName = $"{shortName}.{properties[propertyIndex].Name}".ToLower();
+                        if (Columns.Contains(columnName))
+                        {
+                            result.Add(SetColumn(properties[propertyIndex], shortName, columnName));
+                        }
                     }
                 }
             }
