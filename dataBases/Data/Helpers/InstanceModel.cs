@@ -24,7 +24,7 @@ namespace drualcman.Data.Helpers
                 }
                 else
                 {
-                    if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
+                    if (property.PropertyType.IsClass && property.PropertyType != typeof(string) && !property.PropertyType.IsArray)
                     {
                         object activation = Activator.CreateInstance(property.PropertyType);
                         property.SetValue(item, activation, null);
