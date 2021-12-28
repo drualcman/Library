@@ -239,7 +239,7 @@ namespace drualcman
                 table = t.GetCustomAttribute<DatabaseAttribute>();
             }
 
-            TableName father = TableNames.Find(r => r.Name == column.PropertyType.Name);
+            TableName father = TableNames.Find(r => r.Name == table.Name);
             InnerColumns(properties, father?.ShortName, retorno);
         }
 
