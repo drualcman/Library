@@ -387,7 +387,7 @@ namespace drualcman
                     //guardar una copia del correo para poner un enlace a la copia HTML del mismo
                     try
                     {
-                        fileHTML = f.guardaDato("mail.html", cuerpoTexto, "mails", true);
+                        fileHTML = f.guardaDato("mail.html", cuerpoTexto, folder, true);
                     }
                     catch
                     {
