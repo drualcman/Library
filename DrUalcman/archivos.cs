@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -93,7 +92,7 @@ namespace drualcman
         public string guardaDato(string NombreArchivo, string Archivo, string Carpeta = "", bool NombreDinamico = false, string pre = "")
         {
             UTF8Encoding encoding = new UTF8Encoding();
-            byte[] file = encoding.GetBytes(Archivo);            
+            byte[] file = encoding.GetBytes(Archivo);
             return guardaDato(NombreArchivo, file, Carpeta, NombreDinamico, pre);
         }
 
@@ -196,10 +195,10 @@ namespace drualcman
         public bool borrarArchivo(string nombreArchivo)
         {
             bool bResultado = true;
-                if (existeFichero(nombreArchivo) == true)
-                    File.Delete(nombreArchivo);
-                else
-                    bResultado = false;
+            if (existeFichero(nombreArchivo) == true)
+                File.Delete(nombreArchivo);
+            else
+                bResultado = false;
             return bResultado;
         }
 
@@ -292,7 +291,7 @@ namespace drualcman
                 return string.Empty;
             }
         }
-   
+
         /// <summary>
         /// Obtener la extension del archivo con el .
         /// </summary>
@@ -382,7 +381,7 @@ namespace drualcman
         {
             string randomNum = String.Empty;
             Random autoRand = new Random();
-            
+
             byte h;
 
             for (h = 1; h <= 5; h++)

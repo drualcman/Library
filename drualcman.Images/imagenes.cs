@@ -1,9 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Drawing.Drawing2D;
 
 /// <summary>
 /// Summary description for drArchivos

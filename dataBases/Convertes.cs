@@ -1,5 +1,4 @@
 ﻿using drualcman.Converters.Extensions;
-using drualcman.Data.Converters;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -93,7 +92,7 @@ namespace drualcman
             {
                 return source as DataSet;
             }
-            catch 
+            catch
             {
                 throw;
             }
@@ -127,13 +126,13 @@ namespace drualcman
                 }
                 return dt;
             }
-            catch 
+            catch
             {
                 throw;
             }
         }
 
-        public static List<T> DataTableToList<T>(DataTable dt) where T : new() 
+        public static List<T> DataTableToList<T>(DataTable dt) where T : new()
             => dt.ToList<T>();
 
         /// <summary>
@@ -162,7 +161,7 @@ namespace drualcman
         /// <param name="data">Datos que va a contener la lista.</param>
         /// <returns></returns>
         [Obsolete(message: "Use drualcman.Converters.DataManagement.ConvertListToDataTable")]
-        public static DataTable ListToDataTable<T>(List<T> data) 
+        public static DataTable ListToDataTable<T>(List<T> data)
             => Converters.DataManagement.ConvertListToDataTable(data);
 
         /// <summary>
@@ -171,7 +170,7 @@ namespace drualcman
         /// <param name="data">Datos que va a contener la lista.</param>
         /// <returns></returns>
         [Obsolete(message: "Use drualcman.Converters.DataManagement.ConvertListToDataTable")]
-        public DataTable ConvertListToDataTable<T>(List<T> data) 
+        public DataTable ConvertListToDataTable<T>(List<T> data)
             => ListToDataTable(data);
 
         /// <summary>

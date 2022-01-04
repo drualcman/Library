@@ -1,13 +1,10 @@
 ﻿using drualcman.Attributes;
-using drualcman.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace drualcman.Data.Helpers
 {
@@ -26,7 +23,7 @@ namespace drualcman.Data.Helpers
         public ColumnsNames(string[] columnNames, List<TableName> tables)
             : this(columnNames.ToList(), tables) { }
 
-        public ColumnsNames(ReadOnlyCollection<DbColumn> columns, List<TableName> tables) 
+        public ColumnsNames(ReadOnlyCollection<DbColumn> columns, List<TableName> tables)
         {
             List<string> cols = new List<string>();
             foreach (DbColumn item in columns)

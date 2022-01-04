@@ -33,7 +33,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                
+
 
                 throw new ArgumentException("La cadena no puede ser nula");
             }
@@ -70,7 +70,7 @@ namespace drualcman
                                                     "ALTER TABLE < tabla > < definicion >" + "\r\n" +
                                                     "SQL: " + sql + "\n" + this.rutaDDBB;
                                                 log.end(null, err);
-                                                
+
 
                                                 throw new ArgumentException(err);
                                             }
@@ -85,7 +85,7 @@ namespace drualcman
                     if (sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
-                        
+
 
                         throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + sql);
                     }
@@ -93,7 +93,7 @@ namespace drualcman
                     {
                         bool retorno = ExecuteCommand(sql);
                         if (this.LogResults) log.end(retorno, this.rutaDDBB);
-                        
+
                         return retorno;
                     }
 
@@ -165,7 +165,7 @@ namespace drualcman
         }
 
         #region task
-        public async Task<object> ExecuteAsync(string query, int timeout = 30) 
+        public async Task<object> ExecuteAsync(string query, int timeout = 30)
         {
             object result;
             if (!string.IsNullOrEmpty(query))
@@ -181,14 +181,14 @@ namespace drualcman
             }
             return result;
         }
-       
+
         /// <summary>
         /// Execute SQL query Asynchronous
         /// </summary>
         /// <param name="query"></param>
         /// <param name="timeout">default 30</param>
         /// <returns></returns>
-        public async Task<bool> ExecuteCommandAsync(string query, int timeout = 30) 
+        public async Task<bool> ExecuteCommandAsync(string query, int timeout = 30)
         {
             bool result;
             if (!string.IsNullOrEmpty(query))

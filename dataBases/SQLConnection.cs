@@ -52,7 +52,7 @@ namespace drualcman
         /// </summary>
         protected Task OpenConnectionAsync()
         {
-            return this.OpenConnectionAsync(this.rutaDDBB);            
+            return this.OpenConnectionAsync(this.rutaDDBB);
         }
 
         /// <summary>

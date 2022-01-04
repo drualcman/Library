@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace drualcman
 {
@@ -16,7 +12,7 @@ namespace drualcman
         /// <returns></returns>
         public static string GetTipo(object sender)
         {
-                return sender.GetType().Name;
+            return sender.GetType().Name;
 
         }
 

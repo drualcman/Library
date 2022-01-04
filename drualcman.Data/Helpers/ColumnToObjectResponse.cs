@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace drualcman.Data.Helpers
+﻿namespace drualcman.Data.Helpers
 {
     public class ColumnToObjectResponse
     {

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.AspNetCore.Http;
 
 /// <summary>
 /// Summary description for drAspFicheros
@@ -30,7 +30,7 @@ namespace drualcman
                 this.Context = context;
             }
             #endregion
-            
+
             #region url data
             /// <summary>
             /// Descargar un archivo desde internet
@@ -165,7 +165,7 @@ namespace drualcman
                 RealIP = "";
 
                 try
-                {                    
+                {
                     ClientIP = this.Context.Request.Headers["HTTP_CLIENT-IP"];
                 }
                 catch
@@ -405,7 +405,7 @@ namespace drualcman
 
                         //comprobar que no es una lista de archivo
                         string fichero = string.Empty;
-                        string folder2 =  "~/" + folder;
+                        string folder2 = "~/" + folder;
                         if (filename.IndexOf(";") > 0)
                         {
                             //es una lista de archivos

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 
 /// <summary>
 /// Name Space with utils for develop in .NET c#
@@ -15,7 +12,7 @@ namespace drualcman
     /// Name Space for ASP.NET c#
     /// </summary>
     namespace basicASP
-    {        
+    {
         /// <summary>
         /// Esencial codes for HTML
         /// </summary>
@@ -45,7 +42,7 @@ namespace drualcman
                 string result = strTexto;
                 Regex rgx = new Regex("<((.|\n)*?)>");
                 result = rgx.Replace(strTexto, "");
-                if (result.Length >= longitud) result = result.Substring(0, longitud);                
+                if (result.Length >= longitud) result = result.Substring(0, longitud);
                 return result;
             }
 
@@ -149,7 +146,7 @@ namespace drualcman
             /// <param name="cssClass">clase a utilizar</param>
             /// <param name="id">id a utilizar</param>
             /// <returns></returns>
-            public static string a(string url, string text,  string target, string cssClass, string id)
+            public static string a(string url, string text, string target, string cssClass, string id)
             {
                 return a(url, text, target, cssClass, id, "");
             }
@@ -258,7 +255,7 @@ namespace drualcman
                     cssClass = "class=\"" + cssClass + "\"";
 
                 return "<img  " + cssClass + " alt=\"" + descrip + "\"" + " src=\"" + url +
-                            "\"  title =\"" + descrip + "\" " + tam +" />";
+                            "\"  title =\"" + descrip + "\" " + tam + " />";
             }
 
             /// <summary>
@@ -316,7 +313,7 @@ namespace drualcman
             /// <param name="texto">Texto HTML</param>
             /// <returns></returns>
             public static string sanitize(string texto)
-            {                
+            {
                 return HTMLUtil.sanitize(texto);
             }
 

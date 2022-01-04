@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace drualcman.Data
 {
@@ -67,7 +66,7 @@ namespace drualcman.Data
                     fieldName = properties[i].Name;
                 if (!string.IsNullOrEmpty(fieldName))
                     retorno.Append($" {tableNamesBK[0].ShortName}.[{fieldName}] [{tableNamesBK[0].ShortName}.{fieldName}],");
-                
+
             }
             retorno.Remove(retorno.Length - 1, 1);
             retorno.Append(Environment.NewLine);
@@ -127,10 +126,10 @@ namespace drualcman.Data
                 if (foundSome) retorno.Remove(retorno.Length - 3, 3);
                 else retorno.Remove(retorno.Length - 7, 7);
             }
-            return retorno.ToString(); 
+            return retorno.ToString();
         }
 
-        private void InnerColumns(PropertyInfo column, StringBuilder retorno, 
+        private void InnerColumns(PropertyInfo column, StringBuilder retorno,
             DatabaseAttribute origin, string shortReference)
         {
             Type t = column.PropertyType;
@@ -143,7 +142,7 @@ namespace drualcman.Data
             }
             else
             {
-                properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);                
+                properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 table = t.GetCustomAttribute<DatabaseAttribute>();
             }
 
@@ -152,7 +151,7 @@ namespace drualcman.Data
         }
 
         private void InnerColumns(PropertyInfo[] properties, string shortName, StringBuilder retorno)
-        {            
+        {
             int c = properties.Length;
             for (int i = 0; i < c; i++)
             {

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace drualcman.Data.Converters
 {
@@ -23,7 +19,7 @@ namespace drualcman.Data.Converters
 
         #region async
         [Obsolete(message: "Use DataTable Extension method or drualcman.Converters.XmlConverter.ToDataSetAsync")]
-        public static Task<DataSet> ToDataSetAsync(string xmlData) 
+        public static Task<DataSet> ToDataSetAsync(string xmlData)
             => Task.FromResult(ToDataSet(xmlData));
         #endregion
     }
@@ -42,7 +38,7 @@ namespace drualcman.Data.Converters
             /// <returns></returns>
             [Obsolete(message: "Use drualcman.Data.Converters.XmlConverter.ToDataSet")]
             public static DataSet xml2dataset(string xmlData)
-            {                
+            {
                 return XmlConverter.ToDataSet(xmlData);
             }
         }

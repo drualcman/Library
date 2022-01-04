@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace drualcman
@@ -8,7 +6,7 @@ namespace drualcman
     /// <summary>
     /// Manejo de números
     /// </summary>
-    public  class numeros
+    public class numeros
     {
         /// <summary>
         /// Convert number to string 
@@ -221,12 +219,12 @@ namespace drualcman
             string retorno = string.Empty;
             string pattern = @"(?:- *)?\d";
             System.Text.RegularExpressions.Regex rgx = new System.Text.RegularExpressions.Regex(pattern);
-       
-                foreach (System.Text.RegularExpressions.Match m in rgx.Matches(texto.ToString()))
-                {
-                    retorno += m.Value;
-                }
-                return retorno;  
+
+            foreach (System.Text.RegularExpressions.Match m in rgx.Matches(texto.ToString()))
+            {
+                retorno += m.Value;
+            }
+            return retorno;
         }
 
         /// <summary>
@@ -239,15 +237,15 @@ namespace drualcman
             string retorno = string.Empty;
             string pattern = @"(?:- *)?\d";
             System.Text.RegularExpressions.Regex rgx = new System.Text.RegularExpressions.Regex(pattern);
-         
-                foreach (System.Text.RegularExpressions.Match m in rgx.Matches(texto))
-                {
-                    retorno += m.Value;
-                }
-                return retorno;
-         
+
+            foreach (System.Text.RegularExpressions.Match m in rgx.Matches(texto))
+            {
+                retorno += m.Value;
+            }
+            return retorno;
+
         }
-    
+
         /// <summary>
         /// Round decimal to up 0.195 = 0.12
         /// </summary>

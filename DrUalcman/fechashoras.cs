@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -56,7 +53,7 @@ namespace drualcman
         public string ConvertirFechaSQL(object Fecha, bool hora)
         {
             //convertir la fecha al format admitido por SQL
-            return ConvertirFechaSQL(fechashoras.ConvertToDateTime(Fecha),hora);
+            return ConvertirFechaSQL(fechashoras.ConvertToDateTime(Fecha), hora);
         }
 
         /// <summary>
@@ -461,33 +458,33 @@ namespace drualcman
             string retorno = string.Empty;
             DateTime hour = DateTime.Now;
 
-                switch (tipo)
-                {
-                    case TipoTiempo.Years:
-                        hour = hour.AddYears(Convert.ToInt16(add));
-                        break;
-                    case TipoTiempo.Meses:
-                        hour = hour.AddMonths(Convert.ToInt16(add));
-                        break;
-                    case TipoTiempo.Dias:
-                        hour = hour.AddDays(Convert.ToInt16(add));
-                        break;
-                    case TipoTiempo.Horas:
-                        hour = hour.AddHours(Convert.ToDouble(add));
-                        break;
-                    case TipoTiempo.Minutos:
-                        hour = hour.AddMinutes(Convert.ToDouble(add));
-                        break;
-                    case TipoTiempo.Segundos:
-                        hour = hour.AddSeconds(Convert.ToDouble(add));
-                        break;
-                    case TipoTiempo.Milisegundos:
-                        hour = hour.AddMilliseconds(Convert.ToDouble(add));
-                        break;
-                    case TipoTiempo.Ticks:
-                        hour = hour.AddTicks((long)add);
-                        break;
-                }
+            switch (tipo)
+            {
+                case TipoTiempo.Years:
+                    hour = hour.AddYears(Convert.ToInt16(add));
+                    break;
+                case TipoTiempo.Meses:
+                    hour = hour.AddMonths(Convert.ToInt16(add));
+                    break;
+                case TipoTiempo.Dias:
+                    hour = hour.AddDays(Convert.ToInt16(add));
+                    break;
+                case TipoTiempo.Horas:
+                    hour = hour.AddHours(Convert.ToDouble(add));
+                    break;
+                case TipoTiempo.Minutos:
+                    hour = hour.AddMinutes(Convert.ToDouble(add));
+                    break;
+                case TipoTiempo.Segundos:
+                    hour = hour.AddSeconds(Convert.ToDouble(add));
+                    break;
+                case TipoTiempo.Milisegundos:
+                    hour = hour.AddMilliseconds(Convert.ToDouble(add));
+                    break;
+                case TipoTiempo.Ticks:
+                    hour = hour.AddTicks((long)add);
+                    break;
+            }
 
             retorno = hour.ToString(format);
 
@@ -506,33 +503,33 @@ namespace drualcman
         {
             string retorno = string.Empty;
 
-                switch (tipo)
-                {
-                    case TipoTiempo.Years:
-                        fechahora = fechahora.AddYears(Convert.ToInt16(add));
-                        break;
-                    case TipoTiempo.Meses:
-                        fechahora = fechahora.AddMonths(Convert.ToInt16(add));
-                        break;
-                    case TipoTiempo.Dias:
-                        fechahora = fechahora.AddDays(Convert.ToInt16(add));
-                        break;
-                    case TipoTiempo.Horas:
-                        fechahora = fechahora.AddHours(Convert.ToDouble(add));
-                        break;
-                    case TipoTiempo.Minutos:
-                        fechahora = fechahora.AddMinutes(Convert.ToDouble(add));
-                        break;
-                    case TipoTiempo.Segundos:
-                        fechahora = fechahora.AddSeconds(Convert.ToDouble(add));
-                        break;
-                    case TipoTiempo.Milisegundos:
-                        fechahora = fechahora.AddMilliseconds(Convert.ToDouble(add));
-                        break;
-                    case TipoTiempo.Ticks:
-                        fechahora = fechahora.AddTicks((long)add);
-                        break;
-                }
+            switch (tipo)
+            {
+                case TipoTiempo.Years:
+                    fechahora = fechahora.AddYears(Convert.ToInt16(add));
+                    break;
+                case TipoTiempo.Meses:
+                    fechahora = fechahora.AddMonths(Convert.ToInt16(add));
+                    break;
+                case TipoTiempo.Dias:
+                    fechahora = fechahora.AddDays(Convert.ToInt16(add));
+                    break;
+                case TipoTiempo.Horas:
+                    fechahora = fechahora.AddHours(Convert.ToDouble(add));
+                    break;
+                case TipoTiempo.Minutos:
+                    fechahora = fechahora.AddMinutes(Convert.ToDouble(add));
+                    break;
+                case TipoTiempo.Segundos:
+                    fechahora = fechahora.AddSeconds(Convert.ToDouble(add));
+                    break;
+                case TipoTiempo.Milisegundos:
+                    fechahora = fechahora.AddMilliseconds(Convert.ToDouble(add));
+                    break;
+                case TipoTiempo.Ticks:
+                    fechahora = fechahora.AddTicks((long)add);
+                    break;
+            }
 
             retorno = fechahora.ToString(format);
 

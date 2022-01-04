@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace drualcman
@@ -81,7 +77,7 @@ namespace drualcman
             if (string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
-                
+
 
                 throw new ArgumentException("Query can't be null");
             }
@@ -96,7 +92,7 @@ namespace drualcman
                     this.OpenConnection();
                     using SqlDataAdapter da = new SqlDataAdapter(sql, this.DbConnection);
                     da.SelectCommand.CommandTimeout = timeout;
-                    DataSet ds = new DataSet();                    
+                    DataSet ds = new DataSet();
                     try
                     {
                         da.Fill(ds);
@@ -109,7 +105,7 @@ namespace drualcman
                     finally
                     {
                         if (this.LogResults) log.end(ds, this.rutaDDBB);
-                        
+
                     }
 
                     return ds;
@@ -117,7 +113,7 @@ namespace drualcman
                 catch (Exception ex)
                 {
                     log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
-                    
+
                     throw;
                 }
             }
@@ -238,7 +234,7 @@ namespace drualcman
         /// </returns>
         public async Task<DataSet> DataSetAsync<TModel>() =>
             await DataSetAsync<TModel>(30);
-        
+
 
         /// <summary>
         /// Return DataSet from a direct query

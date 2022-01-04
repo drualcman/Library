@@ -1,13 +1,8 @@
-﻿using drualcman.Data;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace drualcman
 {
@@ -24,7 +19,7 @@ namespace drualcman
             if (!disposedValue)
             {
                 if (disposing)
-                {                    
+                {
                     this.rutaDDBB = null;
                     this.FolderLog = null;
 
@@ -96,7 +91,7 @@ namespace drualcman
             this.dbControl = true;
             this.rutaDDBB = string.Empty;
             this.LogResults = false;
-            WhereRequired = args.ToDictionary(x=> x.Key, x=> x.Value);
+            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
         /// <summary>
@@ -647,7 +642,7 @@ namespace drualcman
         public string cadenaConexion(ddbbSource sourceDDBB)
         {
             return cadenaConexion(sourceDDBB.SOURCE, sourceDDBB.CATALOG,
-                                  sourceDDBB.USER, sourceDDBB.PASS, 
+                                  sourceDDBB.USER, sourceDDBB.PASS,
                                   sourceDDBB.POOL_SIZE, sourceDDBB.WORKSTATION,
                                   sourceDDBB.PACKET, sourceDDBB.SECURITY);
         }

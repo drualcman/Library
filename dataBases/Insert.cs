@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -64,7 +63,7 @@ namespace drualcman
                 {
                     result = ExecuteCommand(cmd) ? 1 : 0;
                 }
-                
+
             }
             else
             {
@@ -98,7 +97,7 @@ namespace drualcman
                 {
                     result = await ExecuteCommandAsync(cmd) ? 1 : 0;
                 }
-                
+
             }
             else
             {
@@ -127,7 +126,7 @@ namespace drualcman
             }
             columns.Remove(columns.Length - 1, 1);
             values.Remove(values.Length - 1, 1);
-            cmd.CommandText = $"INSERT INTO {table} ({columns}) VALUES ({values});";            
+            cmd.CommandText = $"INSERT INTO {table} ({columns}) VALUES ({values});";
             return cmd;
         }
         #endregion

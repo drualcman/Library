@@ -162,7 +162,7 @@ namespace drualcman
 
                 return retorno;
             }
-            
+
             /// <summary>
             /// Recoge un archivo css y lo devuelve sin lineas en blanco
             /// </summary>
@@ -175,7 +175,7 @@ namespace drualcman
                 string retorno = string.Empty;
 
                 string fichero = min;
-                
+
                 ficheros f = new ficheros();
                 switch (tipo)
                 {
@@ -191,7 +191,7 @@ namespace drualcman
 
                 string ok = string.Empty;
                 try
-                {                    
+                {
                     for (int i = 0; i < fileName.Length; i++)
                     {
                         ok += "/* " + folder[i] + "/" + fileName[i];
@@ -254,11 +254,11 @@ namespace drualcman
                             else
                                 ok += " not exist */";
                         }
-                    }                    
+                    }
                 }
                 catch (Exception ex)
                 {
-                    retorno = "/* exception " + ex.ToString() +"*/";
+                    retorno = "/* exception " + ex.ToString() + "*/";
                 }
 
                 if (inline == true)
@@ -311,7 +311,7 @@ namespace drualcman
             }
         }
         #endregion
-        
+
         /// <summary>
         /// Utilidades para manejo de archivos (ficheros)
         /// </summary>
@@ -324,7 +324,7 @@ namespace drualcman
             /// <param name="extension">extension del archivo</param>
             /// <returns></returns>
             public string creaNombreFile(string carpeta, string extension)
-            {                
+            {
                 archivos a = new archivos();
 
                 carpeta = ApplicationPath + carpeta;
@@ -392,7 +392,7 @@ namespace drualcman
 
                 string strRuta = ApplicationPath + a.checkCarpeta(carpeta) + nombreArchivo;
 
-                 bExsiste = a.existeFichero(strRuta);
+                bExsiste = a.existeFichero(strRuta);
                 a = null;
                 return bExsiste;
             }
@@ -488,11 +488,11 @@ namespace drualcman
             /// <returns></returns>
             public string guardaDato(string NombreArchivo, string Archivo, string Carpeta = "", bool NombreDinamico = false, string pre = "")
             {
-                    System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-                    byte[] file = encoding.GetBytes(Archivo);
-                    return guardaDato(NombreArchivo, file, Carpeta, NombreDinamico, pre);
+                System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                byte[] file = encoding.GetBytes(Archivo);
+                return guardaDato(NombreArchivo, file, Carpeta, NombreDinamico, pre);
             }
-            
+
             /// <summary>
             /// Save file in server. Return the name of file.
             /// </summary>
@@ -529,7 +529,7 @@ namespace drualcman
                 string guardar = "";
                 archivos a = new archivos();
                 removeFolder = a.checkCarpeta(removeFolder);
-                Carpeta = ApplicationPath + Carpeta.Replace(removeFolder, "");                
+                Carpeta = ApplicationPath + Carpeta.Replace(removeFolder, "");
                 guardar = a.guardaDato(NombreArchivo, Archivo, Carpeta, NombreDinamico, pre);
                 a = null;
                 return guardar;
@@ -571,7 +571,7 @@ namespace drualcman
                 string guardar = "";
                 archivos a = new archivos();
                 removeFolder = a.checkCarpeta(removeFolder);
-                Carpeta = ApplicationPath + Carpeta.Replace(removeFolder, "");                
+                Carpeta = ApplicationPath + Carpeta.Replace(removeFolder, "");
                 guardar = a.guardaDato(NombreArchivo, Archivo, Carpeta, NombreDinamico, pre);
                 a = null;
                 return guardar;

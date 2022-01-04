@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -82,7 +81,7 @@ namespace drualcman
             {
                 using SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
                 result = ExecuteCommand(cmd);
-                
+
             }
             else
             {
@@ -98,7 +97,7 @@ namespace drualcman
         public async Task<bool> UpdateColumnAsync(string table, string colName, object colValue, string indexColumn, object index) =>
             await UpdateColumnAsync(table, new string[] { colName }, new object[] { colValue }, new string[] { indexColumn }, new object[] { index });
         public async Task<bool> UpdateColumnAsync(string table, string[] colName, object[] colValue, string indexColumn, int index) =>
-            await UpdateColumnAsync(table, colName, colValue, new string[] { indexColumn }, new object[] { index});
+            await UpdateColumnAsync(table, colName, colValue, new string[] { indexColumn }, new object[] { index });
         public async Task<bool> UpdateColumnAsync(string table, string[] colName, object[] colValue, string indexColumn, object index) =>
             await UpdateColumnAsync(table, colName, colValue, new string[] { indexColumn }, new object[] { index });
         public async Task<bool> UpdateColumnAsync(string table, string[] colName, object[] colValue, string[] indexColumn, object[] index)
@@ -108,7 +107,7 @@ namespace drualcman
             {
                 using SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
                 result = await ExecuteCommandAsync(cmd);
-                
+
             }
             else
             {

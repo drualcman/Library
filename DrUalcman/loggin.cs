@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace drualcman
 {
     /// <summary>
     /// Summary description for loggin
     /// </summary>
-    public class loggin 
+    public class loggin
     {
         public string date { get; set; }
         public string starttime { get; set; }
@@ -150,7 +146,7 @@ namespace drualcman
             {
                 _result = Result.ToString();
             }
-            catch 
+            catch
             {
                 _result = string.Empty;
             }

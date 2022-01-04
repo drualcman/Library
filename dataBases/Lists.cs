@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
-using System.Data.Common;
-using System.Collections.ObjectModel;
-using drualcman.Enums;
-using drualcman.Data;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
+﻿using drualcman.Data;
 using drualcman.Data.Helpers;
+using drualcman.Enums;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace drualcman
 {
@@ -114,7 +113,7 @@ namespace drualcman
                         int tableCount = 0;
                         TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
                         List<TableName> TableNames = new List<TableName>();
-                        TableNames.Add(table);                        
+                        TableNames.Add(table);
 
                         ReadOnlyCollection<DbColumn> columnNames = dr.GetColumnSchema();
                         //ColumnsNames ch = new ColumnsNames(columnNames, TableNames);

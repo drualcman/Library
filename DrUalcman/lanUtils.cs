@@ -76,8 +76,8 @@ namespace drualcman
                     //comprobamos si existe el archivo y lo agregamos a los adjuntos
                     archivos a = new archivos();
                     if (a.existeFichero(filename))
-                    {                        
-                        correo.Attachments.Add(new Attachment(a.GetStreamFile(filename), System.IO.Path.GetFileName(filename)));                        
+                    {
+                        correo.Attachments.Add(new Attachment(a.GetStreamFile(filename), System.IO.Path.GetFileName(filename)));
                         //
                         // se elimina el archivo porque no estara bloqueado y y era un archivo temporal
                         //

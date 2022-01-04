@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace drualcman
 {
-    public partial class dataBases 
+    public partial class dataBases
     {
         #region update
         /// <summary>
@@ -53,7 +51,7 @@ namespace drualcman
                 cmd.Parameters["@photo"].Value = image;
                 cmd.Parameters["@index"].Value = index;
                 result = ExecuteCommand(cmd);
-                
+
             }
             else result = false;
             return result;
@@ -79,7 +77,7 @@ namespace drualcman
                 cmd.Parameters.Add("@index");
                 cmd.Parameters["@photo"].Value = image;
                 result = ExecuteCommand(cmd);
-                
+
             }
             else result = false;
             return result;
@@ -144,7 +142,7 @@ namespace drualcman
                 cmd.Parameters["@photo"].Value = image;
                 cmd.Parameters["@index"].Value = index;
                 result = ExecuteCommand(cmd);
-                
+
             }
             else result = false;
             return result;
@@ -196,7 +194,7 @@ namespace drualcman
                 cmd.Parameters["@photo"].Value = image;
                 cmd.Parameters["@index"].Value = index;
                 result = await ExecuteCommandAsync(cmd);
-                _= cmd.Connection.DisposeAsync();
+                _ = cmd.Connection.DisposeAsync();
             }
             else result = false;
             return result;
@@ -222,7 +220,7 @@ namespace drualcman
                 cmd.Parameters.Add("@index");
                 cmd.Parameters["@photo"].Value = image;
                 result = await ExecuteCommandAsync(cmd);
-                
+
             }
             else result = false;
             return result;

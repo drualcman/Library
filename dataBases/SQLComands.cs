@@ -148,7 +148,7 @@ namespace drualcman
         #endregion
 
         #region task
-        public async Task<bool> ExecuteCommandAsync(SqlCommand cmd, int timeout = 30) 
+        public async Task<bool> ExecuteCommandAsync(SqlCommand cmd, int timeout = 30)
         {
             defLog log = new defLog(this.FolderLog);
             bool result;
@@ -174,7 +174,7 @@ namespace drualcman
                     log.end(result, ex);
                 }
                 finally
-                {                    
+                {
                     await cmd.DisposeAsync();
                 }
             }

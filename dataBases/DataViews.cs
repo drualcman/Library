@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Data;
 using System.Threading.Tasks;
 
 namespace drualcman
@@ -49,7 +45,7 @@ namespace drualcman
         /// <param name="sql">Consulta SQL a ejecutar</param>
         /// <returns>
         /// </returns>
-        public DataView DataView(string sql)=>
+        public DataView DataView(string sql) =>
             ConsultarConDataView(sql, 30);
 
         /// <summary>
@@ -59,7 +55,7 @@ namespace drualcman
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public DataView DataView(string sql, int timeout)=>
+        public DataView DataView(string sql, int timeout) =>
             ConsultarConDataView(sql, timeout);
 
         /// <summary>
@@ -97,7 +93,7 @@ namespace drualcman
         /// <param name="timeout">time out in seconds</param>
         /// <returns>
         /// </returns>
-        public async Task<DataView> DataViewAsync<TModel>(int timeout) => 
+        public async Task<DataView> DataViewAsync<TModel>(int timeout) =>
             await DataViewAsync(SetQuery<TModel>(), 30);
 
         /// <summary>

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -183,7 +181,7 @@ namespace drualcman
                 ch = Convert.ToChar(num1);
                 builder.Append(ch);
             }
-            
+
             return builder.ToString();
         }
 
@@ -205,7 +203,7 @@ namespace drualcman
                     retorno += item.Value;
                 }
             }
-            
+
             return retorno;
         }
 
@@ -243,7 +241,7 @@ namespace drualcman
 
             if (youtubeMatch.Success)
                 id = youtubeMatch.Groups[youtubeMatch.Groups.Count - 1].Value;
-            
+
             return id;
         }
 

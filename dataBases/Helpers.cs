@@ -1,11 +1,5 @@
-﻿using drualcman.Attributes;
-using drualcman.Data;
-using drualcman.Enums;
+﻿using drualcman.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace drualcman
@@ -76,7 +70,7 @@ namespace drualcman
             {
                 log.end(null, "No ha superado la prueba de comando correcto.\n" + this.rutaDDBB);
                 throw new ArgumentException("Query must be SELECT fields FROM table / EXEC Storage Process and variables. SQL: " + query);
-            }            
+            }
         }
 
         /// <summary>

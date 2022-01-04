@@ -7,9 +7,9 @@ namespace drualcman
     /// <summary>
     /// Management of MS-SQL DataBases
     /// </summary>
-    public partial class dataBases 
+    public partial class dataBases
     {
-        internal class defLog 
+        internal class defLog
         {
             public string date { get; set; }
             public string starttime { get; set; }

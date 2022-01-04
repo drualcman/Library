@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Xml;
 
 namespace drualcman
 {
@@ -21,7 +18,7 @@ namespace drualcman
             /// <param name="o"></param>
             /// <returns></returns>
             [Obsolete(message: "Use Object extension or drualcman.Converters.DataManagement.ObjectToData")]
-            public static DataTable ObjectToData(object o) => 
+            public static DataTable ObjectToData(object o) =>
                 Converters.DataManagement.ObjectToData(o);
 
 
