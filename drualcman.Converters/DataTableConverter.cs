@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using drualcman.Converters.Extensions;
 
-namespace drualcman.Data.Converters
+namespace drualcman.Converters
 {
     public class DataTableConverter
     {
@@ -16,18 +15,22 @@ namespace drualcman.Data.Converters
         /// </summary>
         /// <param name="data"></param>
         /// <param name="separator"></param>
-        [Obsolete(message: "Use DataTable Extension method or drualcman.Converters.DataTableConverter.FromStream")]
-        public static DataTable FromStream(Stream data, char separator) =>
-            drualcman.Converters.DataTableConverter.FromStream(data, separator);
+        public static DataTable FromStream(Stream data, char separator)
+        {
+            DataTable dt = new DataTable();
+            return dt.FromStream(data, separator);
+        }
 
 
         /// <summary>
         /// get aDataTable from Stream Data
         /// </summary>
         /// <param name="data"></param>
-        [Obsolete(message: "Use DataTable Extension method or drualcman.Converters.DataTableConverter.FromJson")]
-        public static DataTable FromJson(string data) =>
-            drualcman.Converters.DataTableConverter.FromJson(data);
+        public static DataTable FromJson(string data)
+        {
+            DataTable dt = new DataTable();
+            return dt.FromJson(data);
+        }
 
         /// <summary>
         /// Get list of object send from data table
@@ -35,7 +38,6 @@ namespace drualcman.Data.Converters
         /// <typeparam name="TModel"></typeparam>
         /// <param name="dt"></param>
         /// <returns></returns>
-        [Obsolete(message: "Use DataTable Extension method or drualcman.Converters.DataTableConverter.ToList")]
         public static List<TModel> ToList<TModel>(DataTable dt) where TModel : new()
             => dt.ToList<TModel>();
 
@@ -44,7 +46,6 @@ namespace drualcman.Data.Converters
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        [Obsolete(message: "Use DataTable Extension method or drualcman.Converters.DataTableConverter.ToJson")]
         public static string ToJson(DataTable dt)
             => dt.ToJson();
         #endregion
@@ -55,9 +56,11 @@ namespace drualcman.Data.Converters
         /// </summary>
         /// <param name="data"></param>
         /// <param name="separator"></param>
-        [Obsolete(message: "Use DataTable Extension method or drualcman.Converters.DataTableConverter.FromStreamAsync")]
-        public static Task<DataTable> FromStreamAsync(Stream data, char separator) =>
-            drualcman.Converters.DataTableConverter.FromStreamAsync(data, separator);
+        public static Task<DataTable> FromStreamAsync(Stream data, char separator)
+        {
+            DataTable dt = new DataTable();
+            return dt.FromStreamAsync(data, separator);
+        }
 
         /// <summary>
         /// Get list of object send from data table
@@ -65,7 +68,6 @@ namespace drualcman.Data.Converters
         /// <typeparam name="TModel"></typeparam>
         /// <param name="dt"></param>
         /// <returns></returns>
-        [Obsolete(message: "Use DataTable Extension method or drualcman.Converters.DataTableConverter.ToListAsync")]
         public static Task<List<TModel>> ToListAsync<TModel>(DataTable dt) where TModel : new()
             => dt.ToListAsync<TModel>();
 

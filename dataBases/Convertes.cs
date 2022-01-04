@@ -1,5 +1,5 @@
-﻿using drualcman.Data.Converters;
-using drualcman.Data.Extensions;
+﻿using drualcman.Converters.Extensions;
+using drualcman.Data.Converters;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,27 +19,27 @@ namespace drualcman
         /// </summary>
         /// <param name="dv"></param>
         /// <returns></returns>
-        [Obsolete(message: "Use drualcman.Data.Converters.GetCSV")]
+        [Obsolete(message: "Use drualcman.Converters.CSVConverter.GetCSV")]
         public static string GetCSV(DataView dv)
-            => CSVConverter.GetCSV(dv, ",");
+            => Converters.CSVConverter.GetCSV(dv);
 
         /// <summary>
         /// get a CSV file with a , separator
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        [Obsolete(message: "Use drualcman.Data.Converters.GetCSV")]
+        [Obsolete(message: "Use drualcman.Converters.CSVConverter.GetCSV")]
         public static string GetCSV(DataView dt, string separator)
-            => CSVConverter.GetCSV(dt, separator);
+            => Converters.CSVConverter.GetCSV(dt, separator);
 
         /// <summary>
         /// get a CSV file with a , separator
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        [Obsolete(message: "Use drualcman.Data.Converters.GetCSV")]
+        [Obsolete(message: "Use drualcman.Converters.CSVConverter.GetCSV")]
         public static string GetCSV(DataTable dt)
-            => CSVConverter.GetCSV(dt, ",");
+            => Converters.CSVConverter.GetCSV(dt, ",");
 
         /// <summary>
         /// get a CSV file
@@ -47,13 +47,13 @@ namespace drualcman
         /// <param name="dt"></param>
         /// <param name="separator">Separator to use</param>
         /// <returns></returns>
-        [Obsolete(message: "Use drualcman.Data.Converters.GetCSV")]
+        [Obsolete(message: "Use drualcman.Converters.CSVConverter.GetCSV")]
         public static string GetCSV(DataTable dt, string separator)
-            => CSVConverter.GetCSV(dt, separator);
+            => Converters.CSVConverter.GetCSV(dt, separator);
 
-        [Obsolete(message: "Use drualcman.Data.Converters.CSVToDataTable(pathFile) or drualcman.Data.Converters.FromStream")]
+        [Obsolete(message: "Use drualcman.Converters.DataTableConverter.FromStream")]
         public static DataTable CSVtoData(Stream data, char separator)
-            => DataTableConverter.FromStream(data, separator);
+            => Converters.DataTableConverter.FromStream(data, separator);
         #endregion
 
         /// <summary>
@@ -69,16 +69,18 @@ namespace drualcman
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.ObjectToData")]
         public static DataTable ObjectToData(object o)
-            => DataManagement.ObjectToData(o);
+            => Converters.DataManagement.ObjectToData(o);
 
         /// <summary>
         /// Convertir un objeto a data table
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.ObjectToData")]
         public DataTable ConvertObjectToData(object o)
-            => dataBases.ObjectToData(o);
+            => Converters.DataManagement.ObjectToData(o);
 
         /// <summary>
         /// Obtener el DataSet de un DataSource
@@ -140,8 +142,9 @@ namespace drualcman
         /// <param name="filas">Datos que va a contener la lista.</param>
         /// <param name="columnas">Nombres de las columnas para la tabla</param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.ConvertListToDataTable")]
         public DataTable ConvertListToDataTable(List<object> filas, string[] columnas)
-            => DataManagement.ConvertListToDataTable(filas, columnas);
+            => Converters.DataManagement.ConvertListToDataTable(filas, columnas);
 
         /// <summary>
         /// Convertir un List en un Datatable
@@ -149,24 +152,25 @@ namespace drualcman
         /// <param name="filas">Datos que va a contener la lista.</param>
         /// <param name="columnas">Nombres de las columnas para la tabla</param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.ConvertListToDataTable")]
         public static DataTable ListToDataTable(List<object> filas, string[] columnas)
-            => DataManagement.ConvertListToDataTable(filas, columnas);
+            => Converters.DataManagement.ConvertListToDataTable(filas, columnas);
 
         /// <summary>
         /// Convertir un List en un Datatable
         /// </summary>
-        /// <param name="filas">Datos que va a contener la lista.</param>
-        /// <param name="columnas">Nombres de las columnas para la tabla</param>
+        /// <param name="data">Datos que va a contener la lista.</param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.ConvertListToDataTable")]
         public static DataTable ListToDataTable<T>(List<T> data) 
-            => DataManagement.ConvertListToDataTable(data);
+            => Converters.DataManagement.ConvertListToDataTable(data);
 
         /// <summary>
         /// Convertir un List en un Datatable
         /// </summary>
-        /// <param name="filas">Datos que va a contener la lista.</param>
-        /// <param name="columnas">Nombres de las columnas para la tabla</param>
+        /// <param name="data">Datos que va a contener la lista.</param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.ConvertListToDataTable")]
         public DataTable ConvertListToDataTable<T>(List<T> data) 
             => ListToDataTable(data);
 
@@ -175,16 +179,18 @@ namespace drualcman
         /// </summary>
         /// <param name="ds"></param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.ConvertDataSetToJSON")]
         public string DatatableToJSON(DataSet ds)
-            => DataManagement.ConvertDataSetToJSON(ds);
+            => Converters.DataManagement.ConvertDataSetToJSON(ds);
 
         /// <summary>
         /// Convertir un dataset en JSON
         /// </summary>
         /// <param name="ds"></param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.ConvertDataSetToJSON")]
         public static string DataSetToJSON(DataSet ds)
-            => DataManagement.ConvertDataSetToJSON(ds);
+            => Converters.DataManagement.ConvertDataSetToJSON(ds);
 
         /// <summary>
         /// Convertir un data table en JSON
@@ -207,15 +213,17 @@ namespace drualcman
         /// </summary>
         /// <param name="jsonString"></param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.JsonStringToDataTable")]
         public static DataTable JsonStringToDataTable(string jsonString)
-            => DataManagement.JsonStringToDataTable(jsonString);
+            => Converters.DataManagement.JsonStringToDataTable(jsonString);
 
         /// <summary>
         /// Convert JSON data format in DataTable
         /// </summary>
         /// <param name="jsonString"></param>
         /// <returns></returns>
+        [Obsolete(message: "Use drualcman.Converters.DataManagement.ConvertJsonStringToDataTable")]
         public DataTable ConvertJsonStringToDataTable(string jsonString)
-            => DataManagement.JsonStringToDataTable(jsonString);
+            => Converters.DataManagement.JsonStringToDataTable(jsonString);
     }
 }

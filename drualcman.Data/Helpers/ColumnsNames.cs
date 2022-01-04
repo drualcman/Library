@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace drualcman.Data.Helpers
 {
-    internal class ColumnsNames
+    public class ColumnsNames
     {
 
         readonly ReadOnlyCollection<string> Columns;

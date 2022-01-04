@@ -1,4 +1,5 @@
-﻿using drualcman.Data.Helpers;
+﻿using drualcman.Data;
+using drualcman.Data.Helpers;
 using drualcman.Enums;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace drualcman.Data.Extensions
+namespace drualcman.Converters.Extensions
 {
     public static class DataTableExtension
     {
@@ -70,7 +71,7 @@ namespace drualcman.Data.Extensions
 
         #endregion
         #endregion
-        
+
         #region methods
         #region TO
         /// <summary>
@@ -95,7 +96,7 @@ namespace drualcman.Data.Extensions
 
                 ColumnToObject co = new ColumnToObject(new ColumnsNames(columnNames, tables),
                     new InstanceModel(), tables);
-                
+
                 for (int index = 0; index < rows; index++)
                 {
                     TModel dat = new();
@@ -281,7 +282,7 @@ namespace drualcman.Data.Extensions
         /// <param name="dt"></param>
         /// <returns></returns>
         public static Task<string> ToJsonAsync(this DataTable dt)
-            => Task.FromResult(ToJson(dt));
+            => Task.FromResult(dt.ToJson());
         #endregion
 
         #region FROM
@@ -334,7 +335,7 @@ namespace drualcman.Data.Extensions
         /// <param name="jsonString"></param>
         /// <returns></returns>
         public static Task<DataTable> FromJsonAsync(this DataTable dt, string jsonString)
-            => Task.FromResult(FromJson(dt, jsonString));
+            => Task.FromResult(dt.FromJson(jsonString));
         #endregion
         #endregion
 
@@ -364,13 +365,13 @@ namespace drualcman.Data.Extensions
             {
                 jsonString.Append(Convert.ToBoolean(dt.Rows[row][col]) ? "true" : "false");
             }
-            else if (dt.Columns[col].DataType == typeof(Int16) ||
-                dt.Columns[col].DataType == typeof(Int32) ||
-                dt.Columns[col].DataType == typeof(Int64) ||
-                dt.Columns[col].DataType == typeof(Double) ||
-                dt.Columns[col].DataType == typeof(Decimal) ||
-                dt.Columns[col].DataType == typeof(Single) ||
-                dt.Columns[col].DataType == typeof(Byte) ||
+            else if (dt.Columns[col].DataType == typeof(short) ||
+                dt.Columns[col].DataType == typeof(int) ||
+                dt.Columns[col].DataType == typeof(long) ||
+                dt.Columns[col].DataType == typeof(double) ||
+                dt.Columns[col].DataType == typeof(decimal) ||
+                dt.Columns[col].DataType == typeof(float) ||
+                dt.Columns[col].DataType == typeof(byte) ||
                 dt.Columns[col].DataType == typeof(int) ||
                 dt.Columns[col].DataType == typeof(float) ||
                 dt.Columns[col].DataType == typeof(long) ||

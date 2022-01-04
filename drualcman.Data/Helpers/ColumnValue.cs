@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace drualcman.Data.Helpers
 {
-    internal class ColumnValue
+    public class ColumnValue
     {
         readonly ReadOnlyCollection<TableName> Tables;
         readonly object Item;
@@ -26,12 +26,7 @@ namespace drualcman.Data.Helpers
             SetValue(column, row[column.ColumnName]);
         }
 
-        public void SetValue(Columns column, SqlDataReader row)
-        {
-            SetValue(column, row[column.ColumnName]);
-        }
-
-        private void SetValue(Columns column, object row)
+        public void SetValue(Columns column, object row)
         {
             try
             {

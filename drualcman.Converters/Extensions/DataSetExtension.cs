@@ -1,11 +1,12 @@
-﻿using System;
+﻿using drualcman.Converters.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace drualcman.Data.Extensions
+namespace drualcman.Converters.Extensions
 {
     public static class DataSetExtension
     {
@@ -48,7 +49,7 @@ namespace drualcman.Data.Extensions
         /// <param name="ds"></param>
         /// <returns></returns>
         public static Task<string> ToJsonAsync(this DataSet ds)
-            => Task.FromResult(ToJson(ds));
+            => Task.FromResult(ds.ToJson());
         #endregion
         #endregion
 

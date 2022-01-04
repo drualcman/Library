@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace drualcman.Data
 {
-    class Columns
+    public class Columns
     {
         public string TableShortName { get; set; }
         public int TableIndex { get; set; }

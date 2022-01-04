@@ -1,4 +1,5 @@
 ﻿using drualcman.Attributes;
+using drualcman.Data;
 using drualcman.Enums;
 using System;
 using System.Collections.Generic;
@@ -7,13 +8,16 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace drualcman
+namespace drualcman.Data
 {
-    public partial class dataBases
+    public class TableNamesHelper
     {
+        private List<TableName> tableNamesBK = new List<TableName>();
+        public IEnumerable<TableName> TableNames => tableNamesBK;
+
         public void AddTableNames<TModel>()
         {
-            TableNames = new List<TableName>();
+            tableNamesBK = new List<TableName>();
             PropertyInfo[] properties = typeof(TModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             string tableName;
@@ -27,7 +31,7 @@ namespace drualcman
             int tableCount = 0;
             string shortName = $"t{tableCount}";
             TableName newTable = new TableName(tableName, shortName, string.Empty, InnerDirection.NONE, string.Empty, string.Empty, typeof(TModel).Name);
-            TableNames.Add(newTable);
+            tableNamesBK.Add(newTable);
 
             int c = properties.Length;
             for (int i = 0; i < c; i++)
@@ -55,7 +59,7 @@ namespace drualcman
             string shortName;
             PropertyInfo[] properties;
             DatabaseAttribute table;
-            if (Helpers.ObjectHelpers.IsGenericList(column.PropertyType.FullName))
+            if (drualcman.Helpers.ObjectHelpers.IsGenericList(column.PropertyType.FullName))
             {
                 properties = column.PropertyType.GetGenericArguments()[0].GetProperties();
                 table = column.PropertyType.GetGenericArguments()[0].GetCustomAttribute<DatabaseAttribute>();
@@ -74,7 +78,7 @@ namespace drualcman
             shortName = $"t{tableCount}";
             TableName newTable = new TableName(string.IsNullOrEmpty(origin.IndexedName) ? tableName : origin.IndexedName, shortName, shortReference, origin.Inner,
                 origin.InnerColumn ?? origin.Name ?? "", origin.InnerIndex ?? origin.Name ?? origin.InnerColumn ?? "", t.Name, column);
-            TableNames.Add(newTable);
+            tableNamesBK.Add(newTable);
             AddTable(properties, shortName, ref tableCount);
         }
 

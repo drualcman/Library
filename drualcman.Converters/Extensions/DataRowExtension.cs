@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace drualcman.Data.Extensions
+namespace drualcman.Converters.Extensions
 {
     public static class DataRowExtension
     {

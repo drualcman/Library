@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 using drualcman.Enums;
 using drualcman.Data;
 using System.Data;
-using drualcman.Data.Extensions;
 using System.Diagnostics;
 using System.Linq;
 using drualcman.Data.Helpers;
@@ -62,11 +61,13 @@ namespace drualcman
 
             if (string.IsNullOrWhiteSpace(sql))
             {
-                sql = SetQuery<TModel>();
+                SqlQueryTranslator queryTranslator = new SqlQueryTranslator(this.WhereRequired);
+                sql = queryTranslator.SetQuery<TModel>();
             }
             else
             {
-                AddTableNames<TModel>();
+                TableNamesHelper tableNames = new TableNamesHelper();
+                tableNames.AddTableNames<TModel>();
                 CheckSqlInjection(sql, log);
             }
             #endregion
@@ -111,19 +112,15 @@ namespace drualcman
                         Type model = typeof(TModel);
 
                         int tableCount = 0;
-                        if (TableNames is null)
-                        {
-                            TableNames = new List<TableName>();
-                            TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
-                            TableNames.Add(table);
-                        }
-                        else tableCount = 0;
+                        TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
+                        List<TableName> TableNames = new List<TableName>();
+                        TableNames.Add(table);                        
 
                         ReadOnlyCollection<DbColumn> columnNames = dr.GetColumnSchema();
                         //ColumnsNames ch = new ColumnsNames(columnNames, TableNames);
                         InstanceModel instanceModel = new InstanceModel();
 
-                        ColumnToObject columnToObject = new ColumnToObject(new ColumnsNames(columnNames, TableNames),
+                        ColumnSqlClientToObject columnToObject = new ColumnSqlClientToObject(new ColumnsNames(columnNames, TableNames),
                                                         instanceModel, TableNames);
 
                         object currentRow = new String("");

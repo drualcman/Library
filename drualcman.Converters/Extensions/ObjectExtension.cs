@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Data;
+using drualcman.Converters;
 
-namespace drualcman.Data.Extensions
+namespace drualcman.Converters.Extensions
 {
     public static class ObjectConverter
     {
@@ -21,11 +22,11 @@ namespace drualcman.Data.Extensions
                 {
                     if (utilidades.getTipo(o).ToLower() == "dataset")
                     {
-                        data = Data.Converters.DataSetConverter.ToJson((DataSet)o);
+                        data = DataSetConverter.ToJson((DataSet)o);
                     }
                     else if (utilidades.getTipo(o).ToLower() == "datatable")
-                    {                                                
-                        data = Data.Converters.DataTableConverter.ToJson((DataTable)o);
+                    {
+                        data = DataTableConverter.ToJson((DataTable)o);
                     }
                     else data = JsonSerializer.Serialize(o);
                 }

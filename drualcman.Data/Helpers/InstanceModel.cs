@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace drualcman.Data.Helpers
 {
-    internal class InstanceModel
+    public class InstanceModel
     {
         public void InstanceProperties<TModel>(TModel item)
         {

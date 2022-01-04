@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Data;
-using drualcman.Data.Extensions;
+using drualcman.Converters.Extensions;
 
-namespace drualcman.Data.Converters
+namespace drualcman.Converters
 {
     public static class ObjectConverter
     {

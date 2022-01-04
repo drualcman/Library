@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace drualcman.Data.Helpers
 {
-    internal class ColumnToObjectResponse
+    public class ColumnToObjectResponse
     {
         public object InUse { get; set; }
         public string ActualTable { get; set; }

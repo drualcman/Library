@@ -11,9 +11,9 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
+
   <ItemGroup>
-    <ProjectReference Include="..\Dependencies\Dependencies.csproj" />
-    <ProjectReference Include="..\DrUalcman\DrUalcman.csproj" />
+    <ProjectReference Include="..\drualcman.Converters\drualcman.Converters.csproj" />
   </ItemGroup>
 
 </Project>
