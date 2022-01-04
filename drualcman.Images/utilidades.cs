@@ -1,0 +1,71 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+
+namespace drualcman.Images
+{
+    public partial class utilidades
+    {
+
+        /// <summary>
+        /// Convert image to bytes[]
+        /// </summary>
+        /// <param name="imageIn"></param>
+        /// <param name="formato">formato de la imagen</param>
+        /// <returns></returns>
+        public byte[] imageToByteArray(Image imageIn, ImageFormat formato)
+        {
+            using MemoryStream ms = new MemoryStream();
+            imageIn.Save(ms, formato);
+            return ms.ToArray();
+        }
+
+        /// <summary>
+        /// Convert image to bytes[]
+        /// </summary>
+        /// <param name="imageIn"></param>
+        /// <returns></returns>
+        public byte[] imageToByteArray(Image imageIn)
+        {
+            return imageToByteArray(imageIn, imageIn.RawFormat);
+        }
+
+        /// <summary>
+        /// Convert image to bytes[]
+        /// </summary>
+        /// <param name="imageIn"></param>
+        /// <returns></returns>
+        public byte[] imageToByteArray(Bitmap imageIn)
+        {
+            return imageToByteArray(imageIn);
+        }
+
+        /// <summary>
+        /// Convert image to bytes[]
+        /// </summary>
+        /// <param name="imageIn"></param>
+        /// <param name="formato">formato de la imagen</param>
+        /// <returns></returns>
+        public byte[] imageToByteArray(Bitmap imageIn, ImageFormat formato)
+        {
+            return imageToByteArray(imageIn, imageIn.RawFormat);
+        }
+
+        /// <summary>
+        /// Convert bytes[] to image
+        /// </summary>
+        /// <param name="byteArrayIn"></param>
+        /// <returns></returns>
+        public Image byteArrayToImage(byte[] byteArrayIn)
+        {
+            using MemoryStream ms = new MemoryStream(byteArrayIn);
+            Image returnImage = Image.FromStream(ms);
+            return returnImage;
+        }
+    }
+}
