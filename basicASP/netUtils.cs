@@ -350,7 +350,7 @@ namespace drualcman
             public bool EnviarMail(string eMail, string Asunto, string cuerpoTexto,
                 string empresaRemitente, string mailRemitente, string hostSMTP, string userName,
                 string userPass, string urlFiles, int numDestinatarios = 10, bool IsBodyHtml = false,
-                string filename = "", string folder = "~/", bool temp = false, bool enableSsl = false)
+                string filename = "", string folder = "mails", bool temp = false, bool enableSsl = false)
             {
                 bool bResutado = true;
                 // preparar el correo en fotmato HTML   
@@ -387,7 +387,7 @@ namespace drualcman
                     //guardar una copia del correo para poner un enlace a la copia HTML del mismo
                     try
                     {
-                        fileHTML = f.guardaDato("mail.html", cuerpoTexto, "mails", true);
+                        fileHTML = f.guardaDato("mail.html", cuerpoTexto, folder, true);
                     }
                     catch
                     {
