@@ -18,7 +18,7 @@ namespace drualcman
         /// <returns></returns>
         public bool ExecuteCommand(SqlCommand cmd, int timeout = 30)
         {
-            defLog log = new defLog(this.FolderLog);
+            
             bool result;
 
             if (cmd != null)
@@ -64,7 +64,7 @@ namespace drualcman
         /// <returns></returns>
         public object Execute(SqlCommand cmd, int timeout = 30)
         {
-            defLog log = new defLog(this.FolderLog);
+            
             object result;
 
             log.start("Execute(cmd)", cmd.CommandText, this.rutaDDBB);
@@ -95,7 +95,7 @@ namespace drualcman
 
         public SqlDataReader Reader(string sql, int timeout = 30)
         {
-            defLog log = new defLog(this.FolderLog);
+            
             SqlDataReader result;
             log.start("Reader(sql)", sql, this.rutaDDBB);
             #region query
@@ -120,7 +120,7 @@ namespace drualcman
 
         public SqlDataReader Reader(SqlCommand cmd, int timeout = 30)
         {
-            defLog log = new defLog(this.FolderLog);
+            
             SqlDataReader result;
             log.start("Reader(cmd)", cmd.CommandText, this.rutaDDBB);
             try
@@ -150,7 +150,7 @@ namespace drualcman
         #region task
         public async Task<bool> ExecuteCommandAsync(SqlCommand cmd, int timeout = 30)
         {
-            defLog log = new defLog(this.FolderLog);
+            
             bool result;
 
             if (cmd != null)
@@ -190,7 +190,7 @@ namespace drualcman
 
         public async Task<object> ExecuteAsync(SqlCommand cmd, int timeout = 30)
         {
-            defLog log = new defLog(this.FolderLog);
+            
             object result;
 
             log.start("Execute(cmd)", cmd.CommandText, this.rutaDDBB);

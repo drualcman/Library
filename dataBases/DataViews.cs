@@ -69,7 +69,7 @@ namespace drualcman
         /// </returns>
         public DataView ConsultarConDataView(string sql, int timeout)
         {
-            defLog log = new defLog(this.FolderLog);
+            
             log.start("ConsultarConDataView", sql, "");
             return ConsultarConDataTable(sql, timeout).DefaultView;
         }

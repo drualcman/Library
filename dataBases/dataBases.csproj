@@ -13,6 +13,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\drualcman.Abstractions\drualcman.Abstractions.csproj" />
     <ProjectReference Include="..\drualcman.Converters\drualcman.Converters.csproj" />
   </ItemGroup>
 

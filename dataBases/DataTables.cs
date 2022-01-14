@@ -71,7 +71,7 @@ namespace drualcman
         /// </returns>
         public DataTable ConsultarConDataTable(string sql, int timeout)
         {
-            defLog log = new defLog(this.FolderLog);
+            
             log.start("ConsultarConDataTable", sql, "");
             return ConsultarConDataSet(sql, timeout).Tables[0];
         }

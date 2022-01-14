@@ -1,4 +1,5 @@
-﻿using drualcman.Data;
+﻿using drualcman.Abstractions.Interfaces;
+using drualcman.Data;
 using System;
 using System.Text.RegularExpressions;
 
@@ -20,7 +21,7 @@ namespace drualcman
         }
 
         #region security
-        private void CheckSqlInjection(string query, defLog log)
+        private void CheckSqlInjection(string query, IDbLog log)
         {
             if (checkQuery(query))
             {

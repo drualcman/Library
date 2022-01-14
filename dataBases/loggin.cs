@@ -1,4 +1,5 @@
-﻿using drualcman.Converters.Extensions;
+﻿using drualcman.Abstractions.Interfaces;
+using drualcman.Converters.Extensions;
 using System;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace drualcman
     /// </summary>
     public partial class dataBases
     {
-        internal class defLog
+        internal class defLog : IDbLog
         {
             public string date { get; set; }
             public string starttime { get; set; }

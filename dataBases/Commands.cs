@@ -28,7 +28,7 @@ namespace drualcman
         /// </returns>
         public bool EjecutarSQL(string sql)
         {
-            defLog log = new defLog(this.FolderLog);
+            
             log.start("EjecutarSQL(sql)", sql, "");
             if (string.IsNullOrWhiteSpace(sql))
             {

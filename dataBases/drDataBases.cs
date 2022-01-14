@@ -1,4 +1,5 @@
-﻿using System;
+﻿using drualcman.Abstractions.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -77,15 +78,23 @@ namespace drualcman
         private bool ChrControl;
         private bool dbControl;
         Dictionary<string, object> WhereRequired;
+        private IDbLog log;
         #endregion
 
         #region Constructor
+        public void SetLogger(IDbLog logger)
+        {
+            if (logger == null) log = new defLog(this.FolderLog);
+            else log = logger;
+        }
+
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(params KeyValuePair<string, object>[] args)
+        public dataBases(params KeyValuePair<string, object>[] args) 
         {
+            SetLogger(null);
             this.ChrControl = true;
             this.FolderLog = string.Empty;
             this.dbControl = true;
@@ -99,15 +108,10 @@ namespace drualcman
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// </summary>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos por defecto
             this.ChrControl = ControlCHR;
-            this.rutaDDBB = string.Empty; // cadenaConexion(source, catalog, user, pass);
-            this.FolderLog = string.Empty;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
         /// <summary>
@@ -116,15 +120,11 @@ namespace drualcman
         /// <param name="cadenaConexion">Ruta completa de la base de datos</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string cadenaConexion, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(string cadenaConexion, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion;
-            this.FolderLog = string.Empty;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
         /// <summary>
@@ -133,15 +133,11 @@ namespace drualcman
         /// <param name="cadenaConexion">Ruta completa de la base de datos</param>
         /// <param name="folder">Folder for loggin</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string cadenaConexion, string folder, params KeyValuePair<string, object>[] args)
+        public dataBases(string cadenaConexion, string folder, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion;
             this.FolderLog = folder;
-            this.ChrControl = true;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
         /// <summary>
@@ -151,15 +147,12 @@ namespace drualcman
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="dbSecure">Habilitar o desabilitar la seguridad de la base de datos</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string cadenaConexion, bool ControlCHR, bool dbSecure, params KeyValuePair<string, object>[] args)
+        public dataBases(string cadenaConexion, bool ControlCHR, bool dbSecure, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion;
-            this.FolderLog = string.Empty;
             this.ChrControl = ControlCHR;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
         /// <summary>
@@ -169,15 +162,13 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string cadenaConexion, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(string cadenaConexion, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion;
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -188,16 +179,14 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string cadenaConexion, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(string cadenaConexion, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion;
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -208,15 +197,10 @@ namespace drualcman
         /// <param name="user">Usuario</param>
         /// <param name="pass">Password</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass);
-            this.FolderLog = string.Empty;
-            this.ChrControl = true;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
         /// <summary>
@@ -228,15 +212,10 @@ namespace drualcman
         /// <param name="pass">Password</param>
         /// <param name="poolSize">How many connections is allowed</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, int poolSize, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, int poolSize, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize);
-            this.FolderLog = string.Empty;
-            this.ChrControl = true;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
         }
 
         /// <summary>
@@ -246,15 +225,13 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(ddbbSource DDBB, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(ddbbSource DDBB, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion(DDBB);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -265,16 +242,14 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(ddbbSource DDBB, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(ddbbSource DDBB, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion(DDBB);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -287,15 +262,13 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -309,15 +282,13 @@ namespace drualcman
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="poolSize">How many connections</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -331,16 +302,14 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
 
@@ -356,16 +325,14 @@ namespace drualcman
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="poolSize">How many connections</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, bool dbSecure, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, bool dbSecure, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -379,15 +346,13 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
 
@@ -403,15 +368,13 @@ namespace drualcman
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="poolSize">How many connections</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -426,16 +389,14 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
 
@@ -452,16 +413,14 @@ namespace drualcman
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="poolSize">How many connections</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, bool dbSecure, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, bool dbSecure, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -476,15 +435,13 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation, packet);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
 
@@ -501,15 +458,13 @@ namespace drualcman
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="poolSize">How many connections</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation, packet);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -525,16 +480,14 @@ namespace drualcman
         /// <param name="folderLog">Ruta para el fichero del log</param>
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, bool dbSecure, string folderLog, bool ControlCHR, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation, packet);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -551,16 +504,14 @@ namespace drualcman
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="poolSize">How many connections</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, bool dbSecure, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, bool dbSecure, string folderLog, bool ControlCHR, int poolSize, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation, packet);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
         /// <summary>
@@ -577,16 +528,14 @@ namespace drualcman
         /// <param name="ControlCHR">Controlar no poder pasar CHR en el string de la consulta</param>
         /// <param name="persist">Enable or not Persis Security Info</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, bool dbSecure, string folderLog, bool ControlCHR, bool persist, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, bool dbSecure, string folderLog, bool ControlCHR, bool persist, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation, packet, persist);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
 
 
@@ -605,16 +554,14 @@ namespace drualcman
         /// <param name="persist">Enable or not Persis Security Info</param>
         /// <param name="poolSize">How many connections</param>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, bool dbSecure, string folderLog, bool ControlCHR, bool persist, int poolSize, params KeyValuePair<string, object>[] args)
+        public dataBases(string source, string catalog, string user, string pass, string workstation, string packet, bool dbSecure, string folderLog, bool ControlCHR, bool persist, int poolSize, params KeyValuePair<string, object>[] args) : this(args)
         {
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation, packet, persist);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = true;
             this.dbControl = dbSecure;
-            this.LogResults = false;
-            WhereRequired = args.ToDictionary(x => x.Key, x => x.Value);
+            SetLogger(null);
         }
         #endregion
 
