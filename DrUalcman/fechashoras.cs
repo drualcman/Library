@@ -370,13 +370,14 @@ namespace drualcman
             return Anos;
         }
 
+
         /// <summary>
-        /// Calcula cuantos dias faltan desde una fecha a otra
+        /// calculate how many days ahead has between 2 dates
         /// </summary>
         /// <param name="start"></param>
         /// <param name="finish"></param>
         /// <returns></returns>
-        public int diasFaltan(DateTime start, DateTime finish)
+        public int DaysToGo(DateTime start, DateTime finish)
         {
             // Difference in days, hours, and minutes.
             TimeSpan ts = finish - start;
@@ -386,12 +387,12 @@ namespace drualcman
         }
 
         /// <summary>
-        /// Calcula cuantos dias han pasado desde una fecha a otra
+        /// calculate how many days in back has between 2 dates
         /// </summary>
         /// <param name="start"></param>
         /// <param name="finish"></param>
         /// <returns></returns>
-        public int diasPasados(DateTime start, DateTime finish)
+        public int DaysToBack(DateTime start, DateTime finish)
         {
             // Difference in days, hours, and minutes.
             TimeSpan ts = start - finish;
@@ -399,6 +400,22 @@ namespace drualcman
             // Difference in days.
             return ts.Days;
         }
+
+        /// <summary>
+        /// Calcula cuantos dias faltan desde una fecha a otra
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="finish"></param>
+        /// <returns></returns>
+        public int diasFaltan(DateTime start, DateTime finish) => DaysToGo(start, finish);
+
+        /// <summary>
+        /// Calcula cuantos dias han pasado desde una fecha a otra
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="finish"></param>
+        /// <returns></returns>
+        public int diasPasados(DateTime start, DateTime finish) => DaysToBack(start, finish);
 
         /// <summary>
         /// Get current time or date
