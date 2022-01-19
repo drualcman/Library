@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace drualcman.Abstractions.Interfaces
+﻿namespace drualcman.Abstractions.Interfaces
 {
     /// <summary>
     /// This class is use for tracking

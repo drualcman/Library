@@ -52,7 +52,7 @@ namespace drualcman
         /// </returns>
         public async Task<List<TModel>> ListAsync<TModel>(string sql = "", int timeout = 30) where TModel : new()
         {
-            
+
             log.start("ToList", sql, "");
 
             #region query
@@ -91,8 +91,8 @@ namespace drualcman
         /// </returns>
         public Task<List<TModel>> ListAsync<TModel>(SqlCommand cmd, int timeout = 30) where TModel : new()
         {
-            
-            log.start("ToList", "with command", cmd.CommandText);
+
+            log.start("ToList", cmd.CommandText, "");
 
             try
             {

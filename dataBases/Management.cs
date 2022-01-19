@@ -22,8 +22,8 @@ namespace drualcman
         /// Si hay error devuelve el mensasje de error
         /// </returns>
         public string ObtenerDato(string sql, int colSQL, int timeOut = 30)
-        {            
-            
+        {
+
             log.start("GetColAync(sql, colSQL, timeOut)", sql, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
             if (string.IsNullOrWhiteSpace(sql))
@@ -128,7 +128,7 @@ namespace drualcman
         /// </returns>
         public string ObtenerDato(string sql, string colSQL, int timeOut = 30)
         {
-            
+
             log.start("GetColAync(sql, colSQL, timeOut)", sql, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
             if (string.IsNullOrWhiteSpace(sql))
@@ -233,7 +233,7 @@ namespace drualcman
         /// </returns>
         public async Task<string> GetColAync(string sql, string colSQL, int timeOut = 30)
         {
-            
+
             log.start("GetColAync(sql, colSQL, timeOut)", sql, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
             if (string.IsNullOrWhiteSpace(sql))
@@ -333,7 +333,7 @@ namespace drualcman
         /// </returns>
         public async Task<string> GetColAync(string sql, int colSQL, int timeOut = 30)
         {
-            
+
             log.start("GetColAync(sql, colSQL, timeOut)", sql, colSQL.ToString() + ", " + timeOut.ToString());
             string datoRetorno = string.Empty;
             if (string.IsNullOrWhiteSpace(sql))
@@ -444,7 +444,7 @@ namespace drualcman
         /// <returns></returns>
         public bool ExisteEnDDBB(string sql, int timeout)
         {
-            
+
             log.start("ExisteEnDDBB(sql)", sql, "");
             bool retorno = false;
             if (string.IsNullOrWhiteSpace(sql))
@@ -526,7 +526,7 @@ namespace drualcman
         /// <returns></returns>
         public async Task<bool> HasRowsAsync(string sql, int timeout = 30)
         {
-            
+
             log.start("ExisteEnDDBB(sql)", sql, "");
             bool retorno = false;
             if (string.IsNullOrWhiteSpace(sql))
@@ -608,7 +608,7 @@ namespace drualcman
         /// <returns>Devuelve los datos en formato XML, Si hay error devuelve el texto del error</returns>
         public string ConsultarConXML(string sql, int timeout = 30)
         {
-            
+
             log.start("ConsultarConXML", sql, "");
             // Que no sea una cadena vacía
             if (string.IsNullOrWhiteSpace(sql))
@@ -711,7 +711,7 @@ namespace drualcman
         public int ObtenerNuevoId(string Tabla)
         {
             string sql = "SELECT IDENT_CURRENT('" + Tabla + "')";
-            
+
             log.start("ObtenerNuevoId(tabla)", sql, Tabla);
             if (checkQuery(sql))
             {
@@ -789,7 +789,7 @@ namespace drualcman
         {
             string sql = "SELECT TOP 1 " + col + " FROM " + Tabla +
                 " ORDER BY " + col + " DESC";
-            
+
             log.start("ObtenerNuevoId(tabla, col)", sql, Tabla + "," + col);
             if (checkQuery(sql))
             {
@@ -864,7 +864,7 @@ namespace drualcman
         /// </returns>
         public string escalarSP(string sql)
         {
-            
+
             log.start("ConsutarConDataSet", sql, "");
             //
             // Comprobar que están indicando valores correctos (o casi)
@@ -1001,7 +1001,7 @@ namespace drualcman
         public ArrayList getData(string sql)
         {
             ArrayList retorno = new ArrayList();
-            
+
             log.start("getData(querySQ)", sql, "");
             if (string.IsNullOrWhiteSpace(sql))
             {
@@ -1058,7 +1058,7 @@ namespace drualcman
         /// <returns></returns>
         public ArrayList getData(string sql, int cols)
         {
-            
+
             log.start("GetData(sql, cols)", sql, cols.ToString());
             ArrayList retorno = new ArrayList();
             if (string.IsNullOrWhiteSpace(sql))

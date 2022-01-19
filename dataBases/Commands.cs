@@ -28,7 +28,7 @@ namespace drualcman
         /// </returns>
         public bool EjecutarSQL(string sql)
         {
-            
+
             log.start("EjecutarSQL(sql)", sql, "");
             if (string.IsNullOrWhiteSpace(sql))
             {

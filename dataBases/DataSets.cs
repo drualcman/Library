@@ -71,7 +71,7 @@ namespace drualcman
         /// </returns>
         public DataSet ConsultarConDataSet(string sql, int timeout)
         {
-            
+
             log.start("ConsultarConDataSet", sql, "");
             // Que no sea una cadena vacía
             if (string.IsNullOrWhiteSpace(sql))

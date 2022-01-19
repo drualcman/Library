@@ -92,7 +92,7 @@ namespace drualcman
         /// Default constructor
         /// </summary>
         /// <param name="args">Add Where colmns names and default value to include in all the Select queries from the Models</param>
-        public dataBases(params KeyValuePair<string, object>[] args) 
+        public dataBases(params KeyValuePair<string, object>[] args)
         {
             SetLogger(null);
             this.ChrControl = true;
