@@ -12,7 +12,6 @@ namespace drualcman
     /// </summary>
     public partial class dataBases : IDisposable
     {
-
         #region disponse
         private bool disposedValue;
         protected virtual void Dispose(bool disposing)
