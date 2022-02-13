@@ -373,6 +373,7 @@ namespace drualcman
                         .Replace("netcoreapp3.0\\", "")
                         .Replace("netcoreapp3.1\\", "")
                         .Replace("net5.0\\", "")
+                        .Replace("net6.0\\", "")
                         .Replace("x64\\", "")
                         .Replace("x86\\", "");
                 }
