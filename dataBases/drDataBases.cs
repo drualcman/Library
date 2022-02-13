@@ -19,12 +19,8 @@ namespace drualcman
             if (!disposedValue)
             {
                 if (disposing)
-                {
-                    this.rutaDDBB = null;
-                    this.FolderLog = null;
-
-                    if (this.DbConnection is not null)
-                        this.DbConnection.Dispose();
+                {                    
+                    this.DbConnection?.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
@@ -49,6 +45,7 @@ namespace drualcman
         #endregion
 
         #region Porperties
+
         private string connectionString;
         public string rutaDDBB
         {
@@ -73,6 +70,7 @@ namespace drualcman
         #endregion
 
         #region management variables
+        private ddbbSource DbSource;
         private string FolderLog;
         private bool ChrControl;
         private bool dbControl;
@@ -578,6 +576,27 @@ namespace drualcman
             public string PACKET { get; set; }
             public bool SECURITY { get; set; }
             public int POOL_SIZE { get; set; }
+
+            public override string ToString()
+            {
+                string strCadena = string.Empty;
+                if (!string.IsNullOrEmpty(SOURCE))
+                {
+                    strCadena += "Data Source=" + SOURCE + ";" +
+                        "Initial Catalog=" + CATALOG + ";" +
+                        "Persist Security Info=";
+
+                    if (SECURITY) strCadena += "true";
+                    else strCadena += "false";
+
+                    strCadena += ";User ID=" + USER +
+                        ";Password=" + PASS + ";";
+                    strCadena += ";Max Pool Size=" + POOL_SIZE.ToString() + ";";
+                    if (!string.IsNullOrEmpty(WORKSTATION)) strCadena += "workstation id=" + WORKSTATION + ";";
+                    if (!string.IsNullOrEmpty(PACKET)) strCadena += "packet size=" + PACKET + ";";
+                }
+                return strCadena;
+            }
         }
 
         /// <summary>
@@ -706,6 +725,15 @@ namespace drualcman
         /// <returns></returns>
         public string cadenaConexion(string source, string catalog, string user, string pass, int poolSize, string workstation, string packet, bool security)
         {
+            this.DbSource.SOURCE = source;
+            this.DbSource.CATALOG = catalog;
+            this.DbSource.USER = user;
+            this.DbSource.PASS = pass;  
+            this.DbSource.POOL_SIZE = poolSize;
+            this.DbSource.WORKSTATION = workstation;
+            this.DbSource.PACKET = packet;
+            this.DbSource.SECURITY = security;
+
             // crear la cadena de conexión con la base de datos por defecto
             // conexión por defecto al servidor de Gym4u
             string strCadena = string.Empty;
@@ -759,6 +787,16 @@ namespace drualcman
         {
             return this.WhereRequired.Where(k => k.Key == key).FirstOrDefault().Value;
         }
+        #endregion
+
+        #region DbSource methods
+        /// <summary>
+        /// Change the catalog name
+        /// </summary>
+        /// <param name="catalogName"></param>
+        public void SetCatalog(string catalogName) => this.DbSource.CATALOG = catalogName;
+
+        public string GetDbSource() => this.DbSource.ToString();
         #endregion
     }
 
