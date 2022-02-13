@@ -36,7 +36,10 @@ namespace drualcman
                 else
                 {
                     if (this.DbConnection.State != System.Data.ConnectionState.Open)
+                    {
+                        if (string.IsNullOrEmpty(this.DbConnection.ConnectionString)) this.DbConnection.ConnectionString = connectionString;
                         this.DbConnection.Open();
+                    }
                 }
                 if (this.LogResults) log.end(this.DbConnection);
             }
