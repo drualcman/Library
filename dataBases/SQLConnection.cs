@@ -38,7 +38,7 @@ namespace drualcman
                     if (this.DbConnection.State != System.Data.ConnectionState.Open)
                         this.DbConnection.Open();
                 }
-                if (this.LogResults) log.end(this.DbConnection, this.rutaDDBB);
+                if (this.LogResults) log.end(this.DbConnection);
             }
             catch (Exception ex)
             {
