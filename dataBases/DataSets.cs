@@ -104,7 +104,7 @@ namespace drualcman
                     }
                     finally
                     {
-                        if (this.LogResults) log.end(ds, this.rutaDDBB);
+                        if (this.LogResults) log.end(ds);
 
                     }
 

@@ -41,7 +41,7 @@ namespace drualcman
                         this.DbConnection.Open();
                     }
                 }
-                if (this.LogResults) log.end(this.DbConnection, this.rutaDDBB);
+                if (this.LogResults) log.end(this.DbConnection);
             }
             catch (Exception ex)
             {

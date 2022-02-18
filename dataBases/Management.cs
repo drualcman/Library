@@ -105,7 +105,7 @@ namespace drualcman
                         }
 
                         if (this.LogResults)
-                            log.end(datoRetorno, this.rutaDDBB);
+                            log.end(datoRetorno);
 
 
                     }
@@ -210,7 +210,7 @@ namespace drualcman
                         }
 
                         if (this.LogResults)
-                            log.end(datoRetorno, this.rutaDDBB);
+                            log.end(datoRetorno);
 
 
                     }
@@ -311,7 +311,7 @@ namespace drualcman
                         }
 
                         if (this.LogResults)
-                            log.end(datoRetorno, this.rutaDDBB);
+                            log.end(datoRetorno);
 
                     }
                 }
@@ -415,7 +415,7 @@ namespace drualcman
                         }
 
                         if (this.LogResults)
-                            log.end(datoRetorno, this.rutaDDBB);
+                            log.end(datoRetorno);
 
 
                     }
@@ -512,7 +512,7 @@ namespace drualcman
                     retorno = false;
             }
             if (this.LogResults)
-                log.end(retorno, this.rutaDDBB);
+                log.end(retorno);
 
 
             return retorno;
@@ -594,7 +594,7 @@ namespace drualcman
                     retorno = false;
             }
             if (this.LogResults)
-                log.end(retorno, this.rutaDDBB);
+                log.end(retorno);
 
 
             return retorno;
@@ -688,7 +688,7 @@ namespace drualcman
                         throw;
                     }
                     if (this.LogResults)
-                        log.end(ds, this.rutaDDBB);
+                        log.end(ds);
 
 
                     return ds.GetXml();
@@ -764,7 +764,7 @@ namespace drualcman
                         throw;
                     }
                     if (this.LogResults)
-                        log.end(newId, this.rutaDDBB);
+                        log.end(newId);
 
 
                     return newId;
@@ -841,7 +841,7 @@ namespace drualcman
                     }
 
                     if (this.LogResults)
-                        log.end(newId, this.rutaDDBB);
+                        log.end(newId);
 
 
                     return newId;
@@ -932,7 +932,7 @@ namespace drualcman
                         throw;
                     }
                     if (this.LogResults)
-                        log.end(datoRetorno, this.rutaDDBB);
+                        log.end(datoRetorno);
 
                     return datoRetorno;
                 }
@@ -1045,7 +1045,7 @@ namespace drualcman
                 }
             }
             if (this.LogResults)
-                log.end(retorno, this.rutaDDBB);
+                log.end(retorno);
 
 
             return retorno;
@@ -1144,7 +1144,7 @@ namespace drualcman
                         }
 
                         if (this.LogResults)
-                            log.end(retorno, this.rutaDDBB);
+                            log.end(retorno);
 
 
                         return retorno;
