@@ -265,9 +265,9 @@ namespace drualcman
         /// <returns></returns>
         public Stream ToStream(byte[] bytes)
         {
-            byte[] myByteArray = new byte[10];
             MemoryStream stream = new MemoryStream();
-            stream.Write(myByteArray, 0, myByteArray.Length);
+            stream.Write(bytes, 0, bytes.Length);
+            stream.Position = 0;
             return stream;
         }
 
