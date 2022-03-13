@@ -37,8 +37,13 @@ namespace drualcman.Images
         /// <returns></returns>
         public byte[] imageToByteArray(Bitmap imageIn)
         {
-            return imageToByteArray(imageIn);
-        }
+            using (var ms = new MemoryStream())
+            {
+                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                return ms.ToArray();
+             //   return imageToByteArray(imageIn, new ImageFormat(System.Guid.NewGuid()));
+            }
+            }
 
         /// <summary>
         /// Convert image to bytes[]
@@ -48,7 +53,10 @@ namespace drualcman.Images
         /// <returns></returns>
         public byte[] imageToByteArray(Bitmap imageIn, ImageFormat formato)
         {
-            return imageToByteArray(imageIn, imageIn.RawFormat);
+
+            MemoryStream ms = new MemoryStream();
+            imageIn.Save(ms, formato);
+            return ms.ToArray();
         }
 
         /// <summary>
