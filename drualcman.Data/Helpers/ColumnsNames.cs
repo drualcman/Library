@@ -63,6 +63,9 @@ namespace drualcman.Data.Helpers
                         !properties[propertyIndex].PropertyType.IsArray &&
                         properties[propertyIndex].PropertyType != typeof(string))
                     {
+                        //TableName father;
+                        //if(table == null) father = tableNamesBK.Find(r => r.Name == t.Name);
+                        //else father = tableNamesBK.Find(r => r.Name == table.Name);
                         result.AddRange(HaveColumns(properties[propertyIndex].PropertyType, shortName));
                     }
                     else

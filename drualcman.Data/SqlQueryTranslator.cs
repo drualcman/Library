@@ -144,10 +144,11 @@ namespace drualcman.Data
             {
                 properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 table = t.GetCustomAttribute<DatabaseAttribute>();
-            }
-
-            TableName father = tableNamesBK.Find(r => r.Name == table.Name);
-            InnerColumns(properties, father?.ShortName, retorno);
+                TableName father;
+                if(table == null) father = tableNamesBK.Find(r => r.Name == t.Name);                     
+                else father = tableNamesBK.Find(r => r.Name == table.Name);
+                InnerColumns(properties, father?.ShortName, retorno);
+            }            
         }
 
         private void InnerColumns(PropertyInfo[] properties, string shortName, StringBuilder retorno)

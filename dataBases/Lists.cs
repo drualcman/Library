@@ -108,28 +108,32 @@ namespace drualcman
                     bool canRead = dr.Read();
                     if (canRead)
                     {
+                     
                         Type model = typeof(TModel);
 
                         int tableCount = 0;
                         TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
-                        List<TableName> TableNames = new List<TableName>();
-                        TableNames.Add(table);
+                        List<TableName> tableNamesBK = new List<TableName>();
+                        TableNamesHelper tableNames = new TableNamesHelper();
+                        tableNames.AddTableNames<TModel>();
+                        tableNamesBK = new List<TableName>(tableNames.TableNames);
+
 
                         ReadOnlyCollection<DbColumn> columnNames = dr.GetColumnSchema();
                         //ColumnsNames ch = new ColumnsNames(columnNames, TableNames);
                         InstanceModel instanceModel = new InstanceModel();
 
-                        ColumnSqlClientToObject columnToObject = new ColumnSqlClientToObject(new ColumnsNames(columnNames, TableNames),
-                                                        instanceModel, TableNames);
+                        ColumnSqlClientToObject columnToObject = new ColumnSqlClientToObject(new ColumnsNames(columnNames, tableNamesBK),
+                                                        instanceModel, tableNamesBK);
 
                         object currentRow = new String("");
-                        int t = TableNames.Count;
+                        int t = tableNamesBK.Count;
                         do
                         {
                             bool hasList = false;
                             TModel dat = new();
                             instanceModel.InstanceProperties(dat);
-                            ColumnValue columnValue = new ColumnValue(TableNames, dat);
+                            ColumnValue columnValue = new ColumnValue(tableNamesBK, dat);
                             ColumnToObjectResponse response = new ColumnToObjectResponse
                             {
                                 InUse = dat
@@ -141,8 +145,8 @@ namespace drualcman
                             int i = 0;
                             do
                             {
-                                response = columnToObject.SetColumnToObject(new ColumnValue(TableNames, response.InUse),
-                                                    dr, response.InUse, TableNames[i].ShortName);
+                                response = columnToObject.SetColumnToObject(new ColumnValue(tableNamesBK, response.InUse),
+                                                    dr, response.InUse, tableNamesBK[i].ShortName);
 
                                 if (response.IsList)
                                 {
@@ -150,10 +154,10 @@ namespace drualcman
                                     object listInstance = response.PropertyListInstance;
                                     string listName = response.PropertyListName;
                                     //check if have some other object like a property
-                                    TableName tableList = TableNames.Where(t => t.ShortReference == response.ActualTable).FirstOrDefault();
+                                    TableName tableList = tableNamesBK.Where(t => t.ShortReference == response.ActualTable).FirstOrDefault();
                                     if (tableList != null)
                                     {
-                                        response = columnToObject.SetColumnToObject(new ColumnValue(TableNames, response.PropertyListData),
+                                        response = columnToObject.SetColumnToObject(new ColumnValue(tableNamesBK, response.PropertyListData),
                                                        dr, response.PropertyListData, tableList.ShortName);
                                     }
 
