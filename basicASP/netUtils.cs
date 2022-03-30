@@ -339,8 +339,8 @@ namespace drualcman
             /// <param name="userPass">Password de la cuenta</param>
             /// <param name="numDestinatarios">Numero de destinatarios en cada envio. Defecto 50</param>
             /// <param name="IsBodyHtml">Indica si el texto tiene formato HTML</param>
-            /// <param name="filename">Nombre del archivo a enviar</param>
-            /// <param name="folder">Carpeta para almacenar el archivo. Adminte ; para separar nombres de archivo</param>
+            /// <param name="filename">Nombre del archivo a enviar. Adminte ; para separar nombres de archivo</param>
+            /// <param name="folder">Carpeta para almacenar el archivo.</param>
             /// <param name="temp">Indicar si el archiv es temporal o debe ser borrado</param>
             /// <param name="enableSsl">Habilitar la seguridad del servidor</param>
             /// <param name="urlFiles">URI que antecede a la carpeta folder para descargar el link del archivo adjunto</param>
