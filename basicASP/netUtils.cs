@@ -415,7 +415,7 @@ namespace drualcman
                                 if (f.existeFichero(file.Trim(), folder))
                                 {
                                     // solo es un archivo
-                                    fichero = folder2 + file.Trim();
+                                    fichero = folder + file.Trim();
                                     correo.Attachments.Add(new Attachment(a.GetStreamFile(fichero), System.IO.Path.GetFileName(fichero)));
                                     //
                                     // se elimina el archivo porque no estara bloqueado y era un archivo temporal
