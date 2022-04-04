@@ -108,7 +108,7 @@ namespace drualcman
             try
             {
                 DataTable dt;
-                switch (utilidades.getTipo(source).ToLower())
+                switch (Objetos.GetTipo(source).ToLower())
                 {
                     case "dataset":
                         dt = DataSouce2DataSet(source).Tables[0];

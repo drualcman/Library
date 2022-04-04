@@ -171,7 +171,7 @@ namespace drualcman
             /// <returns></returns>
             public static bool ContainsTagHTML(this string text)
             {
-                return lanUtils.ContainsTagHTML(text);
+                return text.ContainsHtmlTags(text);
             }
         }
     }

@@ -46,7 +46,7 @@ namespace drualcman.Converters
             {
                 if (o != null)
                 {
-                    if (utilidades.getTipo(o).ToLower() == "dataset")
+                    if (Objetos.GetTipo(o).ToLower() == "dataset")
                     {
                         string retorno = "[";
                         foreach (DataTable item in ((DataSet)o).Tables)

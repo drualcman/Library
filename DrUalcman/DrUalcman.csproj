@@ -5,6 +5,12 @@
     <RootNamespace>drualcman</RootNamespace>    
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\drualcman.Files\drualcman.Files.csproj" />
+    <ProjectReference Include="..\drualcman.Numbers\drualcman.Numbers.csproj" />
+    <ProjectReference Include="..\drualcman.Objects\drualcman.Objects.csproj" />
+  </ItemGroup>
+
 
 
 </Project>

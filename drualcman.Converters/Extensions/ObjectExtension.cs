@@ -16,11 +16,11 @@ namespace drualcman.Converters.Extensions
             {
                 if (o != null)
                 {
-                    if (utilidades.getTipo(o).ToLower() == "dataset")
+                    if (Objetos.GetTipo(o).ToLower() == "dataset")
                     {
                         data = DataSetConverter.ToJson((DataSet)o);
                     }
-                    else if (utilidades.getTipo(o).ToLower() == "datatable")
+                    else if (Objetos.GetTipo(o).ToLower() == "datatable")
                     {
                         data = DataTableConverter.ToJson((DataTable)o);
                     }
