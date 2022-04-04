@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dependencies\Dependencies.csproj" />
-    <ProjectReference Include="..\DrUalcman\DrUalcman.csproj" />
+    <ProjectReference Include="..\drualcman.Objects\drualcman.Objects.csproj" />
   </ItemGroup>
 
 </Project>
