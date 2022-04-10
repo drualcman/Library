@@ -19,11 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "drualcman.Data", "drualcman
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "drualcman.Abstractions", "drualcman.Abstractions\drualcman.Abstractions.csproj", "{5DB238D8-D2E0-4658-81E1-D38F587A674D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "drualcman.Objects", "drualcman.Objects\drualcman.Objects.csproj", "{3D317769-06B9-41C8-A84D-DD649025DD57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "drualcman.Objects", "drualcman.Objects\drualcman.Objects.csproj", "{3D317769-06B9-41C8-A84D-DD649025DD57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "drualcman.Numbers", "drualcman.Numbers\drualcman.Numbers.csproj", "{B2095ECD-3966-4BEB-9ECC-165B1F5560BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "drualcman.Numbers", "drualcman.Numbers\drualcman.Numbers.csproj", "{B2095ECD-3966-4BEB-9ECC-165B1F5560BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "drualcman.Files", "drualcman.Files\drualcman.Files.csproj", "{CD801A3F-4645-4758-83EC-EB266E8E5276}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "drualcman.Files", "drualcman.Files\drualcman.Files.csproj", "{CD801A3F-4645-4758-83EC-EB266E8E5276}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "drualcman.Encriptation", "drualcman.Encriptation\drualcman.Encriptation.csproj", "{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{CD801A3F-4645-4758-83EC-EB266E8E5276}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD801A3F-4645-4758-83EC-EB266E8E5276}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD801A3F-4645-4758-83EC-EB266E8E5276}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
