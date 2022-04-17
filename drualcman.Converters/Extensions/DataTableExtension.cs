@@ -29,7 +29,7 @@ namespace drualcman.Converters.Extensions
 
             foreach (DataColumn item in dt.Columns)
             {
-                names.Add(item.ColumnName);
+                names.Add(item.ColumnName.ToLower());
             }
 
             return names;
@@ -46,7 +46,7 @@ namespace drualcman.Converters.Extensions
 
             foreach (DataColumn item in dt.Columns)
             {
-                names.Add(item.ColumnName);
+                names.Add(item.ColumnName.ToLower());
             }
 
             return names.ToArray();
