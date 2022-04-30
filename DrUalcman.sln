@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "drualcman.Numbers", "drualc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "drualcman.Files", "drualcman.Files\drualcman.Files.csproj", "{CD801A3F-4645-4758-83EC-EB266E8E5276}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "drualcman.Encriptation", "drualcman.Encriptation\drualcman.Encriptation.csproj", "{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "drualcman.Encriptation", "drualcman.Encriptation\drualcman.Encriptation.csproj", "{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "drualcman.Validators", "drualcman.Validators\drualcman.Validators.csproj", "{2603CD00-2613-4EB2-903E-339840F9E27D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE96155E-E6CC-4A2D-A4D0-ED037E58A816}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2603CD00-2613-4EB2-903E-339840F9E27D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2603CD00-2613-4EB2-903E-339840F9E27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2603CD00-2613-4EB2-903E-339840F9E27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2603CD00-2613-4EB2-903E-339840F9E27D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

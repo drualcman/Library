@@ -9,6 +9,7 @@
     <ProjectReference Include="..\drualcman.Files\drualcman.Files.csproj" />
     <ProjectReference Include="..\drualcman.Numbers\drualcman.Numbers.csproj" />
     <ProjectReference Include="..\drualcman.Objects\drualcman.Objects.csproj" />
+    <ProjectReference Include="..\drualcman.Validators\drualcman.Validators.csproj" />
   </ItemGroup>
 
 
