@@ -404,8 +404,7 @@ namespace drualcman
                         folder = a.checkCarpeta(folder);
 
                         //comprobar que no es una lista de archivo
-                        string fichero = string.Empty;
-                        string folder2 = "~/" + folder;
+                        string fichero;
                         if (filename.IndexOf(";") > 0)
                         {
                             //es una lista de archivos
@@ -430,7 +429,7 @@ namespace drualcman
                             if (f.existeFichero(filename.Trim(), folder))
                             {
                                 // solo es un archivo
-                                fichero = folder2 + filename.Trim();
+                                fichero = folder + filename.Trim();
                                 correo.Attachments.Add(new Attachment(a.GetStreamFile(fichero), System.IO.Path.GetFileName(fichero)));
                                 //
                                 // se elimina el archivo porque no estara bloqueado y era un archivo temporal
@@ -453,12 +452,12 @@ namespace drualcman
                         if (IsBodyHtml == true)
                         {
                             //insert link
-                            cuerpoTexto += basicHTML.a(knowServerURL() + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
+                            cuerpoTexto += basicHTML.a(knowServerURL() + folder + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
                         }
                         else
                         {
                             //inser texto where is it the file
-                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
+                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + folder + fileHTML + " to read it online (copy the link in your Internet browser)";
                         }
                     }
 
@@ -668,20 +667,6 @@ namespace drualcman
                     }
 
                     cuerpoTexto += Environment.NewLine;
-
-                    if (!string.IsNullOrEmpty(fileHTML))
-                    {
-                        if (IsBodyHtml == true)
-                        {
-                            //insert link
-                            cuerpoTexto += basicHTML.a(knowServerURL() + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
-                        }
-                        else
-                        {
-                            //inser texto where is it the file
-                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
-                        }
-                    }
 
                     // cuerpo del mail
                     correo.Body = cuerpoTexto;

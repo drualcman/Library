@@ -56,7 +56,7 @@ namespace drualcman
                 }
                 catch
                 {
-                    emailRemitente = new MailAddress("info@mibiografia.name", empresaRemitente);
+                    emailRemitente = new MailAddress("info@community-mall.com", empresaRemitente);
                 }
                 correo.From = emailRemitente;
                 correo.ReplyToList.Add(emailRemitente);
