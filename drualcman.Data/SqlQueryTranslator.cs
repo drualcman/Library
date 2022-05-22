@@ -37,15 +37,15 @@ namespace drualcman.Data
 
             StringBuilder retorno = new StringBuilder("SELECT ");
             int c = properties.Length;
-            for (int i = 0; i < c; i++)
+            for(int i = 0; i < c; i++)
             {
                 DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
                 string fieldName;
-                if (field is not null)
+                if(field is not null)
                 {
-                    if (!field.Ignore)
+                    if(!field.Ignore)
                     {
-                        if (field.Inner != InnerDirection.NONE)
+                        if(field.Inner != InnerDirection.NONE)
                         {
                             //add columns from the property model
                             InnerColumns(properties[i], retorno, field, shortName);
@@ -53,7 +53,7 @@ namespace drualcman.Data
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(field.Name))
+                            if(string.IsNullOrEmpty(field.Name))
                                 fieldName = properties[i].Name;
                             else
                                 fieldName = field.Name;
@@ -64,18 +64,18 @@ namespace drualcman.Data
                 }
                 else
                     fieldName = properties[i].Name;
-                if (!string.IsNullOrEmpty(fieldName))
+                if(!string.IsNullOrEmpty(fieldName))
                     retorno.Append($" {tableNamesBK[0].ShortName}.[{fieldName}] [{tableNamesBK[0].ShortName}.{fieldName}],");
 
             }
             retorno.Remove(retorno.Length - 1, 1);
             retorno.Append(Environment.NewLine);
             retorno.Append($"FROM [{tableNamesBK[0].Name}] {tableNamesBK[0].ShortName} ");
-            if (tableNamesBK.Count() > 1)
+            if(tableNamesBK.Count() > 1)
             {
                 //add inner joins depending of the model database attributes
                 int tc = tableNamesBK.Count();
-                for (int i = 1; i < tc; i++)
+                for(int i = 1; i < tc; i++)
                 {
                     retorno.Append(Environment.NewLine);
                     retorno.Append($"\t{tableNamesBK[i].Inner} JOIN [{tableNamesBK[i].Name}] {tableNamesBK[i].ShortName} on {tableNamesBK[i].ShortReference}.{(string.IsNullOrEmpty(tableNamesBK[i].InnerIndex) ? string.IsNullOrEmpty(tableNamesBK[i].Column) ? $"{tableNamesBK[i].Name}Id" : tableNamesBK[i].Column : tableNamesBK[i].InnerIndex)} = {tableNamesBK[i].ShortName}.{(string.IsNullOrEmpty(tableNamesBK[i].Column) ? $"{tableNamesBK[i].Name}Id" : tableNamesBK[i].Column)}");
@@ -83,20 +83,20 @@ namespace drualcman.Data
             }
 
             retorno.Append(Environment.NewLine);
-            if (this.WhereRequired is not null)
+            if(this.WhereRequired is not null)
             {
                 bool foundSome = false;
                 retorno.Append($"WHERE ");
-                for (int i = 0; i < c; i++)
+                for(int i = 0; i < c; i++)
                 {
                     DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
                     string fieldName = properties[i].Name;
-                    if (field is not null)
+                    if(field is not null)
                     {
-                        if (!string.IsNullOrEmpty(field.Name)) fieldName = field.Name;
-                        if (field.IndexKey)
+                        if(!string.IsNullOrEmpty(field.Name)) fieldName = field.Name;
+                        if(field.IndexKey)
                         {
-                            if (string.IsNullOrEmpty(field.IndexedName) && this.WhereRequired.ContainsKey(fieldName))
+                            if(string.IsNullOrEmpty(field.IndexedName) && this.WhereRequired.ContainsKey(fieldName))
                             {
                                 foundSome = true;
                                 retorno.Append($" {tableNamesBK[0].ShortName}.[{fieldName}] = {this.GetWhereValue(fieldName)} ");
@@ -104,7 +104,7 @@ namespace drualcman.Data
                             }
                             else
                             {
-                                if (this.WhereRequired.ContainsKey(field.IndexedName))
+                                if(this.WhereRequired.ContainsKey(field.IndexedName))
                                 {
                                     foundSome = true;
                                     retorno.Append($" {tableNamesBK[0].ShortName}.[{fieldName}] = {this.GetWhereValue(field.IndexedName)} ");
@@ -115,7 +115,7 @@ namespace drualcman.Data
                     }
                     else
                     {
-                        if (this.WhereRequired.ContainsKey(fieldName))
+                        if(this.WhereRequired.ContainsKey(fieldName))
                         {
                             foundSome = true;
                             retorno.Append($" {tableNamesBK[0].ShortName}.[{fieldName}] = {this.GetWhereValue(fieldName)} ");
@@ -123,7 +123,7 @@ namespace drualcman.Data
                         }
                     }
                 }
-                if (foundSome) retorno.Remove(retorno.Length - 3, 3);
+                if(foundSome) retorno.Remove(retorno.Length - 3, 3);
                 else retorno.Remove(retorno.Length - 7, 7);
             }
             return retorno.ToString();
@@ -135,7 +135,7 @@ namespace drualcman.Data
             Type t = column.PropertyType;
             PropertyInfo[] properties;
             DatabaseAttribute table;
-            if (drualcman.Helpers.ObjectHelpers.IsGenericList(column.PropertyType.FullName))
+            if(drualcman.Helpers.ObjectHelpers.IsGenericList(column.PropertyType.FullName))
             {
                 properties = column.PropertyType.GetGenericArguments()[0].GetProperties();
                 table = column.PropertyType.GetGenericArguments()[0].GetCustomAttribute<DatabaseAttribute>();
@@ -145,24 +145,24 @@ namespace drualcman.Data
                 properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 table = t.GetCustomAttribute<DatabaseAttribute>();
                 TableName father;
-                if(table == null) father = tableNamesBK.Find(r => r.Name == t.Name);                     
+                if(table == null) father = tableNamesBK.Find(r => r.Name == t.Name);
                 else father = tableNamesBK.Find(r => r.Name == table.Name);
                 InnerColumns(properties, father?.ShortName, retorno);
-            }            
+            }
         }
 
         private void InnerColumns(PropertyInfo[] properties, string shortName, StringBuilder retorno)
         {
             int c = properties.Length;
-            for (int i = 0; i < c; i++)
+            for(int i = 0; i < c; i++)
             {
                 DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
                 string fieldName = properties[i].Name;
-                if (field is not null)
+                if(field is not null)
                 {
-                    if (!field.Ignore)
+                    if(!field.Ignore)
                     {
-                        if (field.Inner != InnerDirection.NONE)
+                        if(field.Inner != InnerDirection.NONE)
                         {
                             //add columns from the property model
                             InnerColumns(properties[i], retorno, field, shortName);
@@ -170,11 +170,11 @@ namespace drualcman.Data
                         }
                         else
                         {
-                            if (drualcman.Helpers.ObjectHelpers.IsGenericList(properties[i].PropertyType.FullName))
+                            if(drualcman.Helpers.ObjectHelpers.IsGenericList(properties[i].PropertyType.FullName))
                                 fieldName = string.Empty;
                             else
                             {
-                                if (string.IsNullOrEmpty(field.Name))
+                                if(string.IsNullOrEmpty(field.Name))
                                     fieldName = properties[i].Name;
                                 else
                                     fieldName = field.Name;
@@ -184,7 +184,7 @@ namespace drualcman.Data
                     else
                         fieldName = string.Empty;
                 }
-                if (!string.IsNullOrEmpty(fieldName))
+                if(!string.IsNullOrEmpty(fieldName))
                     retorno.Append($" {shortName}.[{fieldName}] [{shortName}.{fieldName}],");
             }
         }

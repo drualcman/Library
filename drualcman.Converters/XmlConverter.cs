@@ -18,9 +18,9 @@ namespace drualcman.Converters
             ds.DataSetName = "DataSet";
             XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml(xmlData);
-            foreach (XmlNode padre in xDoc)
+            foreach(XmlNode padre in xDoc)
             {
-                if (padre.NodeType != XmlNodeType.XmlDeclaration)
+                if(padre.NodeType != XmlNodeType.XmlDeclaration)
                 {
                     XmlNodeList xLista = padre.ChildNodes;
                     GetNodos(xLista, ref ds, padre.Name);
@@ -38,7 +38,7 @@ namespace drualcman.Converters
         private static void GetNodos(XmlNodeList xLista, ref DataSet ds, string tabla)
         {
             bool creaPadre = !ds.Tables.Contains(tabla);
-            if (creaPadre) ds.Tables.Add(CreaTabla(xLista, tabla));
+            if(creaPadre) ds.Tables.Add(CreaTabla(xLista, tabla));
             else
             {
                 DataTable tmp = ActualizaTabla(ds.Tables[tabla], xLista, tabla);
@@ -48,11 +48,11 @@ namespace drualcman.Converters
 
             DataTable dt = ds.Tables[tabla];
             DataRow dr = dt.NewRow();
-            foreach (XmlElement item in xLista)
+            foreach(XmlElement item in xLista)
             {
-                if (item.NodeType != XmlNodeType.XmlDeclaration)
+                if(item.NodeType != XmlNodeType.XmlDeclaration)
                 {
-                    if (item.ChildNodes.Count > 1)
+                    if(item.ChildNodes.Count > 1)
                     {
                         dr[item.Name] = item.Name + "[" + item.ChildNodes.Count.ToString() + "]";
                         //sobrecarga para comprobar de nuevo el nodo
@@ -61,11 +61,11 @@ namespace drualcman.Converters
                     }
                     else
                     {
-                        if (item.Attributes.Count > 0)
+                        if(item.Attributes.Count > 0)
                         {
                             string content = dr[item.Name].ToString();
-                            if (!string.IsNullOrEmpty(content)) content += "~";
-                            for (int i = 0; i < item.Attributes.Count; i++)
+                            if(!string.IsNullOrEmpty(content)) content += "~";
+                            for(int i = 0; i < item.Attributes.Count; i++)
                             {
                                 content += item.Attributes[i].Name;
                                 content += ":";
@@ -92,9 +92,9 @@ namespace drualcman.Converters
         private static DataTable CreaTabla(XmlNodeList xLista, string tabla)
         {
             DataTable dt = new DataTable(tabla);
-            foreach (XmlElement item in xLista)
+            foreach(XmlElement item in xLista)
             {
-                if (!dt.Columns.Contains(item.Name))
+                if(!dt.Columns.Contains(item.Name))
                 {
                     dt.Columns.Add(new DataColumn(item.Name));
                 }
@@ -114,15 +114,15 @@ namespace drualcman.Converters
             bool actualizar = false;
             DataTable dt = new DataTable();
             dt.TableName = "ToMerge";
-            foreach (XmlElement item in xLista)
+            foreach(XmlElement item in xLista)
             {
-                if (!Original.Columns.Contains(item.Name))
+                if(!Original.Columns.Contains(item.Name))
                 {
                     actualizar = true;
                     dt.Columns.Add(new DataColumn(item.Name));
                 }
             }
-            if (actualizar) Original.Merge(dt, true, MissingSchemaAction.Add);
+            if(actualizar) Original.Merge(dt, true, MissingSchemaAction.Add);
             return Original;
         }
         #endregion

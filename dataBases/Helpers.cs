@@ -23,29 +23,29 @@ namespace drualcman
         #region security
         private void CheckSqlInjection(string query, IDbLog log)
         {
-            if (checkQuery(query))
+            if(checkQuery(query))
             {
                 bool ok = true;
                 // no permitir comentarios ni algunas instrucciones maliciosas
-                if (query.IndexOf("--") > -1)
+                if(query.IndexOf("--") > -1)
                 {
                     log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
 
                     throw new ArgumentException("No se admiten comentarios de SQL en la cadena de selección. SQL: " + query);
                 }
-                else if (query.ToUpper().IndexOf("DROP TABLE ") > -1)
+                else if(query.ToUpper().IndexOf("DROP TABLE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + query);
                 }
-                else if (query.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
+                else if(query.ToUpper().IndexOf("DROP PROCEDURE ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
 
                     throw new ArgumentException("La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados... SQL: " + query);
                 }
-                else if (query.ToUpper().IndexOf("DROP FUNCTION ") > -1)
+                else if(query.ToUpper().IndexOf("DROP FUNCTION ") > -1)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla, no DROP y otros comandos no adecuados...\n" + this.rutaDDBB);
 
@@ -54,12 +54,12 @@ namespace drualcman
                 else ok = true;
 
                 // Comprobar que realmente se use SELECT, o EXEC
-                if (query.ToUpper().IndexOf("EXEC") < 0)
+                if(query.ToUpper().IndexOf("EXEC") < 0)
                 {
                     ok = false;
                 }
                 // Comprobar que realmente se use SELECT, o EXEC
-                if (query.ToUpper().IndexOf("SELECT") < 0 && ok == false)
+                if(query.ToUpper().IndexOf("SELECT") < 0 && ok == false)
                 {
                     log.end(null, "La cadena debe ser SELECT campos FROM tabla / EXEC Storage Proces and variables\n" + this.rutaDDBB);
 
@@ -82,24 +82,24 @@ namespace drualcman
         private bool checkQuery(string query)
         {
             bool resultado;
-            if (this.dbControl == true)
+            if(this.dbControl == true)
             {
-                if (!string.IsNullOrEmpty(query))
+                if(!string.IsNullOrEmpty(query))
                 {
-                    if (query.ToUpper().IndexOf("INFORMATION_SCHEMA") >= 0)
+                    if(query.ToUpper().IndexOf("INFORMATION_SCHEMA") >= 0)
                         resultado = false;
-                    else if (query.ToLower().IndexOf("sysobjects") >= 0)
+                    else if(query.ToLower().IndexOf("sysobjects") >= 0)
                         resultado = false;
-                    else if (query.ToLower().IndexOf("syscolumns") >= 0)
+                    else if(query.ToLower().IndexOf("syscolumns") >= 0)
                         resultado = false;
-                    else if (query.ToLower().IndexOf(this.rutaDDBB) >= 0)
+                    else if(query.ToLower().IndexOf(this.rutaDDBB) >= 0)
                         resultado = false;
-                    else if (query.ToUpper().IndexOf("BENCHMARK(") >= 0)
+                    else if(query.ToUpper().IndexOf("BENCHMARK(") >= 0)
                         resultado = false;
-                    else if (this.ChrControl == true)
+                    else if(this.ChrControl == true)
                     {
                         int tiene = query.ToLower().IndexOf("chr(");
-                        if (tiene >= 0)
+                        if(tiene >= 0)
                             resultado = false;
                         else
                             resultado = true;

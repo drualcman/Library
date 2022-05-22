@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace drualcman
@@ -13,7 +12,7 @@ namespace drualcman
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
             stream = md5.ComputeHash(encoding.GetBytes(word));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
 
@@ -32,7 +31,7 @@ namespace drualcman
             string str = n.number2String(number);
             n = null;
             stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
 
@@ -51,7 +50,7 @@ namespace drualcman
             string str = n.number2String(number);
             n = null;
             stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
 
@@ -70,7 +69,7 @@ namespace drualcman
             string str = n.number2String(number);
             n = null;
             stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
 
@@ -89,7 +88,7 @@ namespace drualcman
             string str = n.number2String(number);
             n = null;
             stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
 
@@ -106,14 +105,14 @@ namespace drualcman
             StringBuilder sb = new StringBuilder();
             string str = s.ToString();
             stream = md5.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
 
         public static string Token()
         {
             long i = 1;
-            foreach (byte b in Guid.NewGuid().ToByteArray()) i *= ((int)b + 1);
+            foreach(byte b in Guid.NewGuid().ToByteArray()) i *= ((int)b + 1);
             return MD5(string.Format("{0:x}", i - DateTime.Now.Ticks));
         }
 
@@ -155,7 +154,7 @@ namespace drualcman
             string s = arg;
             s = s.Replace('-', '+'); // 62nd char of encoding
             s = s.Replace('_', '/'); // 63rd char of encoding
-            switch (s.Length % 4) // Pad with trailing '='s
+            switch(s.Length % 4) // Pad with trailing '='s
             {
                 case 0: break; // No pad chars in this case
                 case 2: s += "=="; break; // Two pad chars
@@ -173,7 +172,7 @@ namespace drualcman
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
             stream = sha1.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
 
@@ -184,7 +183,7 @@ namespace drualcman
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
             stream = sha256.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
 
@@ -195,7 +194,7 @@ namespace drualcman
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
             stream = sha384.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
 
@@ -206,7 +205,7 @@ namespace drualcman
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
             stream = sha512.ComputeHash(encoding.GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            for(int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
     }

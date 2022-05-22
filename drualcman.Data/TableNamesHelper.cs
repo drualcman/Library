@@ -18,9 +18,9 @@ namespace drualcman.Data
 
             string tableName;
             DatabaseAttribute table = typeof(TModel).GetCustomAttribute<DatabaseAttribute>();
-            if (table is not null)
+            if(table is not null)
             {
-                if (string.IsNullOrEmpty(table.Name)) tableName = typeof(TModel).Name;
+                if(string.IsNullOrEmpty(table.Name)) tableName = typeof(TModel).Name;
                 else tableName = table.Name;
             }
             else tableName = typeof(TModel).Name;
@@ -30,14 +30,14 @@ namespace drualcman.Data
             tableNamesBK.Add(newTable);
 
             int c = properties.Length;
-            for (int i = 0; i < c; i++)
+            for(int i = 0; i < c; i++)
             {
                 DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
-                if (field is not null)
+                if(field is not null)
                 {
-                    if (!field.Ignore)
+                    if(!field.Ignore)
                     {
-                        if (field.Inner != InnerDirection.NONE)
+                        if(field.Inner != InnerDirection.NONE)
                         {
                             //add columns from the property model
                             AddTable(properties[i], field, ref tableCount, shortName);
@@ -55,18 +55,18 @@ namespace drualcman.Data
             string shortName;
             PropertyInfo[] properties;
             DatabaseAttribute table;
-            if (drualcman.Helpers.ObjectHelpers.IsGenericList(column.PropertyType.FullName))
+            if(drualcman.Helpers.ObjectHelpers.IsGenericList(column.PropertyType.FullName))
             {
                 properties = column.PropertyType.GetGenericArguments()[0].GetProperties();
                 table = column.PropertyType.GetGenericArguments()[0].GetCustomAttribute<DatabaseAttribute>();
-                if (table is not null && !string.IsNullOrEmpty(table.Name)) tableName = table.Name;
+                if(table is not null && !string.IsNullOrEmpty(table.Name)) tableName = table.Name;
                 else tableName = column.PropertyType.GetGenericArguments()[0].Name;
             }
             else
             {
                 properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 table = t.GetCustomAttribute<DatabaseAttribute>();
-                if (table is not null && !string.IsNullOrEmpty(table.Name)) tableName = table.Name;
+                if(table is not null && !string.IsNullOrEmpty(table.Name)) tableName = table.Name;
                 else tableName = t.Name;
             }
 
@@ -81,14 +81,14 @@ namespace drualcman.Data
         private void AddTable(PropertyInfo[] properties, string shortName, ref int tableCount)
         {
             int c = properties.Length;
-            for (int i = 0; i < c; i++)
+            for(int i = 0; i < c; i++)
             {
                 DatabaseAttribute field = properties[i].GetCustomAttribute<DatabaseAttribute>();
-                if (field is not null)
+                if(field is not null)
                 {
-                    if (!field.Ignore)
+                    if(!field.Ignore)
                     {
-                        if (field.Inner != InnerDirection.NONE)
+                        if(field.Inner != InnerDirection.NONE)
                         {
                             //add columns from the property model
                             AddTable(properties[i], field, ref tableCount, shortName);

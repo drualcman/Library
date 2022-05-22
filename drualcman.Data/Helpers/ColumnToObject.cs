@@ -29,7 +29,7 @@ namespace drualcman.Data.Helpers
 
             TableName father = Tables.Where(t => t.ShortName == response.ActualTable).FirstOrDefault();
             Type model = father.Instance?.PropertyType ?? item.GetType();
-            if (drualcman.Helpers.ObjectHelpers.IsGenericList(model.FullName))
+            if(drualcman.Helpers.ObjectHelpers.IsGenericList(model.FullName))
             {
                 //activate the list found
                 Type[] genericType = father.Instance.PropertyType.GetGenericArguments();
@@ -48,16 +48,16 @@ namespace drualcman.Data.Helpers
             List<Columns> columns = new List<Columns>(Names.HaveColumns(model, response.ActualTable));
             int c = columns.Count;
 
-            if (response.IsList)
+            if(response.IsList)
             {
                 object dat = Activator.CreateInstance(model);
                 Model.InstanceProperties(dat);
 
-                for (int index = 0; index < c; index++)
+                for(int index = 0; index < c; index++)
                 {
-                    if (columns[index].Options is not null)
+                    if(columns[index].Options is not null)
                     {
-                        if (!columns[index].Options.Ignore)
+                        if(!columns[index].Options.Ignore)
                         {
                             value.SetValue(columns[index].Column.PropertyType.Name, columns[index].Column, dat, reader[columns[index].ColumnName]);
                         }
@@ -72,11 +72,11 @@ namespace drualcman.Data.Helpers
             }
             else
             {
-                for (int index = 0; index < c; index++)
+                for(int index = 0; index < c; index++)
                 {
-                    if (columns[index].Options is not null)
+                    if(columns[index].Options is not null)
                     {
-                        if (!columns[index].Options.Ignore)
+                        if(!columns[index].Options.Ignore)
                         {
                             value.SetValue(columns[index], reader);
                         }

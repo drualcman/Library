@@ -28,22 +28,22 @@ namespace drualcman
             log.start("cnnDDBB(RutaDDBB)", connectionString, "");
             try
             {
-                if (this.DbConnection is null)
+                if(this.DbConnection is null)
                 {
                     this.DbConnection = new SqlConnection(connectionString);
                     this.DbConnection.Open();
                 }
                 else
                 {
-                    if (this.DbConnection.State != System.Data.ConnectionState.Open)
+                    if(this.DbConnection.State != System.Data.ConnectionState.Open)
                     {
-                        if (string.IsNullOrEmpty(this.DbConnection.ConnectionString)) this.DbConnection.ConnectionString = connectionString;
+                        if(string.IsNullOrEmpty(this.DbConnection.ConnectionString)) this.DbConnection.ConnectionString = connectionString;
                         this.DbConnection.Open();
                     }
                 }
-                if (this.LogResults) log.end(this.DbConnection);
+                if(this.LogResults) log.end(this.DbConnection);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
                 throw;

@@ -16,10 +16,10 @@ namespace drualcman
         private bool disposedValue;
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if(!disposedValue)
             {
-                if (disposing)
-                {                    
+                if(disposing)
+                {
                     this.DbConnection?.Dispose();
                 }
 
@@ -31,7 +31,7 @@ namespace drualcman
 
         protected virtual async Task DisposeAsync()
         {
-            if (this.DbConnection is not null)
+            if(this.DbConnection is not null)
                 await this.DbConnection.DisposeAsync();
             Dispose();
         }
@@ -54,7 +54,7 @@ namespace drualcman
             {
                 connectionString = value;
                 //asegurarse de que
-                if (string.IsNullOrEmpty(connectionString))
+                if(string.IsNullOrEmpty(connectionString))
                 {
                     // crear la cadena de conexion con la base de datos por defecto
                     string source = "localhost";
@@ -81,7 +81,7 @@ namespace drualcman
         #region Constructor
         public void SetLogger(IDbLog logger)
         {
-            if (logger == null) log = new defLog(this.FolderLog);
+            if(logger == null) log = new defLog(this.FolderLog);
             else log = logger;
         }
 
@@ -580,20 +580,20 @@ namespace drualcman
             public override string ToString()
             {
                 string strCadena = string.Empty;
-                if (!string.IsNullOrEmpty(SOURCE))
+                if(!string.IsNullOrEmpty(SOURCE))
                 {
                     strCadena += "Data Source=" + SOURCE + ";" +
                         "Initial Catalog=" + CATALOG + ";" +
                         "Persist Security Info=";
 
-                    if (SECURITY) strCadena += "true";
+                    if(SECURITY) strCadena += "true";
                     else strCadena += "false";
 
                     strCadena += ";User ID=" + USER +
                         ";Password=" + PASS + ";";
                     strCadena += ";Max Pool Size=" + POOL_SIZE.ToString() + ";";
-                    if (!string.IsNullOrEmpty(WORKSTATION)) strCadena += "workstation id=" + WORKSTATION + ";";
-                    if (!string.IsNullOrEmpty(PACKET)) strCadena += "packet size=" + PACKET + ";";
+                    if(!string.IsNullOrEmpty(WORKSTATION)) strCadena += "workstation id=" + WORKSTATION + ";";
+                    if(!string.IsNullOrEmpty(PACKET)) strCadena += "packet size=" + PACKET + ";";
                 }
                 return strCadena;
             }
@@ -728,7 +728,7 @@ namespace drualcman
             this.DbSource.SOURCE = source;
             this.DbSource.CATALOG = catalog;
             this.DbSource.USER = user;
-            this.DbSource.PASS = pass;  
+            this.DbSource.PASS = pass;
             this.DbSource.POOL_SIZE = poolSize;
             this.DbSource.WORKSTATION = workstation;
             this.DbSource.PACKET = packet;
@@ -737,20 +737,20 @@ namespace drualcman
             // crear la cadena de conexión con la base de datos por defecto
             // conexión por defecto al servidor de Gym4u
             string strCadena = string.Empty;
-            if (!string.IsNullOrEmpty(source))
+            if(!string.IsNullOrEmpty(source))
             {
                 strCadena += "Data Source=" + source + ";" +
                     "Initial Catalog=" + catalog + ";" +
                     "Persist Security Info=";
 
-                if (security) strCadena += "true";
+                if(security) strCadena += "true";
                 else strCadena += "false";
 
                 strCadena += ";User ID=" + user +
                     ";Password=" + pass + ";";
                 strCadena += ";Max Pool Size=" + poolSize.ToString() + ";";
-                if (!string.IsNullOrEmpty(workstation)) strCadena += "workstation id=" + workstation + ";";
-                if (!string.IsNullOrEmpty(packet)) strCadena += "packet size=" + packet + ";";
+                if(!string.IsNullOrEmpty(workstation)) strCadena += "workstation id=" + workstation + ";";
+                if(!string.IsNullOrEmpty(packet)) strCadena += "packet size=" + packet + ";";
             }
             return strCadena;
         }
@@ -773,7 +773,7 @@ namespace drualcman
         /// <param name="value"></param>
         public void SetWhere(string column, object value)
         {
-            if (this.WhereRequired.ContainsKey(column))
+            if(this.WhereRequired.ContainsKey(column))
             {
                 this.WhereRequired[column] = value;
             }

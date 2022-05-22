@@ -42,7 +42,7 @@ namespace drualcman
                 string result = strTexto;
                 Regex rgx = new Regex("<((.|\n)*?)>");
                 result = rgx.Replace(strTexto, "");
-                if (result.Length >= longitud) result = result.Substring(0, longitud);
+                if(result.Length >= longitud) result = result.Substring(0, longitud);
                 return result;
             }
 
@@ -83,7 +83,7 @@ namespace drualcman
                 {
                     try
                     {
-                        if (color.IndexOf("#") > 0)
+                        if(color.IndexOf("#") > 0)
                             color = color.Substring(1, color.Length);
 
                         int R = int.Parse(color.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
@@ -92,7 +92,7 @@ namespace drualcman
 
                         resultado = Color.FromArgb(R, G, B);
                     }
-                    catch (Exception)
+                    catch(Exception)
                     {
                         resultado = Color.Transparent;
                     }
@@ -179,15 +179,15 @@ namespace drualcman
             /// <returns></returns>
             public static string a(string url, string text, string target, string cssClass, string id, string onclick, string title)
             {
-                if (string.IsNullOrEmpty(target) || string.IsNullOrWhiteSpace(target)) target = "_self";
+                if(string.IsNullOrEmpty(target) || string.IsNullOrWhiteSpace(target)) target = "_self";
                 string link = "<a href =\"" + url + "\" target=\"" + target + "\" ";
-                if (!string.IsNullOrEmpty(cssClass) || !string.IsNullOrWhiteSpace(cssClass)) link += " class=\"" + cssClass + "\" ";
-                if (!string.IsNullOrEmpty(id) || !string.IsNullOrWhiteSpace(id)) link += " id=\"" + id + "\" ";
-                if (!string.IsNullOrEmpty(title) || !string.IsNullOrWhiteSpace(title))
+                if(!string.IsNullOrEmpty(cssClass) || !string.IsNullOrWhiteSpace(cssClass)) link += " class=\"" + cssClass + "\" ";
+                if(!string.IsNullOrEmpty(id) || !string.IsNullOrWhiteSpace(id)) link += " id=\"" + id + "\" ";
+                if(!string.IsNullOrEmpty(title) || !string.IsNullOrWhiteSpace(title))
                 {
                     link += " title=\"" + title + "\" data-toggle=\"tooltip\"  data-placement=\"top\"";
                 }
-                if (!string.IsNullOrEmpty(onclick) || !string.IsNullOrWhiteSpace(onclick)) link += " onclick=\"" + onclick + "\" ";
+                if(!string.IsNullOrEmpty(onclick) || !string.IsNullOrWhiteSpace(onclick)) link += " onclick=\"" + onclick + "\" ";
                 link += ">" + text + "</a>";
                 return link;
             }
@@ -228,8 +228,8 @@ namespace drualcman
             /// <returns></returns>
             public static string img(string descrip, string url, string cssClass = "")
             {
-                if (string.IsNullOrEmpty(descrip)) descrip = url;
-                if (!string.IsNullOrEmpty(cssClass) || string.IsNullOrWhiteSpace(cssClass))
+                if(string.IsNullOrEmpty(descrip)) descrip = url;
+                if(!string.IsNullOrEmpty(cssClass) || string.IsNullOrWhiteSpace(cssClass))
                     cssClass = "class=\"" + cssClass + "\"";
                 return "<img " + cssClass + " alt=\"" + descrip + "\"" + "src=\"" + url +
                             "\" title =\"" + descrip + "\" />";
@@ -245,13 +245,13 @@ namespace drualcman
             /// <returns></returns>
             public static string img(string descrip, string url, string cssClass = "", string Align = "NotSet", int maxHeight = 0, int maxWidth = 0)
             {
-                if (string.IsNullOrEmpty(descrip)) descrip = url;
+                if(string.IsNullOrEmpty(descrip)) descrip = url;
                 string tam = "style=\"";
-                if (maxWidth > 0) tam += "max-width:" + maxWidth.ToString() + "px;";
-                if (maxHeight > 0) tam += "max-height:" + maxHeight.ToString() + "px; ";
+                if(maxWidth > 0) tam += "max-width:" + maxWidth.ToString() + "px;";
+                if(maxHeight > 0) tam += "max-height:" + maxHeight.ToString() + "px; ";
                 tam += "\"";
 
-                if (!string.IsNullOrEmpty(cssClass) || string.IsNullOrWhiteSpace(cssClass))
+                if(!string.IsNullOrEmpty(cssClass) || string.IsNullOrWhiteSpace(cssClass))
                     cssClass = "class=\"" + cssClass + "\"";
 
                 return "<img  " + cssClass + " alt=\"" + descrip + "\"" + " src=\"" + url +
@@ -268,10 +268,10 @@ namespace drualcman
             /// <returns></returns>
             public static string img(string descrip, string url, int maxHeight = 0, int maxWidth = 0)
             {
-                if (string.IsNullOrEmpty(descrip)) descrip = url;
+                if(string.IsNullOrEmpty(descrip)) descrip = url;
                 string tam = "style=\"";
-                if (maxWidth > 0) tam += "width:" + maxWidth.ToString() + "px;";
-                if (maxHeight > 0) tam += "height:" + maxHeight.ToString() + "px; ";
+                if(maxWidth > 0) tam += "width:" + maxWidth.ToString() + "px;";
+                if(maxHeight > 0) tam += "height:" + maxHeight.ToString() + "px; ";
                 tam += "\"";
 
                 return "<img  alt=\"" + descrip + "\"" + "src=\"" + url +
@@ -302,7 +302,7 @@ namespace drualcman
             /// <returns></returns>
             public static string iframe(string src, string medida, int w = 100, int h = 100)
             {
-                if (string.IsNullOrEmpty(medida)) medida = "%";
+                if(string.IsNullOrEmpty(medida)) medida = "%";
                 return "<iframe style=\"border: none;overflow: hidden;min-width:" + w.ToString() + medida + "; min-height:" + h.ToString() + medida + ";\" src=\"" + src +
                        "\" allowfullscreen></iframe>";
             }
@@ -347,12 +347,12 @@ namespace drualcman
                                 string.Format(@"<\s*img\s*src\s*=\s*{0}\s*([^{0}]+)\s*{0}", "\""),
                                 RegexOptions.CultureInvariant | RegexOptions.IgnoreCase |
                                 RegexOptions.Multiline);
-                    foreach (Match match in imgSrcMatches)
+                    foreach(Match match in imgSrcMatches)
                     {
                         imgSrcs.Add(match.Groups[1].Value);
                     }
                 }
-                catch (Exception)
+                catch(Exception)
                 {
 
                     imgSrcs.Add("img/nopicture.jpg");

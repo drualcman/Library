@@ -18,10 +18,10 @@ namespace drualcman.Converters.Extensions
             //https://stackoverflow.com/questions/17398019/convert-datatable-to-json-in-c-sharp                
             StringBuilder jsonString = new StringBuilder();
             int c = ds.Tables.Count;
-            if (c > 0)
+            if(c > 0)
             {
                 jsonString.Append("[");
-                for (int t = 0; t < c; t++)
+                for(int t = 0; t < c; t++)
                 {
                     jsonString.Append("{\"");
                     jsonString.Append(ds.Tables[t].TableName);

@@ -31,7 +31,7 @@ namespace drualcman
             {
                 string retorno = string.Empty;
 
-                switch (tipo)
+                switch(tipo)
                 {
                     case FileTipe.css:
                         retorno = "<style type=\"text/css\">";
@@ -45,11 +45,11 @@ namespace drualcman
                 {
                     ficheros f = new ficheros();
                     string file = f.RutaCompleta(folder) + fileName;
-                    if (f.existeFichero(fileName, folder) == true)
+                    if(f.existeFichero(fileName, folder) == true)
                     {
                         StreamReader read = new StreamReader(file);
                         string content = read.ReadToEnd();
-                        if (tipo == FileTipe.css)
+                        if(tipo == FileTipe.css)
                         {
                             content = content.Replace(Environment.NewLine, " ");
                             content = content.Replace((char)10, ' ');
@@ -76,7 +76,7 @@ namespace drualcman
                     retorno += "";
                 }
 
-                switch (tipo)
+                switch(tipo)
                 {
                     case FileTipe.css:
                         retorno += "</style>";
@@ -100,7 +100,7 @@ namespace drualcman
             {
                 string retorno = string.Empty;
 
-                switch (tipo)
+                switch(tipo)
                 {
                     case FileTipe.css:
                         retorno = "<style type=\"text/css\">";
@@ -115,14 +115,14 @@ namespace drualcman
                     ficheros f = new ficheros();
                     string dir = f.RutaCompleta(folder);
 
-                    foreach (string item in fileName)
+                    foreach(string item in fileName)
                     {
                         string file = f.RutaCompleta(folder) + item;
-                        if (f.existeFichero(item, folder) == true)
+                        if(f.existeFichero(item, folder) == true)
                         {
                             StreamReader read = new StreamReader(file);
                             string content = read.ReadToEnd();
-                            if (tipo == FileTipe.css)
+                            if(tipo == FileTipe.css)
                             {
                                 content = content.Replace(Environment.NewLine, " ");
                                 content = content.Replace((char)10, ' ');
@@ -150,7 +150,7 @@ namespace drualcman
                     retorno += "";
                 }
 
-                switch (tipo)
+                switch(tipo)
                 {
                     case FileTipe.css:
                         retorno += "</style>";
@@ -177,7 +177,7 @@ namespace drualcman
                 string fichero = min;
 
                 ficheros f = new ficheros();
-                switch (tipo)
+                switch(tipo)
                 {
                     case FileTipe.css:
                         fichero += ".css";
@@ -192,17 +192,17 @@ namespace drualcman
                 string ok = string.Empty;
                 try
                 {
-                    for (int i = 0; i < fileName.Length; i++)
+                    for(int i = 0; i < fileName.Length; i++)
                     {
                         ok += "/* " + folder[i] + "/" + fileName[i];
-                        if (string.IsNullOrEmpty(folder[i]))
+                        if(string.IsNullOrEmpty(folder[i]))
                         {
                             ok += " (fichero remoto) */";
                             System.Net.WebClient wc = new System.Net.WebClient();
                             string content = wc.DownloadString(fileName[i]);
                             wc.Dispose();
                             wc = null;
-                            if (tipo == FileTipe.css)
+                            if(tipo == FileTipe.css)
                             {
                                 content = content.Replace(Environment.NewLine, " ");
                                 content = content.Replace((char)10, ' ');
@@ -222,7 +222,7 @@ namespace drualcman
                         }
                         else
                         {
-                            if (f.existeFichero(fileName[i], folder[i]))
+                            if(f.existeFichero(fileName[i], folder[i]))
                             {
                                 ok += " exist */";
                                 string file = f.RutaCompleta(folder[i]) + fileName[i];
@@ -230,7 +230,7 @@ namespace drualcman
                                 string content = read.ReadToEnd();
                                 System.Text.RegularExpressions.Regex rgx = new System.Text.RegularExpressions.Regex(@"(?=\/\*)(.*)(\*\/)");
                                 content = rgx.Replace(content, "");
-                                if (tipo == FileTipe.css)
+                                if(tipo == FileTipe.css)
                                 {
                                     content = content.Replace(Environment.NewLine, " ");
                                     content = content.Replace((char)10, ' ');
@@ -256,14 +256,14 @@ namespace drualcman
                         }
                     }
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     retorno = "/* exception " + ex.ToString() + "*/";
                 }
 
-                if (inline == true)
+                if(inline == true)
                 {
-                    switch (tipo)
+                    switch(tipo)
                     {
                         case FileTipe.css:
                             retorno += ok + "</style>";
@@ -276,7 +276,7 @@ namespace drualcman
                 else
                 {
                     f.guardaDato(fichero, ok, "dat");
-                    switch (tipo)
+                    switch(tipo)
                     {
                         case FileTipe.css:
                             retorno = "<link rel=\"stylesheet\" href=\"" + string.Format("/dat/" + fichero + "?v={0}", CacheExpire(0)) + "\" type=\"text/css\" />";
@@ -303,7 +303,7 @@ namespace drualcman
 
                 System.DateTime hoy = System.DateTime.Today;
 
-                if (days > 0) hoy = hoy.AddDays(days);
+                if(days > 0) hoy = hoy.AddDays(days);
 
                 retorno = hoy.ToString("d").Replace("/", "");
 
@@ -357,7 +357,7 @@ namespace drualcman
                 get
                 {
                     string dir;
-                    if (String.IsNullOrEmpty(AppDomain.CurrentDomain.RelativeSearchPath))
+                    if(String.IsNullOrEmpty(AppDomain.CurrentDomain.RelativeSearchPath))
                     {
                         dir = AppDomain.CurrentDomain.BaseDirectory; //exe folder for WinForms, Consoles, Windows Services
                     }

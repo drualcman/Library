@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text;
+﻿using System.Text;
 
 namespace drualcman
 {
@@ -19,12 +17,12 @@ namespace drualcman
             string nombreArchivo = "";
 
             //comprobar que el primer caracter es . si no agregarlo
-            if (extension.Substring(0, 1) != ".") extension = "." + extension;
+            if(extension.Substring(0, 1) != ".") extension = "." + extension;
 
             do
             {
                 nombreArchivo = strRuta + nombreFile() + extension;
-            } while (existeFichero(nombreArchivo));
+            } while(existeFichero(nombreArchivo));
 
             strRuta = nombreArchivo;
 
@@ -45,12 +43,12 @@ namespace drualcman
             string nombreArchivo = "";
 
             //comprobar que el primer caracter es . si no agregarlo
-            if (extension.Substring(0, 1) != ".") extension = "." + extension;
+            if(extension.Substring(0, 1) != ".") extension = "." + extension;
 
             do
             {
                 nombreArchivo = strRuta + pre + nombreFile(2) + extension;
-            } while (existeFichero(nombreArchivo));
+            } while(existeFichero(nombreArchivo));
 
             strRuta = nombreArchivo;
 
@@ -109,7 +107,7 @@ namespace drualcman
         public string guardaDato(string NombreArchivo, string Archivo, bool HEX, string Carpeta = "", bool NombreDinamico = false, string pre = "")
         {
             byte[] file;
-            if (HEX == true)
+            if(HEX == true)
             {
                 file = ConvertHexToBytes(Archivo);
             }
@@ -154,7 +152,7 @@ namespace drualcman
             Carpeta = checkCarpeta(Carpeta);
 
             //comprobar que el archivo no existe en la web
-            if (NombreDinamico == true)
+            if(NombreDinamico == true)
             {
                 do
                 {
@@ -162,11 +160,11 @@ namespace drualcman
                     //tantas veces como sea necesario para poder almacenar el archivo
                     strRuta = Carpeta + guardar;
                     guardar = pre + nombreFile() + Path.GetExtension(NombreArchivo);
-                } while (existeFichero(strRuta));
+                } while(existeFichero(strRuta));
             }
             else
             {
-                if (string.IsNullOrEmpty(pre)) guardar = NombreArchivo;
+                if(string.IsNullOrEmpty(pre)) guardar = NombreArchivo;
                 else guardar = pre + NombreArchivo;
             }
             strRuta = Carpeta + guardar;
@@ -178,7 +176,7 @@ namespace drualcman
                 save.Close();
                 return guardar;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 string info = "No se ha podido guardar: " + NombreArchivo +
                                 " \r\n Ruta destino: " + strRuta +
@@ -195,7 +193,7 @@ namespace drualcman
         public bool borrarArchivo(string nombreArchivo)
         {
             bool bResultado = true;
-            if (existeFichero(nombreArchivo) == true)
+            if(existeFichero(nombreArchivo) == true)
                 File.Delete(nombreArchivo);
             else
                 bResultado = false;
@@ -210,7 +208,7 @@ namespace drualcman
         public byte[] ConvertHexToBytes(string hex)
         {
             byte[] bytes = new byte[hex.Length / 2];
-            for (int i = 0; i < hex.Length; i += 2)
+            for(int i = 0; i < hex.Length; i += 2)
             {
                 bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
             }
@@ -333,7 +331,7 @@ namespace drualcman
             string retorno;
             try
             {
-                if (soloNombre) retorno = Path.GetFileNameWithoutExtension(file);
+                if(soloNombre) retorno = Path.GetFileNameWithoutExtension(file);
                 else retorno = Path.GetFileName(file);
             }
             catch
@@ -361,13 +359,13 @@ namespace drualcman
         /// <returns></returns>
         public string checkCarpeta(string carpeta)
         {
-            if (!string.IsNullOrEmpty(carpeta))
+            if(!string.IsNullOrEmpty(carpeta))
             {
                 carpeta = carpeta.Trim();        //delete spaces before and end
                                                  //comprobar que la carpeta tiene la \ al final
-                if (carpeta.Substring(carpeta.Length - 1, 1) != "\\") carpeta = carpeta + "\\";
+                if(carpeta.Substring(carpeta.Length - 1, 1) != "\\") carpeta = carpeta + "\\";
                 //comprobar que el primer caracter no es \
-                if (carpeta.Substring(0, 1) == "\\") carpeta = carpeta.Remove(0, 1);
+                if(carpeta.Substring(0, 1) == "\\") carpeta = carpeta.Remove(0, 1);
                 return carpeta;
             }
             else return carpeta;
@@ -384,16 +382,16 @@ namespace drualcman
 
             byte h;
 
-            for (h = 1; h <= 5; h++)
+            for(h = 1; h <= 5; h++)
             {
                 int i_letra = Convert.ToInt32(autoRand.Next(65, 90));
                 string letra = Convert.ToString(i_letra);
                 randomNum += letra;
-                for (int x = 0; x <= 2; x++)
+                for(int x = 0; x <= 2; x++)
                 {
                     randomNum += Convert.ToInt32(autoRand.Next(0, 9)).ToString();
                 }
-                for (int x = 0; x <= 2; x++)
+                for(int x = 0; x <= 2; x++)
                 {
                     i_letra = Convert.ToInt32(autoRand.Next(65, 90));
                     letra = Convert.ToString(i_letra);
@@ -416,20 +414,20 @@ namespace drualcman
             string randomNum = String.Empty;
             Random autoRand = new Random();
 
-            if (r == 0) r = 1;
+            if(r == 0) r = 1;
 
             byte h;
 
-            for (h = 1; h <= r; h++)
+            for(h = 1; h <= r; h++)
             {
                 int i_letra = Convert.ToInt32(autoRand.Next(65, 90));
                 string letra = Convert.ToString(i_letra);
                 randomNum += letra;
-                for (int x = 0; x <= 2; x++)
+                for(int x = 0; x <= 2; x++)
                 {
                     randomNum += Convert.ToInt32(autoRand.Next(0, 9)).ToString();
                 }
-                for (int x = 0; x <= 2; x++)
+                for(int x = 0; x <= 2; x++)
                 {
                     i_letra = Convert.ToInt32(autoRand.Next(65, 90));
                     letra = Convert.ToString(i_letra);
@@ -451,7 +449,7 @@ namespace drualcman
         {
             long originalPosition = 0;
 
-            if (stream.CanSeek)
+            if(stream.CanSeek)
             {
                 originalPosition = stream.Position;
                 stream.Position = 0;
@@ -464,14 +462,14 @@ namespace drualcman
                 int totalBytesRead = 0;
                 int bytesRead;
 
-                while ((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0)
+                while((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0)
                 {
                     totalBytesRead += bytesRead;
 
-                    if (totalBytesRead == readBuffer.Length)
+                    if(totalBytesRead == readBuffer.Length)
                     {
                         int nextByte = stream.ReadByte();
-                        if (nextByte != -1)
+                        if(nextByte != -1)
                         {
                             byte[] temp = new byte[readBuffer.Length * 2];
                             Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
@@ -483,7 +481,7 @@ namespace drualcman
                 }
 
                 byte[] buffer = readBuffer;
-                if (readBuffer.Length != totalBytesRead)
+                if(readBuffer.Length != totalBytesRead)
                 {
                     buffer = new byte[totalBytesRead];
                     Buffer.BlockCopy(readBuffer, 0, buffer, 0, totalBytesRead);
@@ -492,7 +490,7 @@ namespace drualcman
             }
             finally
             {
-                if (stream.CanSeek)
+                if(stream.CanSeek)
                 {
                     stream.Position = originalPosition;
                 }
@@ -517,19 +515,19 @@ namespace drualcman
             try
             {
                 byte[] bytes;
-                using (FileStream fsSource = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using(FileStream fsSource = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
                     // Read the source file into a byte array.
                     bytes = new byte[fsSource.Length];
                     int numBytesToRead = (int)fsSource.Length;
                     int numBytesRead = 0;
-                    while (numBytesToRead > 0)
+                    while(numBytesToRead > 0)
                     {
                         // Read may return anything from 0 to numBytesToRead.
                         int n = fsSource.Read(bytes, numBytesRead, numBytesToRead);
 
                         // Break when the end of the file is reached.
-                        if (n == 0)
+                        if(n == 0)
                             break;
 
                         numBytesRead += n;
@@ -539,19 +537,19 @@ namespace drualcman
                 }
                 return bytes;
             }
-            catch (FileLoadException ex)
+            catch(FileLoadException ex)
             {
                 string info = "We can't read the file: " + path +
                                 " \r\n " + ex.Message + " \r\n " + ex.StackTrace;
                 throw new ArgumentException(info);
             }
-            catch (FileNotFoundException ex)
+            catch(FileNotFoundException ex)
             {
                 string info = "We can't read the file: " + path +
                                 " \r\n " + ex.Message + " \r\n " + ex.StackTrace;
                 throw new ArgumentException(info);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 string info = "We can't read the file: " + path +
                                 " \r\n " + ex.Message + " \r\n " + ex.StackTrace;
@@ -567,7 +565,7 @@ namespace drualcman
         /// <param name="overwrite"></param>
         public void CopyFile(string originPath, string destinationPath, bool overwrite = true)
         {
-            if (existeFichero(originPath) && existeFichero(destinationPath))
+            if(existeFichero(originPath) && existeFichero(destinationPath))
                 File.Copy(originPath, destinationPath, overwrite);
             else
             {

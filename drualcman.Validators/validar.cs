@@ -56,7 +56,7 @@ namespace drualcman
         {
             bool bResutado = true;
 
-            if (string.IsNullOrEmpty(email)) bResutado = false;
+            if(string.IsNullOrEmpty(email)) bResutado = false;
             else
             {
                 string c;
@@ -65,36 +65,36 @@ namespace drualcman
                 string[] partes = email.Split('@');
                 string strComparacion = "._-abcdefghijklmnopqrstuvwxyz0123456789";
                 int nElementos = partes.GetUpperBound(0);
-                if (nElementos == 1)
+                if(nElementos == 1)
                 {
                     // para cada parte, compruebo varias cosas
-                    foreach (string parte in partes)
+                    foreach(string parte in partes)
                     {
                         // comprueba que tiene algún carácter
-                        if (parte.Length > 0)
+                        if(parte.Length > 0)
                         {
                             // para cada caracter  de la parte
-                            for (int i = 0; i < parte.Length; i++)
+                            for(int i = 0; i < parte.Length; i++)
                             {
                                 // tomo el caracter actual
                                 c = parte.Substring(i, 1).ToLower();
                                 // comprobar que es un caracter permitido
-                                if (strComparacion.IndexOf(c) < 0)
+                                if(strComparacion.IndexOf(c) < 0)
                                     bResutado = false;
                             }
                             // si la parte actual acaba o empieza en punto (.) la dirección no es válida                    
-                            if ((parte.Substring(0, 1) == ".") ||
+                            if((parte.Substring(0, 1) == ".") ||
                                 (parte.Substring(parte.Length - 1, 1) == "."))
                                 bResutado = false;
                             // calcular cuantos caracteres hay después del último punto (.) de la segunda
                             // parte del mail.
                             int l = parte.Length - parte.LastIndexOf('.');
                             // si el número de caracteres es distinto de 2 y 3, el mail no es válido
-                            if (l < 3)
+                            if(l < 3)
                                 bResutado = false;
                             // si encuentro dos puntos (..) seguidos, tampoco es válido
                             c = "..";
-                            if (partes[1].IndexOf(c) > 0)
+                            if(partes[1].IndexOf(c) > 0)
                                 bResutado = false;
                         }
                         else

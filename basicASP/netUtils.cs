@@ -91,7 +91,7 @@ namespace drualcman
                     request.AllowAutoRedirect = false;
                     bool retorno;
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    switch (response.StatusCode)
+                    switch(response.StatusCode)
                     {
                         case HttpStatusCode.NonAuthoritativeInformation:
                         case HttpStatusCode.NoContent:
@@ -173,7 +173,7 @@ namespace drualcman
                     ClientIP = string.Empty;
                 }
 
-                if (!string.IsNullOrEmpty(ClientIP))
+                if(!string.IsNullOrEmpty(ClientIP))
                 {
                     RealIP = ClientIP;
                 }
@@ -188,7 +188,7 @@ namespace drualcman
                         Forwaded = string.Empty;
                     }
 
-                    if (!string.IsNullOrEmpty(Forwaded))
+                    if(!string.IsNullOrEmpty(Forwaded))
                     {
                         RealIP = Forwaded;
                     }
@@ -241,7 +241,7 @@ namespace drualcman
                 try
                 {
                     string path = this.Context.Request.PathBase.Value;
-                    if (path.Length > 1) serverURL = this.Context.Request.Host.Host + path;
+                    if(path.Length > 1) serverURL = this.Context.Request.Host.Host + path;
                     else serverURL = this.Context.Request.Host.Host;
                 }
                 catch
@@ -249,7 +249,7 @@ namespace drualcman
                     serverURL = string.Empty;
                 }
 
-                if (soloNombre == false)
+                if(soloNombre == false)
                 {
                     return this.Context.Request.Scheme + "://" + serverURL;
                 }
@@ -276,16 +276,16 @@ namespace drualcman
                     serverURL = string.Empty;
                 }
 
-                if (seguro == false)
+                if(seguro == false)
                 {
-                    if (soloNombre == false)
+                    if(soloNombre == false)
                     {
                         serverURL = this.Context.Request.Scheme + "://" + serverURL;
                     }
                 }
                 else
                 {
-                    if (soloNombre == false)
+                    if(soloNombre == false)
                     {
                         serverURL = "https://" + serverURL;
                     }
@@ -354,7 +354,7 @@ namespace drualcman
             {
                 bool bResutado = true;
                 // preparar el correo en fotmato HTML   
-                if (eMail != "")
+                if(eMail != "")
                 {
                     // ENVÍO DEL FORMULARIO DE CONTACTO
                     // variables para la gestión del correo
@@ -397,21 +397,22 @@ namespace drualcman
                     cuerpoTexto += Environment.NewLine;
 
                     //comprobar que no tiene un fichero adjunto
-                    if (filename != "")
+                    if(filename != "")
                     {
                         //adjuntar el archivo fisicamente
                         archivos a = new archivos();
                         folder = a.checkCarpeta(folder);
 
                         //comprobar que no es una lista de archivo
-                        string fichero;
-                        if (filename.IndexOf(";") > 0)
+                        string fichero = string.Empty;
+                        string folder2 = "~/" + folder;
+                        if(filename.IndexOf(";") > 0)
                         {
                             //es una lista de archivos
                             string[] files = filename.Split(';');
-                            foreach (string file in files)
+                            foreach(string file in files)
                             {
-                                if (f.existeFichero(file.Trim(), folder))
+                                if(f.existeFichero(file.Trim(), folder))
                                 {
                                     // solo es un archivo
                                     fichero = folder + file.Trim();
@@ -419,22 +420,22 @@ namespace drualcman
                                     //
                                     // se elimina el archivo porque no estara bloqueado y era un archivo temporal
                                     //
-                                    if (temp == true) f.borrarArchivo(file.Trim(), folder);
+                                    if(temp == true) f.borrarArchivo(file.Trim(), folder);
                                 }
                                 else cuerpoTexto += basicHTML.a(urlFiles + folder.Replace("~", ""), file.Trim()) + Environment.NewLine;
                             }
                         }
                         else
                         {
-                            if (f.existeFichero(filename.Trim(), folder))
+                            if(f.existeFichero(filename.Trim(), folder))
                             {
                                 // solo es un archivo
-                                fichero = folder + filename.Trim();
+                                fichero = folder2 + filename.Trim();
                                 correo.Attachments.Add(new Attachment(a.GetStreamFile(fichero), System.IO.Path.GetFileName(fichero)));
                                 //
                                 // se elimina el archivo porque no estara bloqueado y era un archivo temporal
                                 //
-                                if (temp == true) f.borrarArchivo(filename.Trim(), folder);
+                                if(temp == true) f.borrarArchivo(filename.Trim(), folder);
                             }
                             else
                             {
@@ -447,17 +448,17 @@ namespace drualcman
 
                     cuerpoTexto += Environment.NewLine;
 
-                    if (!string.IsNullOrEmpty(fileHTML))
+                    if(!string.IsNullOrEmpty(fileHTML))
                     {
-                        if (IsBodyHtml == true)
+                        if(IsBodyHtml == true)
                         {
                             //insert link
-                            cuerpoTexto += basicHTML.a(knowServerURL() + folder + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
+                            cuerpoTexto += basicHTML.a(knowServerURL() + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
                         }
                         else
                         {
                             //inser texto where is it the file
-                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + folder + fileHTML + " to read it online (copy the link in your Internet browser)";
+                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
                         }
                     }
 
@@ -465,43 +466,43 @@ namespace drualcman
                     correo.Body = cuerpoTexto;
 
                     //hacer el envio a todas las direcciones encontradas
-                    if (eMail.IndexOf(";") > 0)
+                    if(eMail.IndexOf(";") > 0)
                     {
                         // extraer las direcciones
                         string[] Direcciones = eMail.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                         bool seguimiento;
-                        if (eMail.IndexOf("invite.trustpilot.com") < 0) seguimiento = false;
+                        if(eMail.IndexOf("invite.trustpilot.com") < 0) seguimiento = false;
                         else seguimiento = true;
 
                         byte s = 1;
                         bool enviado = false;
 
                         // recorrer las direcciones para realizar el envio
-                        foreach (string item in Direcciones)
+                        foreach(string item in Direcciones)
                         {
-                            if (item != "")
+                            if(item != "")
                             {
                                 //comprobar que tiene @
-                                if (item.IndexOf("@") > 0)
+                                if(item.IndexOf("@") > 0)
                                 {
                                     MailAddress nuevoCorreo = new MailAddress(item);
-                                    if (seguimiento)
+                                    if(seguimiento)
                                     {
-                                        if (s < 2) correo.To.Add(nuevoCorreo);
+                                        if(s < 2) correo.To.Add(nuevoCorreo);
                                         else correo.Bcc.Add(nuevoCorreo);
                                     }
                                     else correo.Bcc.Add(nuevoCorreo);
                                 }
 
-                                if (s >= numDestinatarios)
+                                if(s >= numDestinatarios)
                                 {
                                     try
                                     {
                                         smtp.Send(correo);
                                         enviado = true;
                                     }
-                                    catch (Exception ex)
+                                    catch(Exception ex)
                                     {
                                         string err = ex.ToString();
                                         enviado = false;
@@ -520,13 +521,13 @@ namespace drualcman
                             s++;
                         }
                         // enviar al resto de destinatarios
-                        if (enviado == false)
+                        if(enviado == false)
                         {
                             try
                             {
                                 smtp.Send(correo);
                             }
-                            catch (Exception ex)
+                            catch(Exception ex)
                             {
                                 string err = ex.ToString();
                                 //string datos = hostSMTP + ";" + userName + ";" + userPass + enableSsl.ToString();
@@ -546,7 +547,7 @@ namespace drualcman
                             correo.To.Add(eMail);
                             smtp.Send(correo);
                         }
-                        catch (Exception ex)
+                        catch(Exception ex)
                         {
                             string err = ex.ToString();
                             //string datos = hostSMTP + ";" + userName + ";" + userPass + enableSsl.ToString();
@@ -592,11 +593,11 @@ namespace drualcman
             {
                 string filename = string.Empty;
 
-                foreach (string item in filesname)
+                foreach(string item in filesname)
                 {
                     filename += item + "; ";
                 }
-                if (string.IsNullOrEmpty(filename)) filename = filename.TrimEnd().Remove(filename.Length - 2, 1);
+                if(string.IsNullOrEmpty(filename)) filename = filename.TrimEnd().Remove(filename.Length - 2, 1);
 
                 return EnviarMail(eMail, Asunto, cuerpoTexto, empresaRemitente, mailRemitente, hostSMTP, userName,
                                   userPass, numDestinatarios, IsBodyHtml, filename, folder, temp, enableSsl);
@@ -623,14 +624,14 @@ namespace drualcman
             {
                 string err = string.Empty;
                 // preparar el correo en fotmato HTML   
-                if (eMail != "")
+                if(eMail != "")
                 {
                     // ENVÍO DEL FORMULARIO DE CONTACTO
                     // variables para la gestión del correo
                     MailMessage correo = new MailMessage();
                     SmtpClient smtp = new SmtpClient(hostSMTP);
                     // identificación de usuario
-                    if (enableSsl) smtp.Port = 587;
+                    if(enableSsl) smtp.Port = 587;
                     smtp.EnableSsl = enableSsl;
                     //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                     //smtp.UseDefaultCredentials = false;
@@ -668,47 +669,61 @@ namespace drualcman
 
                     cuerpoTexto += Environment.NewLine;
 
+                    if(!string.IsNullOrEmpty(fileHTML))
+                    {
+                        if(IsBodyHtml == true)
+                        {
+                            //insert link
+                            cuerpoTexto += basicHTML.a(knowServerURL() + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
+                        }
+                        else
+                        {
+                            //inser texto where is it the file
+                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
+                        }
+                    }
+
                     // cuerpo del mail
                     correo.Body = cuerpoTexto;
 
                     //hacer el envio a todas las direcciones encontradas
-                    if (eMail.IndexOf(";") > 0)
+                    if(eMail.IndexOf(";") > 0)
                     {
                         // extraer las direcciones
                         string[] Direcciones = eMail.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                         bool seguimiento;
-                        if (eMail.IndexOf("invite.trustpilot.com") < 0) seguimiento = false;
+                        if(eMail.IndexOf("invite.trustpilot.com") < 0) seguimiento = false;
                         else seguimiento = true;
 
                         byte s = 1;
                         bool enviado = false;
                         int numDestinatarios = 50;
                         // recorrer las direcciones para realizar el envio
-                        foreach (string item in Direcciones)
+                        foreach(string item in Direcciones)
                         {
-                            if (item != "")
+                            if(item != "")
                             {
                                 //comprobar que tiene @
-                                if (item.IndexOf("@") > 0)
+                                if(item.IndexOf("@") > 0)
                                 {
                                     MailAddress nuevoCorreo = new MailAddress(item);
-                                    if (seguimiento)
+                                    if(seguimiento)
                                     {
-                                        if (s < 2) correo.To.Add(nuevoCorreo);
+                                        if(s < 2) correo.To.Add(nuevoCorreo);
                                         else correo.Bcc.Add(nuevoCorreo);
                                     }
                                     else correo.Bcc.Add(nuevoCorreo);
                                 }
 
-                                if (s >= numDestinatarios)
+                                if(s >= numDestinatarios)
                                 {
                                     try
                                     {
                                         smtp.Send(correo);
                                         enviado = true;
                                     }
-                                    catch (Exception ex)
+                                    catch(Exception ex)
                                     {
                                         err += "1: " + ex.ToString();
                                         enviado = false;
@@ -726,13 +741,13 @@ namespace drualcman
                             s++;
                         }
                         // enviar al resto de destinatarios
-                        if (enviado == false)
+                        if(enviado == false)
                         {
                             try
                             {
                                 smtp.Send(correo);
                             }
-                            catch (Exception ex)
+                            catch(Exception ex)
                             {
                                 err += "2: " + ex.ToString();
                             }
@@ -748,7 +763,7 @@ namespace drualcman
                             correo.To.Add(eMail);
                             smtp.Send(correo);
                         }
-                        catch (Exception ex)
+                        catch(Exception ex)
                         {
                             err = "3: " + ex.ToString();
                         }

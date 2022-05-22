@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿#nullable disable
 namespace drualcman
 {
     /// <summary>
@@ -50,7 +49,7 @@ namespace drualcman
             this.vars = string.Empty;
             this.error = string.Empty;
             //comprobar que el nombre de archivo tiene extension
-            if (string.IsNullOrEmpty(archivos.GetFileExtension(this.LogFile))) this.LogFile += ".log";
+            if(string.IsNullOrEmpty(archivos.GetFileExtension(this.LogFile))) this.LogFile += ".log";
         }
 
         private void writeLog()
@@ -66,7 +65,7 @@ namespace drualcman
 
                 archivos f = new archivos();
                 string file = f.checkCarpeta(this.LogFolder) + this.LogFile;
-                if (f.existeFichero(file))
+                if(f.existeFichero(file))
                 {
                     //append to actual log
                     using System.IO.StreamWriter z_varocioStreamWriter = new System.IO.StreamWriter(file, true, System.Text.Encoding.UTF8);

@@ -16,7 +16,7 @@ namespace drualcman
         public TModel Get<TModel>(string query = "") where TModel : new()
         {
             List<TModel> list = List<TModel>(query);
-            if (list.Any()) return list[0];
+            if(list.Any()) return list[0];
             else return new TModel();
         }
         #endregion
@@ -31,7 +31,7 @@ namespace drualcman
         public async Task<TModel> GetAsync<TModel>(string query = "") where TModel : new()
         {
             List<TModel> list = await ListAsync<TModel>(query);
-            if (list.Any()) return list[0];
+            if(list.Any()) return list[0];
             else return new TModel();
         }
         #endregion

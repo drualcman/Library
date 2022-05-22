@@ -20,7 +20,7 @@ namespace drualcman.Images
         {
             int width = Image.Width;
             int height = Image.Height;
-            if (width > maxWidth || height > maxHeight)
+            if(width > maxWidth || height > maxHeight)
             {
                 //The flips are in here to prevent any embedded image thumbnails -- usually from cameras
                 //from displaying as the thumbnail image later, in other words, we want a clean
@@ -29,7 +29,7 @@ namespace drualcman.Images
                 Image.RotateFlip(RotateFlipType.Rotate180FlipY);
 
                 float ratio;
-                if (width < height)
+                if(width < height)
                 {
                     ratio = width / (float)height;
                     width = maxWidth;
@@ -66,7 +66,7 @@ namespace drualcman.Images
 
             int width = Image.Width;
             int height = Image.Height;
-            if (width > maxWidth || height > maxHeight)
+            if(width > maxWidth || height > maxHeight)
             {
                 //The flips are in here to prevent any embedded image thumbnails -- usually from cameras
                 //from displaying as the thumbnail image later, in other words, we want a clean
@@ -75,7 +75,7 @@ namespace drualcman.Images
                 Image.RotateFlip(RotateFlipType.Rotate180FlipY);
 
                 float ratio;
-                if (width < height)
+                if(width < height)
                 {
                     ratio = width / (float)height;
                     width = maxWidth;
@@ -224,7 +224,7 @@ namespace drualcman.Images
             stringformat.LineAlignment = vertical;
             //si la posicion es 0,0 calcular donde esta el fina del archivo para poner el texto justo al final
             Point MiPOS = new Point();
-            if (posicion.Y == 0 && posicion.X == 0)
+            if(posicion.Y == 0 && posicion.X == 0)
             {
                 MiPOS.Y = bitmap.Height - 25;
                 MiPOS.X = 175;
@@ -264,7 +264,7 @@ namespace drualcman.Images
             stringformat.Alignment = horizontal;
             stringformat.LineAlignment = vertical;
             Point MiPOS = new Point();
-            if (posicion.Y == 0 && posicion.X == 0)
+            if(posicion.Y == 0 && posicion.X == 0)
             {
                 MiPOS.Y = bitmap.Height - 25;
                 MiPOS.X = 175;
@@ -306,7 +306,7 @@ namespace drualcman.Images
             stringformat.Alignment = horizontal;
             stringformat.LineAlignment = vertical;
             Point MiPOS = new Point();
-            if (posicion.Y == 0 && posicion.X == 0)
+            if(posicion.Y == 0 && posicion.X == 0)
             {
                 MiPOS.Y = bitmap.Height - 25;
                 MiPOS.X = 175;
@@ -339,7 +339,7 @@ namespace drualcman.Images
             stringformat.Alignment = horizontal;
             stringformat.LineAlignment = vertical;
             Point MiPOS = new Point();
-            if (posicion.Y == 0 && posicion.X == 0)
+            if(posicion.Y == 0 && posicion.X == 0)
             {
                 MiPOS.Y = bitmap.Height - 25;
                 MiPOS.X = 175;

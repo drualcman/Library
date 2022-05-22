@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\drualcman.Data\drualcman.Data.csproj" />
     <ProjectReference Include="..\drualcman.Numbers\drualcman.Numbers.csproj" />
   </ItemGroup>
 

@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\drualcman.Abstractions\drualcman.Abstractions.csproj" />
     <ProjectReference Include="..\drualcman.Converters\drualcman.Converters.csproj" />
+    <ProjectReference Include="..\drualcman.Data\drualcman.Data.csproj" />
     <ProjectReference Include="..\drualcman.Files\drualcman.Files.csproj" />
   </ItemGroup>
 

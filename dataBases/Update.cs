@@ -77,7 +77,7 @@ namespace drualcman
         public bool UpdateColumn(string table, string[] colName, object[] colValue, string[] indexColumn, object[] index)
         {
             bool result;
-            if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count() && indexColumn.Count() > 0)
+            if(!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count() && indexColumn.Count() > 0)
             {
                 using SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
                 result = ExecuteCommand(cmd);
@@ -103,7 +103,7 @@ namespace drualcman
         public async Task<bool> UpdateColumnAsync(string table, string[] colName, object[] colValue, string[] indexColumn, object[] index)
         {
             bool result;
-            if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count() && indexColumn.Count() > 0)
+            if(!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count() && indexColumn.Count() > 0)
             {
                 using SqlCommand cmd = SetUpdate(table, colName, colValue, indexColumn, index);
                 result = await ExecuteCommandAsync(cmd);
@@ -125,16 +125,16 @@ namespace drualcman
             using SqlCommand cmd = new SqlCommand();
             StringBuilder sql = new StringBuilder($"UPDATE {table} SET ");
             //check columns
-            for (i = 0; i < colName.Count(); i++)
+            for(i = 0; i < colName.Count(); i++)
             {
                 cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
                 sql.Append($" [{colName[i].Replace("[", "").Replace("]", "")}] = @value_{i},");
             }
             sql.Remove(sql.Length - 1, 1);
-            if (indexColumn.Count() > 0)
+            if(indexColumn.Count() > 0)
             {
                 sql.Append("  WHERE ");
-                for (i = 0; i < indexColumn.Count(); i++)
+                for(i = 0; i < indexColumn.Count(); i++)
                 {
                     cmd.Parameters.AddWithValue($"@index_{i}", index[i]);
                     sql.Append($" [{indexColumn[i].Replace("[", "").Replace("]", "")}]  = @index_{i} AND ");

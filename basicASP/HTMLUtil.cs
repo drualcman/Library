@@ -35,7 +35,7 @@ namespace drualcman
             {
                 string result = strTexto;
                 string param = string.Empty;
-                foreach (string tag in tags)
+                foreach(string tag in tags)
                 {
                     param += "(<((.|\n)?)" + tag.ToUpper() + ">)|";
                     param += "(<((.|\n)?)" + tag.ToLower() + ">)|";
@@ -73,7 +73,7 @@ namespace drualcman
             /// <returns></returns>
             public static string sanitize(string texto)
             {
-                if (!string.IsNullOrEmpty(texto))
+                if(!string.IsNullOrEmpty(texto))
                 {
                     texto = texto.Replace("\n\r", "\n");
                     texto = texto.Replace("\r\n", "\n");

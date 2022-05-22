@@ -44,10 +44,10 @@ namespace drualcman
         public int InsertInDB(string table, string[] colName, object[] colValue, bool returnScope)
         {
             int result;
-            if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
+            if(!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
             {
                 using SqlCommand cmd = SetInsert(table, colName, colValue);
-                if (returnScope)
+                if(returnScope)
                 {
                     cmd.CommandText += "; select SCOPE_IDENTITY()";
                     try
@@ -76,12 +76,12 @@ namespace drualcman
         public async Task<int> InsertInDBAsync(string table, string[] colName, object[] colValue, bool returnScope)
         {
             int result;
-            if (!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
+            if(!string.IsNullOrEmpty(table) && colName.Count() > 0 && colName.Count() == colValue.Count())
             {
                 using SqlCommand cmd = SetInsert(table, colName, colValue);
                 await this.OpenConnectionAsync();
                 cmd.Connection = this.DbConnection;
-                if (returnScope)
+                if(returnScope)
                 {
                     cmd.CommandText += " select SCOPE_IDENTITY()";
                     try
@@ -118,7 +118,7 @@ namespace drualcman
 
             SqlCommand cmd = new SqlCommand();
             //check columns
-            for (i = 0; i < colName.Count(); i++)
+            for(i = 0; i < colName.Count(); i++)
             {
                 columns.Append($"[{colName[i].Replace("[", "").Replace("]", "")}],");
                 values.Append($"@value_{i},");

@@ -35,7 +35,7 @@ namespace drualcman
             delimeter += " ";
             try
             {
-                foreach (var item in list)
+                foreach(var item in list)
                 {
                     retorno += item.ToString() + delimeter;
                 }
@@ -74,19 +74,7 @@ namespace drualcman
         /// <returns></returns>
         public static string FixedLengthString(string MyValue, int length)
         {
-            string retorno = string.Empty;
-            if (MyValue.Length < length)
-            {
-                //rellenar con espacios en blanco hasta el final del string
-                retorno = MyValue;
-                for (int i = MyValue.Length; i < length; i++)
-                {
-                    retorno += " ";
-                }
-            }
-            else if (MyValue.Length > length) retorno = MyValue.Substring(0, length);
-            else retorno = MyValue;
-            return retorno;
+            return FixedLengthString(length, MyValue);
         }
 
         /// <summary>
@@ -98,16 +86,16 @@ namespace drualcman
         public static string FixedLengthString(int length, string MyValue)
         {
             string retorno = string.Empty;
-            if (MyValue.Length < length)
+            if(MyValue.Length < length)
             {
                 //rellenar con espacios en blanco hasta el final del string
                 retorno = MyValue;
-                for (int i = MyValue.Length; i < length; i++)
+                for(int i = MyValue.Length; i < length; i++)
                 {
                     retorno += " ";
                 }
             }
-            else if (MyValue.Length > length) retorno = MyValue.Substring(0, length);
+            else if(MyValue.Length > length) retorno = MyValue.Substring(0, length);
             else retorno = MyValue;
             return retorno;
         }
@@ -122,16 +110,16 @@ namespace drualcman
         public static string FixedLengthString(int length, string MyValue, string relleno)
         {
             string retorno = string.Empty;
-            if (MyValue.Length < length)
+            if(MyValue.Length < length)
             {
                 //rellenar con espacios en blanco hasta el final del string
                 retorno = MyValue;
-                for (int i = MyValue.Length; i < length; i++)
+                for(int i = MyValue.Length; i < length; i++)
                 {
                     retorno += relleno;
                 }
             }
-            else if (MyValue.Length > length) retorno = MyValue.Substring(0, length);
+            else if(MyValue.Length > length) retorno = MyValue.Substring(0, length);
             else retorno = MyValue;
             return retorno;
         }
@@ -146,16 +134,16 @@ namespace drualcman
         public static string FixedLengthString(string MyValue, int length, string relleno)
         {
             string retorno = string.Empty;
-            if (MyValue.Length < length)
+            if(MyValue.Length < length)
             {
                 //rellenar con espacios en blanco hasta el final del string
                 retorno = MyValue;
-                for (int i = MyValue.Length; i < length; i++)
+                for(int i = MyValue.Length; i < length; i++)
                 {
                     retorno += relleno;
                 }
             }
-            else if (MyValue.Length > length) retorno = MyValue.Substring(0, length);
+            else if(MyValue.Length > length) retorno = MyValue.Substring(0, length);
             else retorno = MyValue;
             return retorno;
         }
@@ -171,9 +159,9 @@ namespace drualcman
             char ch;
             int num1 = 0;
             int num2 = 0;
-            for (int i = 0; i < size; i++)
+            for(int i = 0; i < size; i++)
             {
-                while (num1 == num2)
+                while(num1 == num2)
                 {
                     num2 = numeros.numeroAleatorio(65, 90);
                 }
@@ -196,9 +184,9 @@ namespace drualcman
             Regex comprueba = new Regex(@"[a-zA-ZñÑ" + adicionales + "]");      //definicion de los caracteres permitidos
             MatchCollection matches = comprueba.Matches(texto);
             string retorno = string.Empty;
-            if (matches.Count > 0)
+            if(matches.Count > 0)
             {
-                foreach (Match item in matches)
+                foreach(Match item in matches)
                 {
                     retorno += item.Value;
                 }
@@ -220,7 +208,7 @@ namespace drualcman
 
             string id = string.Empty;
 
-            if (youtubeMatch.Success)
+            if(youtubeMatch.Success)
                 id = youtubeMatch.Groups[youtubeMatch.Groups.Count - 1].Value;
 
             return id;
@@ -239,7 +227,7 @@ namespace drualcman
 
             string id = string.Empty;
 
-            if (youtubeMatch.Success)
+            if(youtubeMatch.Success)
                 id = youtubeMatch.Groups[youtubeMatch.Groups.Count - 1].Value;
 
             return id;
@@ -285,13 +273,13 @@ namespace drualcman
         {
             string tab = string.Empty;
 
-            for (int i = 0; i < spaces; i++)
+            for(int i = 0; i < spaces; i++)
             {
                 tab += " ";
             }
 
             string retorno = string.Empty; ;
-            for (int i = 0; i < tabs; i++)
+            for(int i = 0; i < tabs; i++)
             {
                 retorno += tab;
             }

@@ -26,7 +26,7 @@ namespace drualcman.Data.Helpers
         {
             try
             {
-                if (column.TableIndex > 0)
+                if(column.TableIndex > 0)
                 {
                     SetValue(column.PropertyType, column.Column, Item.GetPropValue(Tables[column.TableIndex].Instance.Name), row);
                 }
@@ -35,7 +35,7 @@ namespace drualcman.Data.Helpers
                     SetValue(column.PropertyType, column.Column, Item, row);
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 string err = ex.Message;
                 Console.WriteLine("ex 2 {0}", err);
@@ -48,12 +48,12 @@ namespace drualcman.Data.Helpers
         {
             try
             {
-                if (value != null && value.GetType() != typeof(DBNull))
+                if(value != null && value.GetType() != typeof(DBNull))
                 {
                     sender.SetValue(destination, Convert.ChangeType(value, Nullable.GetUnderlyingType(sender.PropertyType)));
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 string err = ex.Message;
                 Console.WriteLine("ex 3 {0}", err);
@@ -63,14 +63,14 @@ namespace drualcman.Data.Helpers
 
         public void SetValue(string propertyType, PropertyInfo sender, object destination, object value)
         {
-            if (value.GetType() != typeof(DBNull))
+            if(value.GetType() != typeof(DBNull))
             {
-                switch (propertyType)
+                switch(propertyType)
                 {
                     case "bool":
-                        if (int.TryParse(value.ToString(), out int test))
+                        if(int.TryParse(value.ToString(), out int test))
                         {
-                            if (test == 0) sender.SetValue(destination, false);
+                            if(test == 0) sender.SetValue(destination, false);
                             else sender.SetValue(destination, true);
                         }
                         else sender.SetValue(destination, Convert.ToBoolean(value));
@@ -98,10 +98,10 @@ namespace drualcman.Data.Helpers
                         break;
                     case "date":
                         DateTime date;
-                        if (!DateTime.TryParse(value.ToString(), out date))
+                        if(!DateTime.TryParse(value.ToString(), out date))
                         {
                             TimeSpan time;
-                            if (!TimeSpan.TryParse(value.ToString(), out time))
+                            if(!TimeSpan.TryParse(value.ToString(), out time))
                             {
                                 time = new TimeSpan(DateTime.Now.Ticks);
                             }
@@ -113,12 +113,12 @@ namespace drualcman.Data.Helpers
                         sender.SetValue(destination, value);
                         break;
                     default:
-                        if (sender.PropertyType.Equals(value.GetType())) sender.SetValue(destination, value);
+                        if(sender.PropertyType.Equals(value.GetType())) sender.SetValue(destination, value);
                         else
                         {
-                            if (sender.PropertyType.BaseType == typeof(Enum))
+                            if(sender.PropertyType.BaseType == typeof(Enum))
                             {
-                                if (int.TryParse(value.ToString(), out int index))
+                                if(int.TryParse(value.ToString(), out int index))
                                 {
                                     sender.SetValue(destination, index);
                                 }

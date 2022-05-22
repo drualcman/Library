@@ -21,7 +21,7 @@ namespace drualcman
 
             bool result;
 
-            if (cmd != null)
+            if(cmd != null)
             {
                 log.start("ExecuteCommand(cmd)", cmd.CommandText, this.rutaDDBB);
                 try
@@ -34,9 +34,9 @@ namespace drualcman
                     cmd.ExecuteNonQuery();
                     cmd.Connection.Close();
                     result = true;
-                    if (this.LogResults) log.end(result.ToString());
+                    if(this.LogResults) log.end(result.ToString());
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     result = false;
                     log.end(result, ex);
@@ -77,9 +77,9 @@ namespace drualcman
                 cmd.CommandTimeout = timeout;
                 result = cmd.ExecuteScalar();
                 cmd.Connection.Close();
-                if (this.LogResults) log.end(result?.ToString());
+                if(this.LogResults) log.end(result?.ToString());
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 result = null;
                 log.end(result, ex);
@@ -110,7 +110,7 @@ namespace drualcman
                 cmd.CommandText = sql;
                 result = Reader(cmd, timeout);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 result = null;
                 log.end(result, ex);
@@ -132,9 +132,9 @@ namespace drualcman
                 cmd.CommandTimeout = timeout;
                 result = cmd.ExecuteReader();
                 cmd.Connection.Close();
-                if (this.LogResults) log.end(result);
+                if(this.LogResults) log.end(result);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 result = null;
                 log.end(result, ex);
@@ -153,7 +153,7 @@ namespace drualcman
 
             bool result;
 
-            if (cmd != null)
+            if(cmd != null)
             {
                 log.start("ExecuteCommand(cmd)", cmd.CommandText, this.rutaDDBB);
                 try
@@ -166,9 +166,9 @@ namespace drualcman
                     await cmd.ExecuteNonQueryAsync();
                     result = true;
                     await cmd.Connection.CloseAsync();
-                    if (this.LogResults) log.end(result.ToString());
+                    if(this.LogResults) log.end(result.ToString());
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     result = false;
                     log.end(result, ex);
@@ -204,9 +204,9 @@ namespace drualcman
                 cmd.CommandTimeout = timeout;
                 result = await cmd.ExecuteScalarAsync();
                 await cmd.Connection.CloseAsync();
-                if (this.LogResults) log.end(result?.ToString());
+                if(this.LogResults) log.end(result?.ToString());
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 result = null;
                 log.end(result, ex);

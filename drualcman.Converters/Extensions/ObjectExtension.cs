@@ -14,13 +14,13 @@ namespace drualcman.Converters.Extensions
             string data;
             try
             {
-                if (o != null)
+                if(o != null)
                 {
-                    if (Objetos.GetTipo(o).ToLower() == "dataset")
+                    if(o.GetType() == typeof(DataSet))
                     {
                         data = DataSetConverter.ToJson((DataSet)o);
                     }
-                    else if (Objetos.GetTipo(o).ToLower() == "datatable")
+                    else if(o.GetType() == typeof(DataTable))
                     {
                         data = DataTableConverter.ToJson((DataTable)o);
                     }
@@ -28,7 +28,7 @@ namespace drualcman.Converters.Extensions
                 }
                 else data = "{\"Object\":\"NULL\"}";
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 data = $"{{\"Exception\":\"{ex.Message}\"}}";
             }

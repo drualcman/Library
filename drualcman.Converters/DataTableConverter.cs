@@ -33,15 +33,6 @@ namespace drualcman.Converters
         }
 
         /// <summary>
-        /// Get list of object send from data table
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static List<TModel> ToList<TModel>(DataTable dt) where TModel : new()
-            => dt.ToList<TModel>();
-
-        /// <summary>
         /// Convert DataTable to Json
         /// </summary>
         /// <param name="dt"></param>
@@ -61,16 +52,6 @@ namespace drualcman.Converters
             DataTable dt = new DataTable();
             return dt.FromStreamAsync(data, separator);
         }
-
-        /// <summary>
-        /// Get list of object send from data table
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static Task<List<TModel>> ToListAsync<TModel>(DataTable dt) where TModel : new()
-            => dt.ToListAsync<TModel>();
-
         #endregion
     }
 }

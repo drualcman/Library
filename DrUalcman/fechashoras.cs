@@ -30,7 +30,7 @@ namespace drualcman
         public string ConvertirFechaSQL(DateTime Fecha, bool hora)
         {
             //convertir la fecha al format admitido por SQL
-            if (hora == false) return string.Format("{0:yyyy/MM/dd}", Fecha);
+            if(hora == false) return string.Format("{0:yyyy/MM/dd}", Fecha);
             else return string.Format("{0:yyyy/MM/dd HH:mm:ss}", Fecha);
         }
 
@@ -135,8 +135,8 @@ namespace drualcman
         {
             string formatHour = "";
 
-            if (tag == "")
-                if (showDays == false)
+            if(tag == "")
+                if(showDays == false)
                     formatHour = string.Format(format, time.Hours, time.Minutes, time.Seconds);
                 else
                     formatHour = string.Format("{3}D" + format, time.Hours, time.Minutes, time.Seconds, time.Days);
@@ -159,15 +159,15 @@ namespace drualcman
             int hor = 0, min = 0, seg = 0;
             int days = 0, month = 0, years = 0;
             hor = (int)(secs / 3600);            //calcular las horas
-            while (hor > 23)                    //calcular los dias, meses o años pasados
+            while(hor > 23)                    //calcular los dias, meses o años pasados
             {
                 secs = secs - 86400;
                 hor = (int)(secs / 3600);
                 days++;
-                if (days > 30)
+                if(days > 30)
                 {
                     month++;
-                    if (month > 12)
+                    if(month > 12)
                     {
                         years++;
                         month = 0;
@@ -179,7 +179,7 @@ namespace drualcman
             min = (int)(secs / 60);                  //calcular los minutos que hay en los segundos restantes
             seg = (int)(secs - (min * 60));            //calcular los segundos restantes al quitar los minutos
 
-            if (showDays == true) return string.Format(formatDays, years, month, days) + string.Format(formatHours, hor, min, seg);        //decuelve años, minutos, dias, horas:minutos:segundos
+            if(showDays == true) return string.Format(formatDays, years, month, days) + string.Format(formatHours, hor, min, seg);        //decuelve años, minutos, dias, horas:minutos:segundos
             else return string.Format(formatHours, hor, min, seg);            //devuelve solo horas:minutos:segundos
         }
 
@@ -200,10 +200,10 @@ namespace drualcman
             seg = secs.Seconds;         //calcular los segundos restantes al quitar los minutos
             //calcular los años, meses y dias
             days = secs.Days;          //recoger el total de dias
-            while (days > 30)
+            while(days > 30)
             {
                 days -= 30;
-                if (month > 12)
+                if(month > 12)
                 {
                     years++;
                     month = 0;
@@ -211,7 +211,7 @@ namespace drualcman
                 else month++;
             }
 
-            if (showDays == true) return string.Format(formatDays, years, month, days) + string.Format(formatHours, hor, min, seg);        //decuelve años, minutos, dias, horas:minutos:segundos
+            if(showDays == true) return string.Format(formatDays, years, month, days) + string.Format(formatHours, hor, min, seg);        //decuelve años, minutos, dias, horas:minutos:segundos
             else return string.Format(formatHours, hor, min, seg);            //devuelve solo horas:minutos:segundos
         }
 
@@ -262,7 +262,7 @@ namespace drualcman
                     IFormatProvider culture = new System.Globalization.CultureInfo("en-EN");
                     convertedDate = DateTime.Parse(fecha, culture, System.Globalization.DateTimeStyles.AssumeLocal);
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     // it's error the string is not in the proper format or format unknow.
                     ArgumentException err = new ArgumentException(string.Format("'{0}' is not in the proper format.\r\nSystem Error: {1}", fecha, ex));
@@ -295,7 +295,7 @@ namespace drualcman
                     IFormatProvider culture = new System.Globalization.CultureInfo("en-AU");
                     convertedDate = DateTime.Parse(fecha.ToString(), culture);
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     // it's error the string is not in the proper format or format unknown.
                     ArgumentException err = new ArgumentException(string.Format("'{0}' is not in the proper format.\r\nSystem Error: {1}", fecha, ex));
@@ -320,13 +320,13 @@ namespace drualcman
 
             try
             {
-                if (reduct == 0)
+                if(reduct == 0)
                 {
                     retorno = meses[nMes - 1];
                 }
                 else
                 {
-                    if (reduct > meses[nMes - 1].Length) reduct = meses[nMes - 1].Length;
+                    if(reduct > meses[nMes - 1].Length) reduct = meses[nMes - 1].Length;
                     retorno = meses[nMes - 1].Substring(0, reduct);
                 }
             }
@@ -358,9 +358,9 @@ namespace drualcman
                 Anos = (int)Math.Ceiling(Difference.Days / 365.25);
 
                 Anos = dFin.Year - MiNacimiento.Year;
-                if (dFin.Month <= MiNacimiento.Month)
+                if(dFin.Month <= MiNacimiento.Month)
                 {
-                    if (dFin.Day < MiNacimiento.Day) Anos--;
+                    if(dFin.Day < MiNacimiento.Day) Anos--;
                 }
             }
             catch
@@ -475,7 +475,7 @@ namespace drualcman
             string retorno = string.Empty;
             DateTime hour = DateTime.Now;
 
-            switch (tipo)
+            switch(tipo)
             {
                 case TipoTiempo.Years:
                     hour = hour.AddYears(Convert.ToInt16(add));
@@ -520,7 +520,7 @@ namespace drualcman
         {
             string retorno = string.Empty;
 
-            switch (tipo)
+            switch(tipo)
             {
                 case TipoTiempo.Years:
                     fechahora = fechahora.AddYears(Convert.ToInt16(add));
@@ -573,12 +573,12 @@ namespace drualcman
             {
                 fecha = new DateTime(year, month, c);
 
-                if (fecha.DayOfWeek == sel)
+                if(fecha.DayOfWeek == sel)
                     dia = c;
                 else
                     c++;
 
-            } while (dia == 0);
+            } while(dia == 0);
 
             return dia;
         }
@@ -661,22 +661,22 @@ namespace drualcman
 
                 // Try common simple words like "yesterday".
                 var result = TryParseCommonDateTime(input);
-                if (result.HasValue)
+                if(result.HasValue)
                     return result.Value;
 
                 // Try common simple words like "last week".
                 result = TryParseLastOrNextCommonDateTime(input);
-                if (result.HasValue)
+                if(result.HasValue)
                     return result.Value;
 
                 // Try simple format like "+1 week".
                 result = TryParseSimpleRelativeDateTime(input);
-                if (result.HasValue)
+                if(result.HasValue)
                     return result.Value;
 
                 // Try first the full format like "1 day 2 hours 10 minutes ago".
                 result = TryParseCompleteRelativeDateTime(input);
-                if (result.HasValue)
+                if(result.HasValue)
                     return result.Value;
 
                 // Try parse fixed dates like "01/01/2000". or not english
@@ -685,7 +685,7 @@ namespace drualcman
 
             private static DateTime? TryParseCommonDateTime(string input)
             {
-                switch (input)
+                switch(input)
                 {
                     case "now":
                         return DateTime.Now;
@@ -703,7 +703,7 @@ namespace drualcman
             private DateTime? TryParseLastOrNextCommonDateTime(string input)
             {
                 var match = _basicRelativeRegex.Match(input);
-                if (!match.Success)
+                if(!match.Success)
                     return null;
 
                 var unit = match.Groups[2].Value;
@@ -714,7 +714,7 @@ namespace drualcman
             private DateTime? TryParseSimpleRelativeDateTime(string input)
             {
                 var match = _simpleRelativeRegex.Match(input);
-                if (!match.Success)
+                if(!match.Success)
                     return null;
 
                 var delta = Convert.ToInt32(match.Groups[1].Value);
@@ -725,7 +725,7 @@ namespace drualcman
             private DateTime? TryParseCompleteRelativeDateTime(string input)
             {
                 var match = _completeRelativeRegex.Match(input);
-                if (!match.Success)
+                if(!match.Success)
                     return null;
 
                 var values = match.Groups[1].Captures;
@@ -735,7 +735,7 @@ namespace drualcman
 
                 var dateTime = UnitIncludeTime(units) ? DateTime.Now : DateTime.Today;
 
-                for (int i = 0; i < values.Count; ++i)
+                for(int i = 0; i < values.Count; ++i)
                 {
                     var value = sign * Convert.ToInt32(values[i].Value);
                     var unit = units[i].Value;
@@ -755,7 +755,7 @@ namespace drualcman
             /// <returns>Relative datetime</returns>
             private static DateTime AddOffset(string unit, int value, DateTime dateTime)
             {
-                switch (unit)
+                switch(unit)
                 {
                     case "year":
                         return dateTime.AddYears(value);
@@ -790,15 +790,15 @@ namespace drualcman
 
             private static bool UnitIncludeTime(CaptureCollection units)
             {
-                foreach (Capture unit in units)
-                    if (UnitIncludesTime(unit.Value))
+                foreach(Capture unit in units)
+                    if(UnitIncludesTime(unit.Value))
                         return true;
                 return false;
             }
 
             private static bool UnitIncludesTime(string unit)
             {
-                switch (unit)
+                switch(unit)
                 {
                     case "hour":
                     case "minute":

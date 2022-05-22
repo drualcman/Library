@@ -53,12 +53,12 @@ namespace drualcman.Converters
             table.TableName = "Tabla";
 
             // Add columns.
-            for (int i = 0; i < columnas.Length; i++)
+            for(int i = 0; i < columnas.Length; i++)
             {
                 table.Columns.Add(columnas[i]);
             }
             // Add rows.
-            foreach (var array in filas)
+            foreach(var array in filas)
             {
 
                 table.Rows.Add(array);
@@ -92,14 +92,14 @@ namespace drualcman.Converters
                 System.ComponentModel.TypeDescriptor.GetProperties(typeof(T));
             DataTable table = new DataTable();
             table.TableName = "Tabla";
-            for (int i = 0; i < props.Count; i++)
+            for(int i = 0; i < props.Count; i++)
             {
                 System.ComponentModel.PropertyDescriptor prop = props[i];
-                if (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                if(prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
                     table.Columns.Add(prop.Name, prop.PropertyType.GetGenericArguments()[0]);
                 else
                 {
-                    if (prop.PropertyType.IsArray)
+                    if(prop.PropertyType.IsArray)
                     {
                         table.Columns.Add(prop.Name, typeof(string));
                     }
@@ -108,14 +108,14 @@ namespace drualcman.Converters
                 }
             }
             object[] values = new object[props.Count];
-            foreach (T item in data)
+            foreach(T item in data)
             {
-                for (int i = 0; i < values.Length; i++)
+                for(int i = 0; i < values.Length; i++)
                 {
-                    if (props[i].PropertyType.IsArray)
+                    if(props[i].PropertyType.IsArray)
                     {
                         values[i] = GetPropiedades(props[i].GetValue(item));
-                        if (values[i].ToString().ToLower().IndexOf("length : 0") >= 0) values[i] = string.Empty;
+                        if(values[i].ToString().ToLower().IndexOf("length : 0") >= 0) values[i] = string.Empty;
                     }
                     else values[i] = props[i].GetValue(item);
                 }
@@ -137,7 +137,7 @@ namespace drualcman.Converters
             List<T> lst = new List<T>();
 
             // go through each row
-            foreach (DataRow r in tbl.Rows)
+            foreach(DataRow r in tbl.Rows)
             {
                 // add to the list
                 lst.Add(CreateItemFromRow<T>(r));
@@ -157,13 +157,13 @@ namespace drualcman.Converters
             //https://stackoverflow.com/questions/17398019/convert-datatable-to-json-in-c-sharp                
             StringBuilder jsonString = new StringBuilder();
 
-            if (ds.Tables[0].Rows.Count > 0)
+            if(ds.Tables[0].Rows.Count > 0)
             {
                 jsonString.Append("[");
-                for (int rows = 0; rows < ds.Tables[0].Rows.Count; rows++)
+                for(int rows = 0; rows < ds.Tables[0].Rows.Count; rows++)
                 {
                     jsonString.Append("{");
-                    for (int cols = 0; cols < ds.Tables[0].Columns.Count; cols++)
+                    for(int cols = 0; cols < ds.Tables[0].Columns.Count; cols++)
                     {
                         jsonString.Append(@"""" + ds.Tables[0].Columns[cols].ColumnName + @""":");
                     }
@@ -192,23 +192,23 @@ namespace drualcman.Converters
             string retorno = string.Empty;
             string caracter;
             string siguiente;
-            for (int i = 0; i < text.Length; i++)
+            for(int i = 0; i < text.Length; i++)
             {
                 caracter = text.Substring(i, 1);
                 int n = i + 1;
-                if (n < text.Length)
+                if(n < text.Length)
                 {
                     siguiente = text.Substring(n, 1);
-                    if (caracter == "," && siguiente != "\"")
+                    if(caracter == "," && siguiente != "\"")
                     {
-                        if (caracter == "," && siguiente != "{") retorno += string.Empty;
-                        else if (caracter == "," && siguiente == " ")
+                        if(caracter == "," && siguiente != "{") retorno += string.Empty;
+                        else if(caracter == "," && siguiente == " ")
                         {
                             n++;
                             siguiente = text.Substring(n, 1);
-                            if (caracter == "," && siguiente != "\"")
+                            if(caracter == "," && siguiente != "\"")
                             {
-                                if (caracter == "," && siguiente != "{") retorno += string.Empty;
+                                if(caracter == "," && siguiente != "{") retorno += string.Empty;
                                 else retorno += caracter;
                             }
                             else retorno += caracter;
@@ -226,22 +226,22 @@ namespace drualcman.Converters
         {
             //http://www.c-sharpcorner.com/blogs/convert-json-string-to-datatable-in-asp-net1
             DataTable dt = new DataTable();
-            if (!string.IsNullOrEmpty(jsonString) && jsonString.ToLower() != "undefined")
+            if(!string.IsNullOrEmpty(jsonString) && jsonString.ToLower() != "undefined")
             {
                 jsonString = jsonString.Replace("}, {", "},{");
                 jsonString = CheckComa(jsonString);
                 string[] jsonStringArray = System.Text.RegularExpressions.Regex.Split(jsonString.Replace("[", "").Replace("]", ""), "},{");
                 List<string> ColumnsName = new List<string>();
-                foreach (string jSA in jsonStringArray)
+                foreach(string jSA in jsonStringArray)
                 {
                     string[] jsonStringData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");
-                    foreach (string ColumnsNameData in jsonStringData)
+                    foreach(string ColumnsNameData in jsonStringData)
                     {
                         try
                         {
                             int idx = ColumnsNameData.IndexOf(":");
                             string ColumnsNameString = ColumnsNameData.Substring(0, idx - 1).Replace("\"", "").Trim();
-                            if (!ColumnsName.Contains(ColumnsNameString))
+                            if(!ColumnsName.Contains(ColumnsNameString))
                             {
                                 ColumnsName.Add(ColumnsNameString);
                             }
@@ -258,16 +258,16 @@ namespace drualcman.Converters
                     }
                     break;
                 }
-                foreach (string AddColumnName in ColumnsName)
+                foreach(string AddColumnName in ColumnsName)
                 {
                     dt.Columns.Add(AddColumnName);
                 }
-                foreach (string jSA in jsonStringArray)
+                foreach(string jSA in jsonStringArray)
                 {
                     string[] RowData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");
                     DataRow nr = dt.NewRow();
                     int columnNumber = 0;       //reset index of the column per each element
-                    foreach (string rowData in RowData)
+                    foreach(string rowData in RowData)
                     {
                         try
                         {
@@ -290,22 +290,22 @@ namespace drualcman.Converters
         public static List<Dictionary<string, string>> JsonStringToListDictionary(string jsonString)
         {
             List<Dictionary<string, string>> dt = new List<Dictionary<string, string>>();
-            if (!string.IsNullOrEmpty(jsonString) && jsonString.ToLower() != "undefined")
+            if(!string.IsNullOrEmpty(jsonString) && jsonString.ToLower() != "undefined")
             {
                 jsonString = jsonString.Replace("}, {", "},{");
                 jsonString = CheckComa(jsonString);
                 string[] jsonStringArray = System.Text.RegularExpressions.Regex.Split(jsonString.Replace("[", "").Replace("]", ""), "},{");
                 List<string> ColumnsName = new List<string>();
-                foreach (string jSA in jsonStringArray)
+                foreach(string jSA in jsonStringArray)
                 {
                     string[] jsonStringData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");
-                    foreach (string rowData in jsonStringData)
+                    foreach(string rowData in jsonStringData)
                     {
                         try
                         {
                             int idx = rowData.IndexOf(":");
                             string ColumnsNameString = rowData.Substring(0, idx - 1).Replace("\"", "").Trim();
-                            if (!ColumnsName.Contains(ColumnsNameString))
+                            if(!ColumnsName.Contains(ColumnsNameString))
                             {
                                 ColumnsName.Add(ColumnsNameString);
                             }
@@ -322,13 +322,13 @@ namespace drualcman.Converters
                     }
                     break;
                 }
-                foreach (string jSA in jsonStringArray)
+                foreach(string jSA in jsonStringArray)
                 {
 
                     string[] RowData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");
                     int columnNumber = 0;       //reset index of the column per each element
                     Dictionary<string, string> valuePairs = new Dictionary<string, string>();
-                    foreach (string rowData in RowData)
+                    foreach(string rowData in RowData)
                     {
                         try
                         {
@@ -365,13 +365,13 @@ namespace drualcman.Converters
         private static void SetItemFromRow<T>(T item, DataRow row) where T : new()
         {
             // go through each column
-            foreach (DataColumn c in row.Table.Columns)
+            foreach(DataColumn c in row.Table.Columns)
             {
                 // find the property for the column
                 System.Reflection.PropertyInfo p = item.GetType().GetProperty(c.ColumnName);
 
                 // if exists, set the value
-                if (p != null && row[c] != DBNull.Value)
+                if(p != null && row[c] != DBNull.Value)
                 {
                     p.SetValue(item, row[c], null);
                 }

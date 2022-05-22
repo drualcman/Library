@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace drualcman
 {
@@ -24,10 +23,10 @@ namespace drualcman
             {
                 double dNum = 0;
 
-                if (double.TryParse(noGlobalization(number.ToString(), moneda), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out dNum) == false) dNum = 0;
-                if (conFormato == true)
+                if(double.TryParse(noGlobalization(number.ToString(), moneda), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out dNum) == false) dNum = 0;
+                if(conFormato == true)
                 {
-                    if (moneda == "")
+                    if(moneda == "")
                         numReturn = string.Format(System.Globalization.CultureInfo.InvariantCulture, format, dNum);
                     else
                         numReturn = string.Format(System.Globalization.CultureInfo.GetCultureInfo(moneda), format, dNum);
@@ -35,7 +34,7 @@ namespace drualcman
                 else
                     numReturn = dNum.ToString();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 numReturn = "Is not a valid number.\r\n" + ex.Message + "\r\n" + ex.StackTrace;
             }
@@ -55,7 +54,7 @@ namespace drualcman
 
         public string noGlobalization(string number, string cultura)
         {
-            if (string.IsNullOrEmpty(cultura) || string.IsNullOrWhiteSpace(cultura))
+            if(string.IsNullOrEmpty(cultura) || string.IsNullOrWhiteSpace(cultura))
                 cultura = System.Globalization.CultureInfo.InvariantCulture.Name;
 
             decimal monto;
@@ -68,10 +67,10 @@ namespace drualcman
                 string sepS = System.Globalization.CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator;
                 string sepE = System.Globalization.CultureInfo.GetCultureInfo(cultura).NumberFormat.NumberGroupSeparator;
 
-                if (decS != decE)
+                if(decS != decE)
                 {
                     //cambiar el decimal
-                    if (number.IndexOf(decE) > 0)
+                    if(number.IndexOf(decE) > 0)
                     {
                         number = number.Replace(decS, "#");
                         number = number.Replace(sepS, decE);
@@ -89,7 +88,7 @@ namespace drualcman
                 else
                 {
                     //comprobar de nuevo quye el numero enviado no necesita cambiar el decimal
-                    if (number.IndexOf(decE) < 0)
+                    if(number.IndexOf(decE) < 0)
                     {
                         number = number.Replace(sepS, "#");
                         number = number.Replace(decE, sepS);
@@ -104,15 +103,15 @@ namespace drualcman
                 // quitar todo lo que no sean números '.'  ','
                 string newNumber = "";
                 bool encontrado = false;
-                for (int i = 0; i < number.Length; i++)
+                for(int i = 0; i < number.Length; i++)
                 {
                     string caracter = number.Substring(i, 1);
 
-                    switch (caracter)
+                    switch(caracter)
                     {
                         case ".":
                         case ",":
-                            if (encontrado == false)
+                            if(encontrado == false)
                             {
                                 newNumber += ".";
                                 encontrado = true;
@@ -127,7 +126,7 @@ namespace drualcman
                             break;
                         default:
                             int n;
-                            if (int.TryParse(caracter, out n) == true)
+                            if(int.TryParse(caracter, out n) == true)
                                 newNumber += caracter;
                             break;
                     }
@@ -148,7 +147,7 @@ namespace drualcman
         public double string2number(string number, string cultura = "")
         {
             double dNum;
-            if (!string.IsNullOrEmpty(number))
+            if(!string.IsNullOrEmpty(number))
             {
                 number = noGlobalization(number, cultura);
 
@@ -158,7 +157,7 @@ namespace drualcman
                     dNum = double.Parse(number, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
                     return dNum;
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     throw new ArgumentException("Is not a valid number.\r\n" + ex.Message + "\r\n" + ex.StackTrace);
                 }
@@ -182,7 +181,7 @@ namespace drualcman
             dNum /= 100;
 
             bool formato = false;
-            if (!string.IsNullOrEmpty(format) && !string.IsNullOrEmpty(format)) formato = true;
+            if(!string.IsNullOrEmpty(format) && !string.IsNullOrEmpty(format)) formato = true;
 
             number = number2String(dNum, formato, format, cultura);
 
@@ -220,7 +219,7 @@ namespace drualcman
             string pattern = @"(?:- *)?\d";
             System.Text.RegularExpressions.Regex rgx = new System.Text.RegularExpressions.Regex(pattern);
 
-            foreach (System.Text.RegularExpressions.Match m in rgx.Matches(texto.ToString()))
+            foreach(System.Text.RegularExpressions.Match m in rgx.Matches(texto.ToString()))
             {
                 retorno += m.Value;
             }
@@ -238,7 +237,7 @@ namespace drualcman
             string pattern = @"(?:- *)?\d";
             System.Text.RegularExpressions.Regex rgx = new System.Text.RegularExpressions.Regex(pattern);
 
-            foreach (System.Text.RegularExpressions.Match m in rgx.Matches(texto))
+            foreach(System.Text.RegularExpressions.Match m in rgx.Matches(texto))
             {
                 retorno += m.Value;
             }
@@ -274,7 +273,7 @@ namespace drualcman
         public static decimal GetPorcentaje(decimal inicial, decimal final)
         {
             decimal ratio;
-            if (inicial > 0)
+            if(inicial > 0)
             {
                 //porcentaje positivo
                 ratio = final - inicial;
@@ -293,7 +292,7 @@ namespace drualcman
         public decimal getPorcentaje(decimal inicial, decimal final)
         {
             decimal ratio;
-            if (inicial > 0)
+            if(inicial > 0)
             {
                 //porcentaje positivo
                 ratio = final - inicial;
@@ -387,7 +386,7 @@ namespace drualcman
                 // know if have decimals
                 // later truncate to 2 decimals
                 // and calculate int
-                if ((dNum % 1) != 0)
+                if((dNum % 1) != 0)
                 {
                     // have decimals
                     numReturn = dNum.ToString("N2");
@@ -403,13 +402,13 @@ namespace drualcman
 
                 int pos = numReturn.IndexOf(",");
 
-                if (pos > 0)        // delete character ","
+                if(pos > 0)        // delete character ","
                 {
                     do
                     {
                         numReturn = numReturn.Remove(pos, 1);
                         pos = numReturn.IndexOf(",");
-                    } while (pos > 0);
+                    } while(pos > 0);
 
                 }
             }
@@ -429,7 +428,7 @@ namespace drualcman
         /// <returns></returns>
         public string number2StringInCents(object number, bool fuerzaNum)
         {
-            if (fuerzaNum == true)
+            if(fuerzaNum == true)
             {
                 return number2String(FuerzaNumeros(number.ToString()));
             }
@@ -454,7 +453,7 @@ namespace drualcman
             }
             // If we timeout when replacing invalid characters, 
             // we should return Empty.
-            catch (RegexMatchTimeoutException)
+            catch(RegexMatchTimeoutException)
             {
                 return String.Empty;
             }

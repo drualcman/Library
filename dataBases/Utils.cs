@@ -18,7 +18,7 @@ namespace drualcman
         /// <returns></returns>
         public static IEnumerable<DataRow> AsEnumerable(DataTable table)
         {
-            for (int i = 0; i < table.Rows.Count; i++)
+            for(int i = 0; i < table.Rows.Count; i++)
             {
                 yield return table.Rows[i];
             }
@@ -51,11 +51,11 @@ namespace drualcman
         {
             DataTable dtResult;
             dtResult = dtOrigin.Clone();
-            foreach (DataRow origen in dtOrigin.Rows)
+            foreach(DataRow origen in dtOrigin.Rows)
             {
                 string expression = columnID + " = '" + origen[columnID].ToString() + "'";
                 DataRow[] destino = dtDestination.Select(expression);
-                if (destino.Count() == 0) dtResult.Rows.Add(origen.ItemArray);
+                if(destino.Count() == 0) dtResult.Rows.Add(origen.ItemArray);
             }
             return dtResult;
         }
@@ -80,10 +80,10 @@ namespace drualcman
         {
             string[] ruta = this.rutaDDBB.Split(';');
             string catalog = string.Empty;
-            foreach (string Categoria in ruta)
+            foreach(string Categoria in ruta)
             {
                 string[] desglose = Categoria.Split('=');
-                if (desglose[0].ToLower().IndexOf("catalog") >= 0) catalog = desglose[1];
+                if(desglose[0].ToLower().IndexOf("catalog") >= 0) catalog = desglose[1];
             }
             return catalog;
         }
@@ -96,10 +96,10 @@ namespace drualcman
         {
             string[] ruta = this.rutaDDBB.Split(';');
             string Source = string.Empty;
-            foreach (string Categoria in ruta)
+            foreach(string Categoria in ruta)
             {
                 string[] desglose = Categoria.Split('=');
-                if (desglose[0].ToLower().IndexOf("source") >= 0) Source = desglose[1];
+                if(desglose[0].ToLower().IndexOf("source") >= 0) Source = desglose[1];
             }
             return Source;
         }

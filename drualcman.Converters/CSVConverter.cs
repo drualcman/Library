@@ -41,7 +41,7 @@ namespace drualcman.Converters
         {
             //Build the CSV file data as a Comma separated string.
             string csv = string.Empty;
-            foreach (DataColumn column in dt.Columns)
+            foreach(DataColumn column in dt.Columns)
             {
                 //Add the Header row for CSV file.
                 csv += column.ColumnName + separator;
@@ -50,9 +50,9 @@ namespace drualcman.Converters
             //Add new line.
             csv += "\r\n";
 
-            foreach (DataRow row in dt.Rows)
+            foreach(DataRow row in dt.Rows)
             {
-                foreach (DataColumn column in dt.Columns)
+                foreach(DataColumn column in dt.Columns)
                 {
                     //Add the Data rows.
                     csv += row[column.ColumnName].ToString().Replace(separator, "") + separator;

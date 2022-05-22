@@ -41,18 +41,18 @@ namespace drualcman
         public bool DeleteRow(string table, string[] indexColumn, object[] index)
         {
             bool result;
-            if (!string.IsNullOrEmpty(table) && indexColumn.Count() > 0 && index.Count() > 0)
+            if(!string.IsNullOrEmpty(table) && indexColumn.Count() > 0 && index.Count() > 0)
             {
                 string sql = $@"Delete FROM {table} WHERE ";
                 int i;
                 //check index columns
                 this.OpenConnection();
                 using SqlCommand cmd = DbConnection.CreateCommand();
-                for (i = 0; i < indexColumn.Count(); i++)
+                for(i = 0; i < indexColumn.Count(); i++)
                 {
                     sql += $"{indexColumn[i]} = @{indexColumn[i]}";
                     cmd.Parameters.AddWithValue($"@{indexColumn[i]}", index[i]);
-                    if (i + 1 < indexColumn.Count()) sql += " AND ";
+                    if(i + 1 < indexColumn.Count()) sql += " AND ";
                 }
                 cmd.CommandText = sql;
                 result = ExecuteCommand(cmd);
@@ -71,18 +71,18 @@ namespace drualcman
         public bool DeleteRow(string table, string[] indexColumn, int[] index)
         {
             bool result;
-            if (!string.IsNullOrEmpty(table) && indexColumn.Count() > 0 && index.Count() > 0)
+            if(!string.IsNullOrEmpty(table) && indexColumn.Count() > 0 && index.Count() > 0)
             {
                 string sql = $@"Delete FROM {table} WHERE ";
                 int i;
                 //check index columns
                 this.OpenConnection();
                 using SqlCommand cmd = DbConnection.CreateCommand();
-                for (i = 0; i < indexColumn.Count(); i++)
+                for(i = 0; i < indexColumn.Count(); i++)
                 {
                     sql += $"{indexColumn[i]} = @{indexColumn[i]}";
                     cmd.Parameters.AddWithValue($"@{indexColumn[i]}", index[i]);
-                    if (i + 1 < indexColumn.Count()) sql += " AND ";
+                    if(i + 1 < indexColumn.Count()) sql += " AND ";
                 }
                 cmd.CommandText = sql;
                 result = ExecuteCommand(cmd);
@@ -109,18 +109,18 @@ namespace drualcman
         public async Task<bool> DeleteRowAsync(string table, string[] indexColumn, object[] index)
         {
             bool result;
-            if (!string.IsNullOrEmpty(table) && indexColumn.Count() > 0 && index.Count() > 0)
+            if(!string.IsNullOrEmpty(table) && indexColumn.Count() > 0 && index.Count() > 0)
             {
                 string sql = $@"Delete FROM {table} WHERE ";
                 int i;
                 //check index columns
                 await this.OpenConnectionAsync();
                 using SqlCommand cmd = DbConnection.CreateCommand();
-                for (i = 0; i < indexColumn.Count(); i++)
+                for(i = 0; i < indexColumn.Count(); i++)
                 {
                     sql += $"{indexColumn[i]} = @{indexColumn[i]}";
                     cmd.Parameters.AddWithValue($"@{indexColumn[i]}", index[i]);
-                    if (i + 1 < indexColumn.Count()) sql += " AND ";
+                    if(i + 1 < indexColumn.Count()) sql += " AND ";
                 }
                 cmd.CommandText = sql;
                 result = await ExecuteCommandAsync(cmd);
@@ -140,18 +140,18 @@ namespace drualcman
         public async Task<bool> DeleteRowAsync(string table, string[] indexColumn, int[] index)
         {
             bool result;
-            if (!string.IsNullOrEmpty(table) && indexColumn.Count() > 0 && index.Count() > 0)
+            if(!string.IsNullOrEmpty(table) && indexColumn.Count() > 0 && index.Count() > 0)
             {
                 string sql = $@"Delete FROM {table} WHERE ";
                 int i;
                 //check index columns
                 await this.OpenConnectionAsync();
                 using SqlCommand cmd = DbConnection.CreateCommand();
-                for (i = 0; i < indexColumn.Count(); i++)
+                for(i = 0; i < indexColumn.Count(); i++)
                 {
                     sql += $"{indexColumn[i]} = @{indexColumn[i]}";
                     cmd.Parameters.AddWithValue($"@{indexColumn[i]}", index[i]);
-                    if (i + 1 < indexColumn.Count()) sql += " AND ";
+                    if(i + 1 < indexColumn.Count()) sql += " AND ";
                 }
                 cmd.CommandText = sql;
                 result = await ExecuteCommandAsync(cmd);

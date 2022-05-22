@@ -38,7 +38,7 @@ namespace drualcman
         {
             bool bResutado = true;
             // preparar el correo en fotmato HTML   
-            if (eMail != "")
+            if(eMail != "")
             {
                 // ENVÍO DEL FORMULARIO DE CONTACTO
                 // variables para la gestión del correo
@@ -56,7 +56,7 @@ namespace drualcman
                 }
                 catch
                 {
-                    emailRemitente = new MailAddress("info@community-mall.com", empresaRemitente);
+                    emailRemitente = new MailAddress("info@mibiografia.name", empresaRemitente);
                 }
                 correo.From = emailRemitente;
                 correo.ReplyToList.Add(emailRemitente);
@@ -69,26 +69,26 @@ namespace drualcman
                 correo.Body = cuerpoTexto;
 
                 //comprobar que no tiene un fichero adjunto
-                if (filename != "")
+                if(filename != "")
                 {
                     //adjuntar el archivo fisicamente
                     filename = folder + filename;
                     //comprobamos si existe el archivo y lo agregamos a los adjuntos
                     archivos a = new archivos();
-                    if (a.existeFichero(filename))
+                    if(a.existeFichero(filename))
                     {
                         correo.Attachments.Add(new Attachment(a.GetStreamFile(filename), System.IO.Path.GetFileName(filename)));
                         //
                         // se elimina el archivo porque no estara bloqueado y y era un archivo temporal
                         //
-                        if (temp == true) a.borrarArchivo(filename);
+                        if(temp == true) a.borrarArchivo(filename);
                     }
                     a = null;
 
                 }
 
                 //hacer el envio a todas las direcciones encontradas
-                if (eMail.IndexOf(";") > 0)
+                if(eMail.IndexOf(";") > 0)
                 {
                     // extraer las direcciones
                     string[] Direcciones = eMail.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -98,18 +98,18 @@ namespace drualcman
                     bool enviado = false;
 
                     // recorrer las direcciones para realizar el envio
-                    foreach (string item in Direcciones)
+                    foreach(string item in Direcciones)
                     {
-                        if (item != "")
+                        if(item != "")
                         {
                             //comprobar que tiene @
-                            if (item.IndexOf("@") > 0)
+                            if(item.IndexOf("@") > 0)
                             {
                                 MailAddress nuevoCorreo = new MailAddress(item);
                                 correo.Bcc.Add(nuevoCorreo);
                             }
 
-                            if (s <= numDestinatarios)
+                            if(s <= numDestinatarios)
                             {
                                 try
                                 {
@@ -133,7 +133,7 @@ namespace drualcman
                         s++;
                     }
                     // enviar al resto de destinatarios
-                    if (enviado == false)
+                    if(enviado == false)
                     {
                         try
                         {
@@ -198,7 +198,7 @@ namespace drualcman
                 pattern = @"<\s*" + tag + @"\s*\/?>";
                 retorno = Regex.IsMatch(text, pattern, RegexOptions.IgnoreCase);
                 c++;
-            } while (c < tags.Count() && retorno == false);
+            } while(c < tags.Count() && retorno == false);
             return retorno;
         }
 

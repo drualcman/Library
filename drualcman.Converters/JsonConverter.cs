@@ -44,12 +44,12 @@ namespace drualcman.Converters
         {
             try
             {
-                if (o != null)
+                if(o != null)
                 {
-                    if (Objetos.GetTipo(o).ToLower() == "dataset")
+                    if(typeof(object) == typeof(DataSet))
                     {
                         string retorno = "[";
-                        foreach (DataTable item in ((DataSet)o).Tables)
+                        foreach(DataTable item in ((DataSet)o).Tables)
                         {
                             retorno += ConvertDataTableToJSON(item) + ",";
                         }
@@ -80,22 +80,15 @@ namespace drualcman.Converters
         {
             DataSet ds = new DataSet();
             ds.DataSetName = "DataSet";
-            try
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.LoadXml(xmlData);
+            foreach(XmlNode padre in xDoc)
             {
-                XmlDocument xDoc = new XmlDocument();
-                xDoc.LoadXml(xmlData);
-                foreach (XmlNode padre in xDoc)
+                if(padre.NodeType != XmlNodeType.XmlDeclaration)
                 {
-                    if (padre.NodeType != XmlNodeType.XmlDeclaration)
-                    {
-                        XmlNodeList xLista = padre.ChildNodes;
-                        GetNodos(xLista, ref ds, padre.Name);
-                    }
+                    XmlNodeList xLista = padre.ChildNodes;
+                    GetNodos(xLista, ref ds, padre.Name);
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
             return ds;
         }
@@ -108,53 +101,47 @@ namespace drualcman.Converters
         /// <param name="tabla">Nombre del nodo para la tabla</param>
         private static void GetNodos(XmlNodeList xLista, ref DataSet ds, string tabla)
         {
-            try
-            {
-                bool creaPadre = !ds.Tables.Contains(tabla);
-                if (creaPadre) ds.Tables.Add(CreaTabla(xLista, tabla));
-                else ActualizaTabla(ds.Tables[tabla], xLista, tabla);
+            bool creaPadre = !ds.Tables.Contains(tabla);
+            if(creaPadre) ds.Tables.Add(CreaTabla(xLista, tabla));
+            else ActualizaTabla(ds.Tables[tabla], xLista, tabla);
 
-                DataTable dt = ds.Tables[tabla];
-                dt.TableName = "Tabla";
-                DataRow dr = dt.NewRow();
-                foreach (XmlElement item in xLista)
+            DataTable dt = ds.Tables[tabla];
+            dt.TableName = "Tabla";
+            DataRow dr = dt.NewRow();
+            foreach(XmlElement item in xLista)
+            {
+                if(item.NodeType != XmlNodeType.XmlDeclaration)
                 {
-                    if (item.NodeType != XmlNodeType.XmlDeclaration)
+                    if(item.ChildNodes.Count > 1)
                     {
-                        if (item.ChildNodes.Count > 1)
+                        dr[item.Name] = item.Name + "[" + item.ChildNodes.Count.ToString() + "]";
+                        //sobrecarga para comprobar de nuevo el nodo
+                        XmlNodeList xLista1 = item.ChildNodes;
+                        GetNodos(xLista1, ref ds, item.Name);
+                    }
+                    else
+                    {
+                        if(item.Attributes.Count > 0)
                         {
-                            dr[item.Name] = item.Name + "[" + item.ChildNodes.Count.ToString() + "]";
-                            //sobrecarga para comprobar de nuevo el nodo
-                            XmlNodeList xLista1 = item.ChildNodes;
-                            GetNodos(xLista1, ref ds, item.Name);
-                        }
-                        else
-                        {
-                            if (item.Attributes.Count > 0)
+                            string content = dr[item.Name].ToString();
+                            if(!string.IsNullOrEmpty(content)) content += "~";
+                            for(int i = 0; i < item.Attributes.Count; i++)
                             {
-                                string content = dr[item.Name].ToString();
-                                if (!string.IsNullOrEmpty(content)) content += "~";
-                                for (int i = 0; i < item.Attributes.Count; i++)
-                                {
-                                    content += item.Attributes[i].Name;
-                                    content += ":";
-                                    content += item.Attributes[i].InnerText;
-                                    content += ";";
-                                }
-                                dr[item.Name] = content;
+                                content += item.Attributes[i].Name;
+                                content += ":";
+                                content += item.Attributes[i].InnerText;
+                                content += ";";
                             }
-                            else dr[item.Name] = item.InnerText;
+                            dr[item.Name] = content;
                         }
+                        else dr[item.Name] = item.InnerText;
                     }
                 }
-                dt.Rows.Add(dr);
-                ds.Tables.Remove(tabla);
-                ds.Tables.Add(dt);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            dt.Rows.Add(dr);
+            ds.Tables.Remove(tabla);
+            ds.Tables.Add(dt);
+
         }
 
         /// <summary>
@@ -167,9 +154,9 @@ namespace drualcman.Converters
         {
             DataTable dt = new DataTable(tabla);
             dt.TableName = "Tabla";
-            foreach (XmlElement item in xLista)
+            foreach(XmlElement item in xLista)
             {
-                if (!dt.Columns.Contains(item.Name))
+                if(!dt.Columns.Contains(item.Name))
                 {
                     dt.Columns.Add(new DataColumn(item.Name));
                 }
@@ -189,15 +176,15 @@ namespace drualcman.Converters
             bool actualizar = false;
             DataTable dt = new DataTable(tabla);
             dt.TableName = "Tabla";
-            foreach (XmlElement item in xLista)
+            foreach(XmlElement item in xLista)
             {
-                if (!Original.Columns.Contains(item.Name))
+                if(!Original.Columns.Contains(item.Name))
                 {
                     actualizar = true;
                     dt.Columns.Add(new DataColumn(item.Name));
                 }
             }
-            if (actualizar) Original.Merge(dt, true, MissingSchemaAction.Add);
+            if(actualizar) Original.Merge(dt, true, MissingSchemaAction.Add);
             return Original;
         }
 
@@ -216,12 +203,12 @@ namespace drualcman.Converters
             table.TableName = "Tabla";
 
             // Add columns.
-            for (int i = 0; i < columnas.Length; i++)
+            for(int i = 0; i < columnas.Length; i++)
             {
                 table.Columns.Add(columnas[i]);
             }
             // Add rows.
-            foreach (var array in filas)
+            foreach(var array in filas)
             {
 
                 table.Rows.Add(array);
@@ -241,14 +228,14 @@ namespace drualcman.Converters
                 System.ComponentModel.TypeDescriptor.GetProperties(typeof(T));
             DataTable table = new DataTable();
             table.TableName = "Tabla";
-            for (int i = 0; i < props.Count; i++)
+            for(int i = 0; i < props.Count; i++)
             {
                 System.ComponentModel.PropertyDescriptor prop = props[i];
-                if (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                if(prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
                     table.Columns.Add(prop.Name, prop.PropertyType.GetGenericArguments()[0]);
                 else
                 {
-                    if (prop.PropertyType.IsArray)
+                    if(prop.PropertyType.IsArray)
                     {
                         table.Columns.Add(prop.Name, typeof(string));
                     }
@@ -257,14 +244,14 @@ namespace drualcman.Converters
                 }
             }
             object[] values = new object[props.Count];
-            foreach (T item in data)
+            foreach(T item in data)
             {
-                for (int i = 0; i < values.Length; i++)
+                for(int i = 0; i < values.Length; i++)
                 {
-                    if (props[i].PropertyType.IsArray)
+                    if(props[i].PropertyType.IsArray)
                     {
                         values[i] = DataManagement.GetPropiedades(props[i].GetValue(item));
-                        if (values[i].ToString().ToLower().IndexOf("length : 0") >= 0) values[i] = string.Empty;
+                        if(values[i].ToString().ToLower().IndexOf("length : 0") >= 0) values[i] = string.Empty;
                     }
                     else values[i] = props[i].GetValue(item);
                 }
@@ -286,7 +273,7 @@ namespace drualcman.Converters
             List<T> lst = new List<T>();
 
             // go through each row
-            foreach (DataRow r in tbl.Rows)
+            foreach(DataRow r in tbl.Rows)
             {
                 // add to the list
                 lst.Add(CreateItemFromRow<T>(r));
@@ -306,13 +293,13 @@ namespace drualcman.Converters
             //https://stackoverflow.com/questions/17398019/convert-datatable-to-json-in-c-sharp                
             StringBuilder jsonString = new StringBuilder();
 
-            if (ds.Tables[0].Rows.Count > 0)
+            if(ds.Tables[0].Rows.Count > 0)
             {
                 jsonString.Append("[");
-                for (int rows = 0; rows < ds.Tables[0].Rows.Count; rows++)
+                for(int rows = 0; rows < ds.Tables[0].Rows.Count; rows++)
                 {
                     jsonString.Append("{");
-                    for (int cols = 0; cols < ds.Tables[0].Columns.Count; cols++)
+                    for(int cols = 0; cols < ds.Tables[0].Columns.Count; cols++)
                     {
                         jsonString.Append(@"""" + ds.Tables[0].Columns[cols].ColumnName + @""":");
 
@@ -359,13 +346,13 @@ namespace drualcman.Converters
             //https://stackoverflow.com/questions/17398019/convert-datatable-to-json-in-c-sharp                
             StringBuilder jsonString = new StringBuilder();
 
-            if (dt.Rows.Count > 0)
+            if(dt.Rows.Count > 0)
             {
                 jsonString.Append("[");
-                for (int rows = 0; rows < dt.Rows.Count; rows++)
+                for(int rows = 0; rows < dt.Rows.Count; rows++)
                 {
                     jsonString.Append("{");
-                    for (int cols = 0; cols < dt.Columns.Count; cols++)
+                    for(int cols = 0; cols < dt.Columns.Count; cols++)
                     {
                         jsonString.Append(@"""" + dt.Columns[cols].ColumnName + @""":");
 
@@ -408,22 +395,22 @@ namespace drualcman.Converters
         {
             //http://www.c-sharpcorner.com/blogs/convert-json-string-to-datatable-in-asp-net1
             DataTable dt = new DataTable();
-            if (!string.IsNullOrEmpty(jsonString) && jsonString.ToLower() != "undefined")
+            if(!string.IsNullOrEmpty(jsonString) && jsonString.ToLower() != "undefined")
             {
                 jsonString = jsonString.Replace("}, {", "},{");
                 jsonString = CheckComa(jsonString);
                 string[] jsonStringArray = System.Text.RegularExpressions.Regex.Split(jsonString.Replace("[", "").Replace("]", ""), "},{");
                 List<string> ColumnsName = new List<string>();
-                foreach (string jSA in jsonStringArray)
+                foreach(string jSA in jsonStringArray)
                 {
                     string[] jsonStringData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");
-                    foreach (string ColumnsNameData in jsonStringData)
+                    foreach(string ColumnsNameData in jsonStringData)
                     {
                         try
                         {
                             int idx = ColumnsNameData.IndexOf(":");
                             string ColumnsNameString = ColumnsNameData.Substring(0, idx - 1).Replace("\"", "").Trim();
-                            if (!ColumnsName.Contains(ColumnsNameString))
+                            if(!ColumnsName.Contains(ColumnsNameString))
                             {
                                 ColumnsName.Add(ColumnsNameString);
                             }
@@ -440,16 +427,16 @@ namespace drualcman.Converters
                     }
                     break;
                 }
-                foreach (string AddColumnName in ColumnsName)
+                foreach(string AddColumnName in ColumnsName)
                 {
                     dt.Columns.Add(AddColumnName);
                 }
-                foreach (string jSA in jsonStringArray)
+                foreach(string jSA in jsonStringArray)
                 {
                     string[] RowData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");
                     DataRow nr = dt.NewRow();
                     int columnNumber = 0;       //reset index of the column per each element
-                    foreach (string rowData in RowData)
+                    foreach(string rowData in RowData)
                     {
                         try
                         {
@@ -477,23 +464,23 @@ namespace drualcman.Converters
             // IF LAST PROPERTY THEN REMOVE 'COMMA'  IF NOT LAST PROPERTY THEN ADD 'COMMA'
             string addComma = isLast ? "" : ",";
             numeros n = new numeros();
-            if (dt.Rows[rows][cols] == DBNull.Value)
+            if(dt.Rows[rows][cols] == DBNull.Value)
             {
                 jsonString.Append(" null " + addComma);
             }
-            else if (dt.Columns[cols].DataType == typeof(DateTime))
+            else if(dt.Columns[cols].DataType == typeof(DateTime))
             {
                 jsonString.Append(@"""" + ((DateTime)dt.Rows[rows][cols]).ToString("yyyy-MM-dd HH':'mm':'ss") + @"""" + addComma);
             }
-            else if (dt.Columns[cols].DataType == typeof(string))
+            else if(dt.Columns[cols].DataType == typeof(string))
             {
                 jsonString.Append(@"""" + dt.Rows[rows][cols].ToString().Replace("\"", "\\\"") + @"""" + addComma);
             }
-            else if (dt.Columns[cols].DataType == typeof(bool))
+            else if(dt.Columns[cols].DataType == typeof(bool))
             {
                 jsonString.Append(Convert.ToBoolean(dt.Rows[rows][cols]) ? "true" + addComma : "false" + addComma);
             }
-            else if (dt.Columns[cols].DataType == typeof(short))
+            else if(dt.Columns[cols].DataType == typeof(short))
             {
                 try
                 {
@@ -504,7 +491,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(int))
+            else if(dt.Columns[cols].DataType == typeof(int))
             {
                 try
                 {
@@ -515,7 +502,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(long))
+            else if(dt.Columns[cols].DataType == typeof(long))
             {
                 try
                 {
@@ -526,7 +513,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(int))
+            else if(dt.Columns[cols].DataType == typeof(int))
             {
                 try
                 {
@@ -537,7 +524,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(double))
+            else if(dt.Columns[cols].DataType == typeof(double))
             {
                 try
                 {
@@ -548,7 +535,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(decimal))
+            else if(dt.Columns[cols].DataType == typeof(decimal))
             {
                 try
                 {
@@ -559,7 +546,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(float))
+            else if(dt.Columns[cols].DataType == typeof(float))
             {
                 try
                 {
@@ -570,7 +557,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(long))
+            else if(dt.Columns[cols].DataType == typeof(long))
             {
                 try
                 {
@@ -581,7 +568,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(short))
+            else if(dt.Columns[cols].DataType == typeof(short))
             {
                 try
                 {
@@ -592,7 +579,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(float))
+            else if(dt.Columns[cols].DataType == typeof(float))
             {
                 try
                 {
@@ -603,7 +590,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if (dt.Columns[cols].DataType == typeof(byte))
+            else if(dt.Columns[cols].DataType == typeof(byte))
             {
                 try
                 {
@@ -632,23 +619,23 @@ namespace drualcman.Converters
             string retorno = string.Empty;
             string caracter;
             string siguiente;
-            for (int i = 0; i < text.Length; i++)
+            for(int i = 0; i < text.Length; i++)
             {
                 caracter = text.Substring(i, 1);
                 int n = i + 1;
-                if (n < text.Length)
+                if(n < text.Length)
                 {
                     siguiente = text.Substring(n, 1);
-                    if (caracter == "," && siguiente != "\"")
+                    if(caracter == "," && siguiente != "\"")
                     {
-                        if (caracter == "," && siguiente != "{") retorno += string.Empty;
-                        else if (caracter == "," && siguiente == " ")
+                        if(caracter == "," && siguiente != "{") retorno += string.Empty;
+                        else if(caracter == "," && siguiente == " ")
                         {
                             n++;
                             siguiente = text.Substring(n, 1);
-                            if (caracter == "," && siguiente != "\"")
+                            if(caracter == "," && siguiente != "\"")
                             {
-                                if (caracter == "," && siguiente != "{") retorno += string.Empty;
+                                if(caracter == "," && siguiente != "{") retorno += string.Empty;
                                 else retorno += caracter;
                             }
                             else retorno += caracter;
@@ -678,13 +665,13 @@ namespace drualcman.Converters
         private static void SetItemFromRow<T>(T item, DataRow row) where T : new()
         {
             // go through each column
-            foreach (DataColumn c in row.Table.Columns)
+            foreach(DataColumn c in row.Table.Columns)
             {
                 // find the property for the column
                 System.Reflection.PropertyInfo p = item.GetType().GetProperty(c.ColumnName);
 
                 // if exists, set the value
-                if (p != null && row[c] != DBNull.Value)
+                if(p != null && row[c] != DBNull.Value)
                 {
                     p.SetValue(item, row[c], null);
                 }

@@ -26,7 +26,7 @@ namespace drualcman.Data.Helpers
         public ColumnsNames(ReadOnlyCollection<DbColumn> columns, List<TableName> tables)
         {
             List<string> cols = new List<string>();
-            foreach (DbColumn item in columns)
+            foreach(DbColumn item in columns)
             {
                 cols.Add(item.ColumnName.ToLower());
             }
@@ -47,19 +47,19 @@ namespace drualcman.Data.Helpers
             bool isDirectQuery = Columns[0].IndexOf(".") < 0;
             int c = properties.Length;
 
-            for (int propertyIndex = 0; propertyIndex < c; propertyIndex++)
+            for(int propertyIndex = 0; propertyIndex < c; propertyIndex++)
             {
                 string columnName;
                 DatabaseAttribute field = properties[propertyIndex].GetCustomAttribute<DatabaseAttribute>();
                 bool notIgnored;
-                if (field is not null)
+                if(field is not null)
                 {
                     notIgnored = !field.Ignore;
                 }
                 else notIgnored = true;
-                if (notIgnored)
+                if(notIgnored)
                 {
-                    if (properties[propertyIndex].PropertyType.IsClass &&
+                    if(properties[propertyIndex].PropertyType.IsClass &&
                         !properties[propertyIndex].PropertyType.IsArray &&
                         properties[propertyIndex].PropertyType != typeof(string))
                     {
@@ -70,9 +70,9 @@ namespace drualcman.Data.Helpers
                     }
                     else
                     {
-                        if (isDirectQuery) columnName = properties[propertyIndex].Name.ToLower();
+                        if(isDirectQuery) columnName = properties[propertyIndex].Name.ToLower();
                         else columnName = $"{shortName}.{properties[propertyIndex].Name}".ToLower();
-                        if (Columns.Contains(columnName))
+                        if(Columns.Contains(columnName))
                         {
                             result.Add(SetColumn(properties[propertyIndex], shortName, columnName));
                         }
@@ -85,17 +85,17 @@ namespace drualcman.Data.Helpers
         private Columns SetColumn(PropertyInfo property, string shortName, string columnName)
         {
             string propertyType;
-            if (property.PropertyType.Name == typeof(bool).Name) propertyType = "bool";
-            else if (property.PropertyType.Name == typeof(int).Name) propertyType = "int";
-            else if (property.PropertyType.Name == typeof(long).Name) propertyType = "long";
-            else if (property.PropertyType.Name == typeof(double).Name) propertyType = "double";
-            else if (property.PropertyType.Name == typeof(decimal).Name) propertyType = "decimal";
-            else if (property.PropertyType.Name == typeof(float).Name) propertyType = "float";
-            else if (property.PropertyType.Name == typeof(short).Name) propertyType = "short";
-            else if (property.PropertyType.Name == typeof(byte).Name) propertyType = "byte";
-            else if (property.PropertyType.Name == typeof(DateTime).Name) propertyType = "date";
-            else if (property.PropertyType.Name == typeof(Nullable).Name) propertyType = "nullable";
-            else if (property.PropertyType.Name == typeof(Nullable<>).Name) propertyType = "nullable";
+            if(property.PropertyType.Name == typeof(bool).Name) propertyType = "bool";
+            else if(property.PropertyType.Name == typeof(int).Name) propertyType = "int";
+            else if(property.PropertyType.Name == typeof(long).Name) propertyType = "long";
+            else if(property.PropertyType.Name == typeof(double).Name) propertyType = "double";
+            else if(property.PropertyType.Name == typeof(decimal).Name) propertyType = "decimal";
+            else if(property.PropertyType.Name == typeof(float).Name) propertyType = "float";
+            else if(property.PropertyType.Name == typeof(short).Name) propertyType = "short";
+            else if(property.PropertyType.Name == typeof(byte).Name) propertyType = "byte";
+            else if(property.PropertyType.Name == typeof(DateTime).Name) propertyType = "date";
+            else if(property.PropertyType.Name == typeof(Nullable).Name) propertyType = "nullable";
+            else if(property.PropertyType.Name == typeof(Nullable<>).Name) propertyType = "nullable";
             else propertyType = "text";
 
             TableName table = Tables.Where(t => t.ShortName == shortName).FirstOrDefault();

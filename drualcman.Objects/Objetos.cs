@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace drualcman
 {
@@ -24,17 +23,17 @@ namespace drualcman
         /// <returns></returns>
         public static Object GetPropValue(this Object obj, String name)
         {
-            if (obj == null) return null;
+            if(obj == null) return null;
             else
             {
                 // Split property name to parts (propertyName could be hierarchical, like obj.subobj.subobj.property
                 string[] propertyNameParts = name.Split('.');
 
-                foreach (String part in propertyNameParts)
+                foreach(String part in propertyNameParts)
                 {
                     Type type = obj.GetType();
                     PropertyInfo info = type.GetProperty(part);
-                    if (info == null) return null;
+                    if(info == null) return null;
                     else obj = info.GetValue(obj, null);
                 }
                 return obj;
@@ -52,7 +51,7 @@ namespace drualcman
         {
             // throws InvalidCastException if types are incompatible
             Object retval = GetPropValue(obj, name);
-            if (retval == null) return default(T);
+            if(retval == null) return default(T);
             else return (T)retval;
         }
     }

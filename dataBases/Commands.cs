@@ -30,7 +30,7 @@ namespace drualcman
         {
 
             log.start("EjecutarSQL(sql)", sql, "");
-            if (string.IsNullOrWhiteSpace(sql))
+            if(string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
 
@@ -39,26 +39,26 @@ namespace drualcman
             }
             else
             {
-                if (checkQuery(sql))
+                if(checkQuery(sql))
                 {
                     //
                     // Comprobar que están indicando valores correctos (o casi)
                     //
                     // Que no sea una cadena vacía                    
 
-                    if ((sql.ToUpper().IndexOf("UPDATE ") < 0))
+                    if((sql.ToUpper().IndexOf("UPDATE ") < 0))
                     {
-                        if ((sql.ToUpper().IndexOf("INSERT ") < 0))
+                        if((sql.ToUpper().IndexOf("INSERT ") < 0))
                         {
-                            if ((sql.ToUpper().IndexOf("DELETE ") < 0))
+                            if((sql.ToUpper().IndexOf("DELETE ") < 0))
                             {
-                                if ((sql.ToUpper().IndexOf("EXEC ") < 0))
+                                if((sql.ToUpper().IndexOf("EXEC ") < 0))
                                 {
-                                    if ((sql.ToUpper().IndexOf("DROP ") < 0))
+                                    if((sql.ToUpper().IndexOf("DROP ") < 0))
                                     {
-                                        if ((sql.ToUpper().IndexOf("ALTER ") < 0))
+                                        if((sql.ToUpper().IndexOf("ALTER ") < 0))
                                         {
-                                            if ((sql.ToUpper().IndexOf("CREATE ") < 0))
+                                            if((sql.ToUpper().IndexOf("CREATE ") < 0))
                                             {
                                                 string err = "La cadena debe ser: " + "\r\n" +
                                                     "UPDATE < tabla > SET < campo=valor >" + "\r\n" +
@@ -82,7 +82,7 @@ namespace drualcman
                     }
 
 
-                    if (sql.IndexOf("--") > -1)
+                    if(sql.IndexOf("--") > -1)
                     {
                         log.end(null, "No se admiten comentarios de SQL en la cadena de selección\n" + this.rutaDDBB);
 
@@ -92,7 +92,7 @@ namespace drualcman
                     else
                     {
                         bool retorno = ExecuteCommand(sql);
-                        if (this.LogResults) log.end(retorno);
+                        if(this.LogResults) log.end(retorno);
 
                         return retorno;
                     }
@@ -117,7 +117,7 @@ namespace drualcman
         public object Execute(string sql, int timeout)
         {
             object result;
-            if (!string.IsNullOrEmpty(sql))
+            if(!string.IsNullOrEmpty(sql))
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = sql;
@@ -150,7 +150,7 @@ namespace drualcman
         public bool ExecuteCommand(string sql, int timeout)
         {
             bool result;
-            if (!string.IsNullOrEmpty(sql))
+            if(!string.IsNullOrEmpty(sql))
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = sql;
@@ -168,7 +168,7 @@ namespace drualcman
         public async Task<object> ExecuteAsync(string query, int timeout = 30)
         {
             object result;
-            if (!string.IsNullOrEmpty(query))
+            if(!string.IsNullOrEmpty(query))
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = query;
@@ -191,7 +191,7 @@ namespace drualcman
         public async Task<bool> ExecuteCommandAsync(string query, int timeout = 30)
         {
             bool result;
-            if (!string.IsNullOrEmpty(query))
+            if(!string.IsNullOrEmpty(query))
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = query;
@@ -216,7 +216,7 @@ namespace drualcman
         /// </returns>
         public string EjecutarSP(string sql)
         {
-            if ((sql.ToUpper().IndexOf("EXEC ") < 0))
+            if((sql.ToUpper().IndexOf("EXEC ") < 0))
                 sql = "EXEC " + sql;
 
             return ConsultarConXML(sql);
@@ -235,7 +235,7 @@ namespace drualcman
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
+            if(string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
@@ -256,14 +256,14 @@ namespace drualcman
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
+            if(string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
 
             string doParam = "";
 
-            foreach (string item in param)
+            foreach(string item in param)
             {
                 doParam += "'" + item.Replace("'", "''") + "', ";
             }

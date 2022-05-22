@@ -16,7 +16,7 @@ namespace drualcman.Converters.Extensions
         {
             List<string> names = new List<string>();
 
-            foreach (DataColumn item in dr.Table.Columns)
+            foreach(DataColumn item in dr.Table.Columns)
             {
                 names.Add(item.ColumnName);
             }
@@ -33,7 +33,7 @@ namespace drualcman.Converters.Extensions
         {
             List<string> names = new List<string>();
 
-            foreach (DataColumn item in dr.ItemArray)
+            foreach(DataColumn item in dr.ItemArray)
             {
                 names.Add(item.ColumnName);
             }

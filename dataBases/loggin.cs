@@ -56,7 +56,7 @@ namespace drualcman
                 this.error = string.Empty;
                 try
                 {
-                    if (!string.IsNullOrEmpty(Folder))
+                    if(!string.IsNullOrEmpty(Folder))
                     {
                         archivos a = new archivos();
                         this.folder = a.checkCarpeta(Folder);

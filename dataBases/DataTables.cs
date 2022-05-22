@@ -96,7 +96,7 @@ namespace drualcman
         /// </returns>
         public DataTable spConDataTable(string sql, int timeout)
         {
-            if ((sql.ToUpper().IndexOf("EXEC ") < 0))
+            if((sql.ToUpper().IndexOf("EXEC ") < 0))
                 sql = "EXEC " + sql;
 
             return ConsultarConDataTable(sql, timeout);
@@ -153,14 +153,14 @@ namespace drualcman
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
+            if(string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
 
             string doParam = "";
 
-            foreach (string item in param)
+            foreach(string item in param)
             {
                 doParam += "'" + item.Replace("'", "''") + "', ";
             }

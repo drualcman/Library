@@ -1,7 +1,4 @@
-﻿using drualcman.Data;
-using drualcman.Data.Helpers;
-using drualcman.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -13,8 +10,6 @@ namespace drualcman.Converters.Extensions
 {
     public static class DataTableExtension
     {
-        //static Mutex mutexRow = new Mutex();
-
         #region columns
         #region methods
 
@@ -27,7 +22,7 @@ namespace drualcman.Converters.Extensions
         {
             List<string> names = new List<string>();
 
-            foreach (DataColumn item in dt.Columns)
+            foreach(DataColumn item in dt.Columns)
             {
                 names.Add(item.ColumnName.ToLower());
             }
@@ -44,7 +39,7 @@ namespace drualcman.Converters.Extensions
         {
             List<string> names = new List<string>();
 
-            foreach (DataColumn item in dt.Columns)
+            foreach(DataColumn item in dt.Columns)
             {
                 names.Add(item.ColumnName.ToLower());
             }
@@ -75,59 +70,25 @@ namespace drualcman.Converters.Extensions
         #region methods
         #region TO
         /// <summary>
-        /// Get list of object send from data table
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static List<TModel> ToList<TModel>(this DataTable dt) where TModel : new()
-        {
-            string[] columnNames = dt.ColumnNamesToArray();
-            List<TModel> result = new List<TModel>();
-            int rows = dt.Rows.Count;
-            if (rows > 0)
-            {
-                Type model = typeof(TModel);
-
-                List<TableName> tables = new List<TableName>();
-                int tableCount = 0;
-                TableName table = new TableName(model.Name, $"t{tableCount}", string.Empty, InnerDirection.NONE, string.Empty, string.Empty, model.Name);
-                tables.Add(table);
-
-                ColumnToObject co = new ColumnToObject(new ColumnsNames(columnNames, tables),
-                    new InstanceModel(), tables);
-
-                for (int index = 0; index < rows; index++)
-                {
-                    TModel dat = new();
-                    co.SetColumnToObject(new ColumnValue(tables, dat), dt.Rows[index], dat, $"t{tableCount}");
-                    result.Add(dat);
-                }
-            }
-            return result;
-        }
-
-
-        /// <summary>
         /// Convert DataTable to Json
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
         public static string ToJson(this DataTable dt)
         {
-            if (dt is not null)
+            if(dt is not null)
             {
                 //https://stackoverflow.com/questions/17398019/convert-datatable-to-json-in-c-sharp                
                 StringBuilder jsonString = new StringBuilder();
                 int r = dt.Rows.Count;
                 int c = dt.Columns.Count;
-                if (r > 0)
+                if(r > 0)
                 {
                     jsonString.Append("[");
-                    for (int row = 0; row < r; row++)
+                    for(int row = 0; row < r; row++)
                     {
                         jsonString.Append("{");
-                        for (int col = 0; col < c; col++)
+                        for(int col = 0; col < c; col++)
                         {
                             jsonString.Append("\"");
                             jsonString.Append(dt.Columns[col].ColumnName);
@@ -158,15 +119,15 @@ namespace drualcman.Converters.Extensions
         {
             StreamReader sr = new StreamReader(data);
             string[] headers = sr.ReadLine().Split(separator);
-            foreach (string header in headers)
+            foreach(string header in headers)
             {
                 dt.Columns.Add(header);
             }
-            while (!sr.EndOfStream)
+            while(!sr.EndOfStream)
             {
                 string[] rows = sr.ReadLine().Split(separator);
                 DataRow dr = dt.NewRow();
-                for (int i = 0; i < headers.Length; i++)
+                for(int i = 0; i < headers.Length; i++)
                 {
                     dr[i] = rows[i];
                 }
@@ -196,22 +157,22 @@ namespace drualcman.Converters.Extensions
         public static DataTable FromJson(this DataTable dt, string jsonString)
         {
             //http://www.c-sharpcorner.com/blogs/convert-json-string-to-datatable-in-asp-net1
-            if (!string.IsNullOrEmpty(jsonString) && jsonString.ToLower() != "undefined")
+            if(!string.IsNullOrEmpty(jsonString) && jsonString.ToLower() != "undefined")
             {
                 jsonString = jsonString.Replace("}, {", "},{");
                 jsonString = CheckComa(jsonString);
                 string[] jsonStringArray = System.Text.RegularExpressions.Regex.Split(jsonString.Replace("[", "").Replace("]", ""), "},{");
                 List<string> ColumnsName = new List<string>();
-                foreach (string jSA in jsonStringArray)
+                foreach(string jSA in jsonStringArray)
                 {
                     string[] jsonStringData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");
-                    foreach (string ColumnsNameData in jsonStringData)
+                    foreach(string ColumnsNameData in jsonStringData)
                     {
                         try
                         {
                             int idx = ColumnsNameData.IndexOf(":");
                             string ColumnsNameString = ColumnsNameData.Substring(0, idx - 1).Replace("\"", "").Trim();
-                            if (!ColumnsName.Contains(ColumnsNameString))
+                            if(!ColumnsName.Contains(ColumnsNameString))
                             {
                                 ColumnsName.Add(ColumnsNameString);
                             }
@@ -228,16 +189,16 @@ namespace drualcman.Converters.Extensions
                     }
                     break;
                 }
-                foreach (string AddColumnName in ColumnsName)
+                foreach(string AddColumnName in ColumnsName)
                 {
                     dt.Columns.Add(AddColumnName);
                 }
-                foreach (string jSA in jsonStringArray)
+                foreach(string jSA in jsonStringArray)
                 {
                     string[] RowData = System.Text.RegularExpressions.Regex.Split(jSA.Replace("{", "").Replace("}", ""), ",");
                     DataRow nr = dt.NewRow();
                     int columnNumber = 0;       //reset index of the column per each element
-                    foreach (string rowData in RowData)
+                    foreach(string rowData in RowData)
                     {
                         try
                         {
@@ -262,21 +223,6 @@ namespace drualcman.Converters.Extensions
         #region async
         #region TO
         /// <summary>
-        /// Get list of object send from data table
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static Task<List<TModel>> ToListAsync<TModel>(this DataTable dt) where TModel : new()
-        {
-            if (dt.Rows.Count > 0)
-            {
-                return Task.FromResult(dt.ToList<TModel>());
-            }
-            else return Task.FromResult(new List<TModel>());          //no results
-        }
-
-        /// <summary>
         /// Convertir uyn DataTable en un objero JSON
         /// </summary>
         /// <param name="dt"></param>
@@ -298,16 +244,16 @@ namespace drualcman.Converters.Extensions
             StreamReader sr = new StreamReader(data);
             string head = await sr.ReadLineAsync();
             string[] headers = head.Split(separator);
-            foreach (string header in headers)
+            foreach(string header in headers)
             {
                 dt.Columns.Add(header);
             }
-            while (!sr.EndOfStream)
+            while(!sr.EndOfStream)
             {
                 string rowHead = await sr.ReadLineAsync();
                 string[] rows = rowHead.Split(separator);
                 DataRow dr = dt.NewRow();
-                for (int i = 0; i < headers.Length; i++)
+                for(int i = 0; i < headers.Length; i++)
                 {
                     dr[i] = rows[i];
                 }
@@ -345,27 +291,27 @@ namespace drualcman.Converters.Extensions
             // IF LAST PROPERTY THEN REMOVE 'COMMA'  IF NOT LAST PROPERTY THEN ADD 'COMMA'
             string addComma = isLast ? "" : ",";
             StringBuilder jsonString = new StringBuilder();
-            if (dt.Rows[row][col] == DBNull.Value)
+            if(dt.Rows[row][col] == DBNull.Value)
             {
                 jsonString.Append(" null ");
             }
-            else if (dt.Columns[col].DataType == typeof(DateTime))
+            else if(dt.Columns[col].DataType == typeof(DateTime))
             {
                 jsonString.Append("\"");
                 jsonString.Append(((DateTime)dt.Rows[row][col]).ToString("yyyy-MM-dd HH':'mm':'ss"));
                 jsonString.Append("\"");
             }
-            else if (dt.Columns[col].DataType == typeof(string))
+            else if(dt.Columns[col].DataType == typeof(string))
             {
                 jsonString.Append("\"");
                 jsonString.Append(dt.Rows[row][col].ToString().Replace("\"", "\\\""));
                 jsonString.Append("\"");
             }
-            else if (dt.Columns[col].DataType == typeof(bool))
+            else if(dt.Columns[col].DataType == typeof(bool))
             {
                 jsonString.Append(Convert.ToBoolean(dt.Rows[row][col]) ? "true" : "false");
             }
-            else if (dt.Columns[col].DataType == typeof(short) ||
+            else if(dt.Columns[col].DataType == typeof(short) ||
                 dt.Columns[col].DataType == typeof(int) ||
                 dt.Columns[col].DataType == typeof(long) ||
                 dt.Columns[col].DataType == typeof(double) ||
@@ -406,23 +352,23 @@ namespace drualcman.Converters.Extensions
             string retorno = string.Empty;
             string caracter;
             string siguiente;
-            for (int i = 0; i < text.Length; i++)
+            for(int i = 0; i < text.Length; i++)
             {
                 caracter = text.Substring(i, 1);
                 int n = i + 1;
-                if (n < text.Length)
+                if(n < text.Length)
                 {
                     siguiente = text.Substring(n, 1);
-                    if (caracter == "," && siguiente != "\"")
+                    if(caracter == "," && siguiente != "\"")
                     {
-                        if (caracter == "," && siguiente != "{") retorno += string.Empty;
-                        else if (caracter == "," && siguiente == " ")
+                        if(caracter == "," && siguiente != "{") retorno += string.Empty;
+                        else if(caracter == "," && siguiente == " ")
                         {
                             n++;
                             siguiente = text.Substring(n, 1);
-                            if (caracter == "," && siguiente != "\"")
+                            if(caracter == "," && siguiente != "\"")
                             {
-                                if (caracter == "," && siguiente != "{") retorno += string.Empty;
+                                if(caracter == "," && siguiente != "{") retorno += string.Empty;
                                 else retorno += caracter;
                             }
                             else retorno += caracter;

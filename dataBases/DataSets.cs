@@ -74,7 +74,7 @@ namespace drualcman
 
             log.start("ConsultarConDataSet", sql, "");
             // Que no sea una cadena vacía
-            if (string.IsNullOrWhiteSpace(sql))
+            if(string.IsNullOrWhiteSpace(sql))
             {
                 log.end(null, "La cadena no puede ser nula\n" + this.rutaDDBB);
 
@@ -97,20 +97,20 @@ namespace drualcman
                     {
                         da.Fill(ds);
                     }
-                    catch (Exception ex)
+                    catch(Exception ex)
                     {
                         log.end(null, ex.ToString() + "\n" + this.rutaDDBB);
                         throw;
                     }
                     finally
                     {
-                        if (this.LogResults) log.end(ds);
+                        if(this.LogResults) log.end(ds);
 
                     }
 
                     return ds;
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     log.end(sql, ex.ToString() + "\n" + this.rutaDDBB);
 
@@ -139,7 +139,7 @@ namespace drualcman
         /// </returns>
         public DataSet spConDataset(string sql, int timeout)
         {
-            if ((sql.ToUpper().IndexOf("EXEC ") < 0))
+            if((sql.ToUpper().IndexOf("EXEC ") < 0))
                 sql = "EXEC " + sql;
 
             return ConsultarConDataSet(sql, timeout);
@@ -171,7 +171,7 @@ namespace drualcman
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
+            if(string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
@@ -205,14 +205,14 @@ namespace drualcman
             // Comprobar que están indicando valores correctos (o casi)
             //
             // Que no sea una cadena vacía
-            if (string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
+            if(string.IsNullOrEmpty(sql) || string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException("La cadena no puede ser nula.");
             }
 
             string doParam = "";
 
-            foreach (string item in param)
+            foreach(string item in param)
             {
                 doParam += "'" + item.Replace("'", "''") + "', ";
             }

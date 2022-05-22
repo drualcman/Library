@@ -1,6 +1,7 @@
 ﻿using drualcman.Data;
 using drualcman.Data.Helpers;
 using drualcman.Enums;
+using drualcman.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -58,7 +59,7 @@ namespace drualcman
             #region query
             // If a query is empty create the query from the Model
 
-            if (string.IsNullOrWhiteSpace(sql))
+            if(string.IsNullOrWhiteSpace(sql))
             {
                 SqlQueryTranslator queryTranslator = new SqlQueryTranslator(this.WhereRequired);
                 sql = queryTranslator.SetQuery<TModel>();
@@ -103,12 +104,12 @@ namespace drualcman
                 using SqlDataReader dr = cmd.ExecuteReader();
 
                 List<TModel> result = new List<TModel>();
-                if (dr is not null)
+                if(dr is not null)
                 {
                     bool canRead = dr.Read();
-                    if (canRead)
+                    if(canRead)
                     {
-                     
+
                         Type model = typeof(TModel);
 
                         int tableCount = 0;
@@ -148,14 +149,14 @@ namespace drualcman
                                 response = columnToObject.SetColumnToObject(new ColumnValue(tableNamesBK, response.InUse),
                                                     dr, response.InUse, tableNamesBK[i].ShortName);
 
-                                if (response.IsList)
+                                if(response.IsList)
                                 {
                                     hasList = true;
                                     object listInstance = response.PropertyListInstance;
                                     string listName = response.PropertyListName;
                                     //check if have some other object like a property
                                     TableName tableList = tableNamesBK.Where(t => t.ShortReference == response.ActualTable).FirstOrDefault();
-                                    if (tableList != null)
+                                    if(tableList != null)
                                     {
                                         response = columnToObject.SetColumnToObject(new ColumnValue(tableNamesBK, response.PropertyListData),
                                                        dr, response.PropertyListData, tableList.ShortName);
@@ -168,24 +169,24 @@ namespace drualcman
                                 }
 
                                 i++;
-                                if (i >= t)
+                                if(i >= t)
                                 {
                                     i = 0;
                                     canRead = canRead = dr.Read();
-                                    if (!hasList) currentRow = -1;
+                                    if(!hasList) currentRow = -1;
                                 }
-                            } while (canRead && currentRow.ToString() == dr[0].ToString());
+                            } while(canRead && currentRow.ToString() == dr[0].ToString());
 
                             result.Add(dat);
                             columnValue = null;
-                        } while (canRead);
+                        } while(canRead);
                     }
 
                 }
                 cmd.Connection.Close();
                 return Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 log.end(cmd.CommandText, ex.ToString() + "\n" + this.rutaDDBB);
                 throw;
