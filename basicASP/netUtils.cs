@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Summary description for drAspFicheros
@@ -39,13 +41,9 @@ namespace drualcman
             /// <returns></returns>
             public static byte[] GetFileFromUrl(string url)
             {
-                // Create a new WebClient instance.
-                WebClient myWebClient = new WebClient();
-                // Concatenate the domain with the Web resource filename.
-                byte[] file = myWebClient.DownloadData(url);
-                myWebClient.Dispose();
-                myWebClient = null;
-                return file;
+                using HttpClient client = new HttpClient();
+                byte[] result = client.GetByteArrayAsync(url).Result;
+                return result;
             }
 
             /// <summary>
@@ -55,13 +53,10 @@ namespace drualcman
             /// <returns></returns>
             public static string GetStringFromUrl(string url)
             {
-                // Create a new WebClient instance.
-                WebClient myWebClient = new WebClient();
-                // Concatenate the domain with the Web resource filename.
-                string response = myWebClient.DownloadString(url);
-                myWebClient.Dispose();
-                myWebClient = null;
-                return response;
+                
+                using HttpClient client = new HttpClient();
+                string result = client.GetStringAsync(url).Result;
+                return result;
             }
             #endregion
 
@@ -86,11 +81,10 @@ namespace drualcman
             {
                 try
                 {
-                    HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
-                    request.Timeout = timeout;
-                    request.AllowAutoRedirect = false;
-                    bool retorno;
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    bool retorno;              
+                    using HttpClient client = new HttpClient();
+                    client.Timeout = new TimeSpan(timeout);
+                    HttpResponseMessage response = client.GetAsync(url).Result;
                     switch(response.StatusCode)
                     {
                         case HttpStatusCode.NonAuthoritativeInformation:
@@ -143,7 +137,6 @@ namespace drualcman
                             retorno = false;
                             break;
                     }
-                    response.Close();
                     return retorno;
                 }
                 catch

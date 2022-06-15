@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http;
 
 /// <summary>
 /// Summary description for drAspFicheros
@@ -192,16 +193,14 @@ namespace drualcman
                 string ok = string.Empty;
                 try
                 {
+                    using HttpClient client = new HttpClient();
                     for(int i = 0; i < fileName.Length; i++)
                     {
                         ok += "/* " + folder[i] + "/" + fileName[i];
                         if(string.IsNullOrEmpty(folder[i]))
                         {
                             ok += " (fichero remoto) */";
-                            System.Net.WebClient wc = new System.Net.WebClient();
-                            string content = wc.DownloadString(fileName[i]);
-                            wc.Dispose();
-                            wc = null;
+                            string content = client.GetStringAsync(fileName[i]).Result;
                             if(tipo == FileTipe.css)
                             {
                                 content = content.Replace(Environment.NewLine, " ");
