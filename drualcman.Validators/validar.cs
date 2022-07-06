@@ -133,7 +133,7 @@ namespace drualcman
         /// <returns></returns>
         public bool tlf(string tlf)
         {
-            return Regex.IsMatch(tlf, @"^\+?\d{1,3}?[- .]?\(?(?:\d{2,3})\)?[- .]?\d\d\d[- .]?\d\d\d\d$");
+            return Regex.IsMatch(tlf, @"^\+?\d{1,3}?[- .]?\(?(?:\d{1,4})\)?[- .]?\d{3,4}[- .]?\d{3,4}$");
         }
 
         /// <summary>
