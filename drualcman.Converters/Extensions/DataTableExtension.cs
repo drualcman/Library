@@ -298,7 +298,7 @@ namespace drualcman.Converters.Extensions
             else if(dt.Columns[col].DataType == typeof(DateTime))
             {
                 jsonString.Append("\"");
-                jsonString.Append(((DateTime)dt.Rows[row][col]).ToString("yyyy-MM-dd HH':'mm':'ss"));
+                jsonString.Append(((DateTime)dt.Rows[row][col]).ToString("O"));
                 jsonString.Append("\"");
             }
             else if(dt.Columns[col].DataType == typeof(string))
