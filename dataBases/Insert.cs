@@ -123,14 +123,22 @@ namespace drualcman
                 columns.Append($"[{colName[i].Replace("[", "").Replace("]", "")}],");
                 values.Append($"@value_{i},");
 
-                if (colValue[i].GetType() == typeof(DateTime))
+                if (colValue[i] is not null)
                 {
-                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), Convert.ToDateTime(colValue[i]).ToString("O"));
+                    if (colValue[i].GetType() == typeof(DateTime))
+                    {
+                        cmd.Parameters.AddWithValue("@value_" + i.ToString(), Convert.ToDateTime(colValue[i]).ToString("O"));
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i]);
+                    }
                 }
                 else
                 {
-                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), DBNull.Value);
                 }
+
 
             }
             columns.Remove(columns.Length - 1, 1);
