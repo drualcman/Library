@@ -127,7 +127,14 @@ namespace drualcman
             //check columns
             for(i = 0; i < colName.Count(); i++)
             {
-                cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
+                if (colValue[i].GetType() == typeof(DateTime))
+                {
+                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), Convert.ToDateTime(colValue[i]).ToString("O"));
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@value_" + i.ToString(), colValue[i] ?? DBNull.Value);
+                }
                 sql.Append($" [{colName[i].Replace("[", "").Replace("]", "")}] = @value_{i},");
             }
             sql.Remove(sql.Length - 1, 1);
