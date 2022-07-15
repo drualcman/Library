@@ -31,7 +31,7 @@ namespace drualcman
         {
             //convertir la fecha al format admitido por SQL
             if(hora == false) return string.Format("{0:yyyy-MM-dd}", Fecha);
-            else return string.Format("O", Fecha);
+            else return string.Format("{0:O}", Fecha);
         }
 
         /// <summary>
