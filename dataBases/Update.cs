@@ -131,7 +131,7 @@ namespace drualcman
                 {
                     if (colValue[i].GetType() == typeof(DateTime))
                     {
-                        cmd.Parameters.AddWithValue("@value_" + i.ToString(), Convert.ToDateTime(colValue[i]).ToString("O"));
+                        cmd.Parameters.AddWithValue("@value_" + i.ToString(), Convert.ToDateTime(colValue[i]).ToUniversalTime());
                     }
                     else
                     {
