@@ -123,9 +123,9 @@ namespace drualcman
                 columns.Append($"[{colName[i].Replace("[", "").Replace("]", "")}],");
                 values.Append($"@value_{i},");
 
-                if (colValue[i] is not null)
+                if(colValue[i] is not null)
                 {
-                    if (colValue[i].GetType() == typeof(DateTime))
+                    if(colValue[i].GetType() == typeof(DateTime))
                     {
                         cmd.Parameters.AddWithValue("@value_" + i.ToString(), Convert.ToDateTime(colValue[i]).ToUniversalTime());
                     }

@@ -66,7 +66,7 @@ namespace drualcman.Data.Extensions
         #endregion
 
         #region helpers
-        
+
         /// <summary>
         /// Get all column names from the table send
         /// </summary>

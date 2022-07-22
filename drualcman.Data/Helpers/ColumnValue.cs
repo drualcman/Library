@@ -127,8 +127,8 @@ namespace drualcman.Data.Helpers
                                     sender.SetValue(destination, Enum.Parse(sender.PropertyType, value.ToString()));
                                 }
                             }
-                            else if (sender.PropertyType == typeof(String)) sender.SetValue(destination, value.ToString());
-                            else if (value.GetType().IsAssignableTo(typeof(IConvertible))) sender.SetValue(destination, Convert.ChangeType(value, sender.PropertyType));
+                            else if(sender.PropertyType == typeof(String)) sender.SetValue(destination, value.ToString());
+                            else if(value.GetType().IsAssignableTo(typeof(IConvertible))) sender.SetValue(destination, Convert.ChangeType(value, sender.PropertyType));
                             else sender.SetValue(destination, value);
                         }
                         break;
