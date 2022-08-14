@@ -3,7 +3,6 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Summary description for drAspFicheros
@@ -53,7 +52,7 @@ namespace drualcman
             /// <returns></returns>
             public static string GetStringFromUrl(string url)
             {
-                
+
                 using HttpClient client = new HttpClient();
                 string result = client.GetStringAsync(url).Result;
                 return result;
@@ -81,7 +80,7 @@ namespace drualcman
             {
                 try
                 {
-                    bool retorno;              
+                    bool retorno;
                     using HttpClient client = new HttpClient();
                     client.Timeout = new TimeSpan(timeout);
                     HttpResponseMessage response = client.GetAsync(url).Result;

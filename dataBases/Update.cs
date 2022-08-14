@@ -127,9 +127,9 @@ namespace drualcman
             //check columns
             for(i = 0; i < colName.Count(); i++)
             {
-                if (colValue[i] is not null)
+                if(colValue[i] is not null)
                 {
-                    if (colValue[i].GetType() == typeof(DateTime))
+                    if(colValue[i].GetType() == typeof(DateTime))
                     {
                         cmd.Parameters.AddWithValue("@value_" + i.ToString(), Convert.ToDateTime(colValue[i]).ToUniversalTime());
                     }

@@ -23,7 +23,7 @@ namespace drualcman.Converters.Extensions
                     else if(o.GetType() == typeof(DataTable))
                     {
                         data = DataTableConverter.ToJson((DataTable)o);
-                    } 
+                    }
                     else if(o.GetType() == typeof(DataView))
                     {
                         DataView dv = (DataView)o;
