@@ -7,7 +7,7 @@ namespace drualcman
     {
         public static string MD5(string word)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
@@ -23,7 +23,7 @@ namespace drualcman
         /// <returns></returns>
         public static string MD5(int number)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
@@ -42,7 +42,7 @@ namespace drualcman
         /// <returns></returns>
         public static string MD5(long number)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
@@ -61,7 +61,7 @@ namespace drualcman
         /// <returns></returns>
         public static string MD5(double number)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
@@ -80,7 +80,7 @@ namespace drualcman
         /// <returns></returns>
         public static string MD5(decimal number)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
@@ -99,7 +99,7 @@ namespace drualcman
         /// <returns></returns>
         public static string MD5(object s)
         {
-            MD5 md5 = MD5CryptoServiceProvider.Create();
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
@@ -167,7 +167,7 @@ namespace drualcman
 
         public static string SHA1(string str)
         {
-            SHA1 sha1 = SHA1Managed.Create();
+            SHA1 sha1 = System.Security.Cryptography.SHA1.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
@@ -178,7 +178,7 @@ namespace drualcman
 
         public static string SHA256(string str)
         {
-            SHA256 sha256 = SHA256Managed.Create();
+            SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
@@ -189,7 +189,7 @@ namespace drualcman
 
         public static string SHA384(string str)
         {
-            SHA384 sha384 = SHA384Managed.Create();
+            SHA384 sha384 = System.Security.Cryptography.SHA384.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
@@ -200,7 +200,7 @@ namespace drualcman
 
         public static string SHA512(string str)
         {
-            SHA512 sha512 = SHA512Managed.Create();
+            SHA512 sha512 = System.Security.Cryptography.SHA512.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] stream = null;
             StringBuilder sb = new StringBuilder();
