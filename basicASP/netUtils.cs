@@ -18,17 +18,20 @@ namespace drualcman
         {
             #region variables
             private HttpContext Context;
+            private readonly string BaseUri;
             #endregion
 
             #region Constructor
             public netUtils()
             {
                 this.Context = null;
+                BaseUri = string.Empty;
             }
 
             public netUtils(HttpContext context)
             {
                 this.Context = context;
+                BaseUri = knowServerURL();
             }
             #endregion
 
@@ -207,15 +210,19 @@ namespace drualcman
             public string knowServerURL()
             {
                 string serverURL;
-
-                try
+                if(this.Context is not null)
                 {
-                    serverURL = this.Context.Request.Scheme + "://" + this.Context.Request.Host.Value;
+                    try
+                    {
+                        serverURL = this.Context.Request.Scheme + "://" + this.Context.Request.Host.Value;
+                    }
+                    catch
+                    {
+                        serverURL = string.Empty;
+                    }
                 }
-                catch
-                {
+                else
                     serverURL = string.Empty;
-                }
 
                 return serverURL;
 
@@ -445,12 +452,12 @@ namespace drualcman
                         if(IsBodyHtml == true)
                         {
                             //insert link
-                            cuerpoTexto += basicHTML.a(knowServerURL() + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
+                            cuerpoTexto += basicHTML.a(BaseUri + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
                         }
                         else
                         {
                             //inser texto where is it the file
-                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
+                            cuerpoTexto += " If you cannot read the message well click here " + BaseUri + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
                         }
                     }
 
@@ -666,12 +673,12 @@ namespace drualcman
                         if(IsBodyHtml == true)
                         {
                             //insert link
-                            cuerpoTexto += basicHTML.a(knowServerURL() + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
+                            cuerpoTexto += basicHTML.a(BaseUri + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
                         }
                         else
                         {
                             //inser texto where is it the file
-                            cuerpoTexto += " If you cannot read the message well click here " + knowServerURL() + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
+                            cuerpoTexto += " If you cannot read the message well click here " + BaseUri + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
                         }
                     }
 
