@@ -158,8 +158,8 @@ namespace drualcman
                 {
                     //el nombre existe en el servidor, cambiar el nombre del archivo
                     //tantas veces como sea necesario para poder almacenar el archivo
-                    strRuta = Carpeta + guardar;
                     guardar = pre + nombreFile() + Path.GetExtension(NombreArchivo);
+                    strRuta = Carpeta + guardar;
                 } while(existeFichero(strRuta));
             }
             else
