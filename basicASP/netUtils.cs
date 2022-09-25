@@ -332,6 +332,7 @@ namespace drualcman
             /// <param name="mailRemitente">Mail del remitente (opcional)</param>
             /// <param name="hostSMTP">Servidor de envio</param>
             /// <param name="userName">Nombre de usuario</param>
+            /// <param name="notUse">Obsolete, nohting to do</param>
             /// <param name="userPass">Password de la cuenta</param>
             /// <param name="numDestinatarios">Numero de destinatarios en cada envio. Defecto 50</param>
             /// <param name="IsBodyHtml">Indica si el texto tiene formato HTML</param>
@@ -339,13 +340,12 @@ namespace drualcman
             /// <param name="folder">Carpeta para almacenar el archivo.</param>
             /// <param name="temp">Indicar si el archiv es temporal o debe ser borrado</param>
             /// <param name="enableSsl">Habilitar la seguridad del servidor</param>
-            /// <param name="urlFiles">URI que antecede a la carpeta folder para descargar el link del archivo adjunto</param>
             /// <returns>
             /// Devuelve true si el envío ha sido satisfactorio
             /// </returns>
             public bool EnviarMail(string eMail, string Asunto, string cuerpoTexto,
                 string empresaRemitente, string mailRemitente, string hostSMTP, string userName,
-                string userPass, string urlFiles, int numDestinatarios = 10, bool IsBodyHtml = false,
+                string userPass, string notUse, int numDestinatarios = 10, bool IsBodyHtml = false,
                 string filename = "", string folder = "mails", bool temp = false, bool enableSsl = false)
             {
                 bool bResutado = true;
@@ -403,15 +403,6 @@ namespace drualcman
 
                         //comprobar que no es una lista de archivo
                         string fichero = string.Empty;
-                        string folder2 = "~/" + folder;
-                        try
-                        {
-                            urlFiles = MailUri.GetFilesUrl();
-                        }
-                        catch
-                        {
-                            urlFiles = string.Empty;
-                        }
                         if(filename.IndexOf(";") > 0)
                         {
                             //es una lista de archivos
@@ -420,8 +411,8 @@ namespace drualcman
                             {
                                 if(f.existeFichero(file.Trim(), folder))
                                 {
-                                    // solo es un archivo
-                                    fichero = folder + file.Trim();
+                                    // solo es un archivo                                  
+                                    fichero = Path.Combine(folder, file.Trim());
                                     correo.Attachments.Add(new Attachment(a.GetStreamFile(fichero), System.IO.Path.GetFileName(fichero)));
                                     //
                                     // se elimina el archivo porque no estara bloqueado y era un archivo temporal
@@ -430,8 +421,8 @@ namespace drualcman
                                 }
                                 else
                                 {
-                                    if(!string.IsNullOrEmpty(urlFiles))
-                                        cuerpoTexto += basicHTML.a(urlFiles, file.Trim()) + Environment.NewLine;
+                                    if(IsUrl(file.Trim()))
+                                        cuerpoTexto += basicHTML.a(file.Trim(), file.Trim()) + Environment.NewLine;
                                 }
                             }
                         }
@@ -440,7 +431,7 @@ namespace drualcman
                             if(f.existeFichero(filename.Trim(), folder))
                             {
                                 // solo es un archivo
-                                fichero = folder2 + filename.Trim();
+                                fichero = Path.Combine(folder, filename.Trim());
                                 correo.Attachments.Add(new Attachment(a.GetStreamFile(fichero), System.IO.Path.GetFileName(fichero)));
                                 //
                                 // se elimina el archivo porque no estara bloqueado y era un archivo temporal
@@ -449,8 +440,8 @@ namespace drualcman
                             }
                             else
                             {
-                                if(!string.IsNullOrEmpty(urlFiles))
-                                    cuerpoTexto += basicHTML.a(urlFiles, filename.Trim());
+                                if(IsUrl(filename.Trim()))
+                                    cuerpoTexto += basicHTML.a(filename.Trim(), filename.Trim()) + Environment.NewLine;
                             }
                         }
                         a = null;
@@ -787,6 +778,14 @@ namespace drualcman
                 return err;
             }
             #endregion
+
+            private bool IsUrl(string fileName)
+            {
+                bool result;
+                result = fileName.Contains("http://");
+                if(!result) result = fileName.Contains("https://");
+                return result;
+            }
         }
     }
 }
