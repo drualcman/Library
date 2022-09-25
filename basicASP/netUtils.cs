@@ -383,7 +383,7 @@ namespace drualcman
                     //guardar una copia del correo para poner un enlace a la copia HTML del mismo
                     try
                     {
-                        if(MailUri is not null) fileHTML = MailUri.GetReadUri(cuerpoTexto);
+                        if(MailUri is not null) fileHTML = MailUri.GetFileHtmlUrl(cuerpoTexto);
                         else fileHTML = string.Empty;
                     }
                     catch
@@ -662,7 +662,7 @@ namespace drualcman
                     //guardar una copia del correo para poner un enlace a la copia HTML del mismo
                     try
                     {
-                        fileHTML = MailUri.GetReadUri(cuerpoTexto);
+                        fileHTML = MailUri.GetFileHtmlUrl(cuerpoTexto);
                     }
                     catch
                     {

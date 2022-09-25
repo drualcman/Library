@@ -2,6 +2,6 @@
 {
     public interface IMailReadUri
     {
-        string GetReadUri(string mailBody);
+        string GetFileHtmlUrl(string mailBody);
     }
 }
