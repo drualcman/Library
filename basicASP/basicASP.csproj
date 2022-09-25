@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\drualcman.Abstractions\drualcman.Abstractions.csproj" />
     <ProjectReference Include="..\drualcman.Files\drualcman.Files.csproj" />
   </ItemGroup>
 

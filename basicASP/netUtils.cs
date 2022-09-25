@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using drualcman.Abstractions.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -18,20 +19,16 @@ namespace drualcman
         {
             #region variables
             private HttpContext Context;
-            private readonly string BaseUri;
+            private IMailReadUri MailUri;
             #endregion
 
             #region Constructor
-            public netUtils()
-            {
-                this.Context = null;
-                BaseUri = string.Empty;
-            }
-
-            public netUtils(HttpContext context)
+            public netUtils() : this(null) { }
+            public netUtils(HttpContext context) : this(context, null) { }
+            public netUtils(HttpContext context, IMailReadUri mailUri)
             {
                 this.Context = context;
-                BaseUri = knowServerURL();
+                MailUri = mailUri;
             }
             #endregion
 
@@ -381,12 +378,13 @@ namespace drualcman
                     correo.Priority = MailPriority.Normal;
                     correo.IsBodyHtml = IsBodyHtml;
 
-                    ficheros f = new ficheros();
+
                     string fileHTML = string.Empty;
                     //guardar una copia del correo para poner un enlace a la copia HTML del mismo
                     try
                     {
-                        fileHTML = f.guardaDato("mail.html", cuerpoTexto, folder, true);
+                        if(MailUri is not null) fileHTML = MailUri.GetReadUri(cuerpoTexto);
+                        else fileHTML = string.Empty;
                     }
                     catch
                     {
@@ -401,10 +399,19 @@ namespace drualcman
                         //adjuntar el archivo fisicamente
                         archivos a = new archivos();
                         folder = a.checkCarpeta(folder);
+                        ficheros f = new ficheros();
 
                         //comprobar que no es una lista de archivo
                         string fichero = string.Empty;
                         string folder2 = "~/" + folder;
+                        try
+                        {
+                            urlFiles = MailUri.GetFilesUrl();
+                        }
+                        catch
+                        {
+                            urlFiles = string.Empty;
+                        }
                         if(filename.IndexOf(";") > 0)
                         {
                             //es una lista de archivos
@@ -421,7 +428,11 @@ namespace drualcman
                                     //
                                     if(temp == true) f.borrarArchivo(file.Trim(), folder);
                                 }
-                                else cuerpoTexto += basicHTML.a(urlFiles + folder.Replace("~", ""), file.Trim()) + Environment.NewLine;
+                                else
+                                {
+                                    if(!string.IsNullOrEmpty(urlFiles))
+                                        cuerpoTexto += basicHTML.a(urlFiles, file.Trim()) + Environment.NewLine;
+                                }
                             }
                         }
                         else
@@ -438,7 +449,8 @@ namespace drualcman
                             }
                             else
                             {
-                                cuerpoTexto += basicHTML.a(urlFiles + folder.Replace("~", ""), filename.Trim());
+                                if(!string.IsNullOrEmpty(urlFiles))
+                                    cuerpoTexto += basicHTML.a(urlFiles, filename.Trim());
                             }
                         }
                         a = null;
@@ -452,12 +464,12 @@ namespace drualcman
                         if(IsBodyHtml == true)
                         {
                             //insert link
-                            cuerpoTexto += basicHTML.a(BaseUri + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
+                            cuerpoTexto += basicHTML.a(fileHTML, "If you cannot read the message well click here to read it online", "_blank");
                         }
                         else
                         {
                             //inser texto where is it the file
-                            cuerpoTexto += " If you cannot read the message well click here " + BaseUri + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
+                            cuerpoTexto += " If you cannot read the message well click here " + fileHTML + " to read it online (copy the link in your Internet browser)";
                         }
                     }
 
@@ -654,12 +666,12 @@ namespace drualcman
                     correo.Priority = MailPriority.Normal;
                     correo.IsBodyHtml = IsBodyHtml;
 
-                    ficheros f = new ficheros();
+
                     string fileHTML;
                     //guardar una copia del correo para poner un enlace a la copia HTML del mismo
                     try
                     {
-                        fileHTML = f.guardaDato("mail.html", cuerpoTexto, "mails", true);
+                        fileHTML = MailUri.GetReadUri(cuerpoTexto);
                     }
                     catch
                     {
@@ -673,12 +685,12 @@ namespace drualcman
                         if(IsBodyHtml == true)
                         {
                             //insert link
-                            cuerpoTexto += basicHTML.a(BaseUri + "/mails/" + fileHTML, "If you cannot read the message well click here to read it online", "_blank");
+                            cuerpoTexto += basicHTML.a(fileHTML, "If you cannot read the message well click here to read it online", "_blank");
                         }
                         else
                         {
                             //inser texto where is it the file
-                            cuerpoTexto += " If you cannot read the message well click here " + BaseUri + "/mails/" + fileHTML + " to read it online (copy the link in your Internet browser)";
+                            cuerpoTexto += " If you cannot read the message well click here " + fileHTML + " to read it online (copy the link in your Internet browser)";
                         }
                     }
 
