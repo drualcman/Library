@@ -6,6 +6,26 @@ namespace drualcman.Converters
 {
     public class XmlConverter
     {
+
+        private readonly XmlDocument XDocument;
+        public XmlConverter(string data)
+        {
+            XDocument = new XmlDocument();
+            XDocument.LoadXml(data);
+        }
+
+        public XmlNodeList GetNodeByName(string nodeName) =>
+            XDocument.GetElementsByTagName(nodeName);
+
+        public string[] GetNodeInnetText(string nodeName)
+        {
+            List<string> result = new();
+            foreach(XmlElement item in GetNodeByName(nodeName))
+                result.Add(item.InnerText);
+            return result.ToArray();
+        }
+
+
         #region methods
         /// <summary>
         /// Convert XML String in DataSet
