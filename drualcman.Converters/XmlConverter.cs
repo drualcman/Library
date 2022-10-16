@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text;
 using System.Xml;
 
 namespace drualcman.Converters
@@ -20,8 +21,17 @@ namespace drualcman.Converters
         {
             List<string> result = new();
             foreach(XmlElement item in GetNodeByName(nodeName))
-                result.Add(item.InnerText);
+                foreach(XmlNode node in GetNodeList(item))
+                    result.Add(node.InnerText);
             return result.ToArray();
+        }
+
+        public XmlNodeList GetNodeList(XmlElement item)
+        {
+            XmlNodeList xLista = null;
+            if(item.ChildNodes.Count > 1)
+                xLista = item.ChildNodes;
+            return xLista;
         }
 
         public IDictionary<string, string> ElementToDictionary(XmlElement item)
@@ -31,12 +41,8 @@ namespace drualcman.Converters
             {
                 if(item.ChildNodes.Count == 1 &&
                    item.Attributes.Count > 0)
-                {
                     for(int i = 0; i < item.Attributes.Count; i++)
-                    {
                         result.Add(item.Attributes[i].Name, item.Attributes[i].Value);
-                    }
-                }
             }
             return result;
         }
@@ -45,10 +51,8 @@ namespace drualcman.Converters
         {
             List<XmlNode> nodes = new();
             foreach(XmlNode padre in Document)
-            {
                 if(padre.NodeType != XmlNodeType.XmlDeclaration)
                     nodes.Add(padre);
-            }
             return nodes;
         }
         #endregion
