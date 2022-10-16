@@ -1,21 +1,20 @@
 ﻿using System.Data;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace drualcman.Converters
 {
     public class XmlConverter
     {
-
-        private readonly XmlDocument XDocument;
+        public readonly XmlDocument Document;
         public XmlConverter(string data)
         {
-            XDocument = new XmlDocument();
-            XDocument.LoadXml(data);
+            Document = new XmlDocument();
+            Document.LoadXml(data);
         }
 
+        #region object methods
         public XmlNodeList GetNodeByName(string nodeName) =>
-            XDocument.GetElementsByTagName(nodeName);
+            Document.GetElementsByTagName(nodeName);
 
         public string[] GetNodeInnetText(string nodeName)
         {
@@ -25,8 +24,37 @@ namespace drualcman.Converters
             return result.ToArray();
         }
 
+        public IDictionary<string, string> ElementToDictionary(XmlElement item)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            if(item.NodeType != XmlNodeType.XmlDeclaration)
+            {
+                if(item.ChildNodes.Count == 1 &&
+                   item.Attributes.Count > 0)
+                {
+                    for(int i = 0; i < item.Attributes.Count; i++)
+                    {
+                        result.Add(item.Attributes[i].Name, item.Attributes[i].Value);
+                    }
+                }
+            }
+            return result;
+        }
 
-        #region methods
+        public IList<XmlNode> GetNoteList()
+        {
+            List<XmlNode> nodes = new();
+            foreach(XmlNode padre in Document)
+            {
+                if(padre.NodeType != XmlNodeType.XmlDeclaration)
+                    nodes.Add(padre);
+            }
+            return nodes;
+        }
+        #endregion
+
+
+        #region static methods
         /// <summary>
         /// Convert XML String in DataSet
         /// </summary>
@@ -36,15 +64,11 @@ namespace drualcman.Converters
         {
             DataSet ds = new DataSet();
             ds.DataSetName = "DataSet";
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.LoadXml(xmlData);
-            foreach(XmlNode padre in xDoc)
+            XmlConverter xmlConverter = new XmlConverter(xmlData);
+            foreach(XmlNode padre in xmlConverter.GetNoteList())
             {
-                if(padre.NodeType != XmlNodeType.XmlDeclaration)
-                {
-                    XmlNodeList xLista = padre.ChildNodes;
-                    GetNodos(xLista, ref ds, padre.Name);
-                }
+                XmlNodeList xLista = padre.ChildNodes;
+                GetNodos(xLista, ref ds, padre.Name);
             }
             return ds;
         }
