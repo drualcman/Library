@@ -21,8 +21,14 @@ namespace drualcman.Converters
         {
             List<string> result = new();
             foreach(XmlElement item in GetNodeByName(nodeName))
-                foreach(XmlNode node in GetNodeList(item))
-                    result.Add(node.InnerText);
+            {
+                XmlNodeList nodes = GetNodeList(item);
+                if(nodes is not null)
+                {
+                    foreach(XmlNode node in nodes)
+                        result.Add(node.InnerText);
+                }
+            }
             return result.ToArray();
         }
 
