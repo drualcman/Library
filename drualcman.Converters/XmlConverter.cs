@@ -35,7 +35,7 @@ namespace drualcman.Converters
         public XmlNodeList GetNodeList(XmlElement item)
         {
             XmlNodeList xLista = null;
-            if(item.ChildNodes.Count > 1)
+            if(item.ChildNodes.Count > 0)
                 xLista = item.ChildNodes;
             return xLista;
         }
