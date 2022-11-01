@@ -14,7 +14,7 @@ namespace drualcman
         /// <returns></returns>
         public bool URL(string url)
         {
-            return Regex.IsMatch(url, @"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
+            return Regex.IsMatch(url.ToLower(), @"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace drualcman
         /// <returns></returns>
         public bool URLN(string url)
         {
-            return Regex.IsMatch(url, @"^(http:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
+            return Regex.IsMatch(url.ToLower(), @"^(http:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace drualcman
         /// <returns></returns>
         public bool URLS(string url)
         {
-            return Regex.IsMatch(url, @"^(https:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
+            return Regex.IsMatch(url.ToLower(), @"^(https:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace drualcman
         /// <returns></returns>
         public bool mail(string mail)
         {
-            return Regex.IsMatch(mail, @"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$");
+            return Regex.IsMatch(mail.ToLower(), @"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$");
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace drualcman
                 string c;
 
                 // rompo el mail en dos partes, antes y despues de la @
-                string[] partes = email.Split('@');
+                string[] partes = email.ToLower().Split('@');
                 string strComparacion = "._-abcdefghijklmnopqrstuvwxyz0123456789";
                 int nElementos = partes.GetUpperBound(0);
                 if(nElementos == 1)
