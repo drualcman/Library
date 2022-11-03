@@ -72,7 +72,7 @@ namespace drualcman.Converters
         /// <returns></returns>
         public static DataTable CSVToDataTable(string filePath, char separator)
         {
-            DataTable dt = new DataTable();
+            using DataTable dt = new DataTable();
             return dt.FromFile(filePath, separator);
         }
         #endregion

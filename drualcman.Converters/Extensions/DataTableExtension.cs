@@ -117,7 +117,7 @@ namespace drualcman.Converters.Extensions
         /// <param name="separator"></param>
         public static DataTable FromStream(this DataTable dt, Stream data, char separator)
         {
-            StreamReader sr = new StreamReader(data);
+            using StreamReader sr = new StreamReader(data);
             string[] headers = sr.ReadLine().Split(separator);
             foreach(string header in headers)
             {
@@ -144,7 +144,7 @@ namespace drualcman.Converters.Extensions
         /// <returns></returns>
         public static DataTable FromFile(this DataTable dt, string filePath, char separator)
         {
-            StreamReader sr = new StreamReader(filePath);
+            using StreamReader sr = new StreamReader(filePath);
             return dt.FromStream(sr.BaseStream, separator);
         }
 

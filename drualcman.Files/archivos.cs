@@ -224,10 +224,10 @@ namespace drualcman
         {
             using FileStream fileStream = File.OpenRead(filePath);
 
-            MemoryStream memStream = new MemoryStream();
+            using MemoryStream memStream = new MemoryStream();
             memStream.SetLength(fileStream.Length);
             fileStream.Read(memStream.GetBuffer(), 0, (int)fileStream.Length);
-
+            
             return memStream;
 
         }
@@ -263,7 +263,7 @@ namespace drualcman
         /// <returns></returns>
         public Stream ToStream(byte[] bytes)
         {
-            MemoryStream stream = new MemoryStream();
+            using MemoryStream stream = new MemoryStream();
             stream.Write(bytes, 0, bytes.Length);
             stream.Position = 0;
             return stream;
