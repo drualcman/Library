@@ -224,10 +224,10 @@ namespace drualcman
         {
             using FileStream fileStream = File.OpenRead(filePath);
 
-            using MemoryStream memStream = new MemoryStream();
+            MemoryStream memStream = new MemoryStream();
             memStream.SetLength(fileStream.Length);
             fileStream.Read(memStream.GetBuffer(), 0, (int)fileStream.Length);
-            
+
             return memStream;
 
         }
@@ -263,7 +263,7 @@ namespace drualcman
         /// <returns></returns>
         public Stream ToStream(byte[] bytes)
         {
-            using MemoryStream stream = new MemoryStream();
+            MemoryStream stream = new MemoryStream();
             stream.Write(bytes, 0, bytes.Length);
             stream.Position = 0;
             return stream;
@@ -515,26 +515,25 @@ namespace drualcman
             try
             {
                 byte[] bytes;
-                using(FileStream fsSource = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using FileStream fsSource = new FileStream(path, FileMode.Open, FileAccess.Read);
+                // Read the source file into a byte array.
+                bytes = new byte[fsSource.Length];
+                int numBytesToRead = (int)fsSource.Length;
+                int numBytesRead = 0;
+                while(numBytesToRead > 0)
                 {
-                    // Read the source file into a byte array.
-                    bytes = new byte[fsSource.Length];
-                    int numBytesToRead = (int)fsSource.Length;
-                    int numBytesRead = 0;
-                    while(numBytesToRead > 0)
-                    {
-                        // Read may return anything from 0 to numBytesToRead.
-                        int n = fsSource.Read(bytes, numBytesRead, numBytesToRead);
+                    // Read may return anything from 0 to numBytesToRead.
+                    int n = fsSource.Read(bytes, numBytesRead, numBytesToRead);
 
-                        // Break when the end of the file is reached.
-                        if(n == 0)
-                            break;
+                    // Break when the end of the file is reached.
+                    if(n == 0)
+                        break;
 
-                        numBytesRead += n;
-                        numBytesToRead -= n;
-                    }
-                    numBytesToRead = bytes.Length;
+                    numBytesRead += n;
+                    numBytesToRead -= n;
                 }
+                numBytesToRead = bytes.Length;
+
                 return bytes;
             }
             catch(FileLoadException ex)
