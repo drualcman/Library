@@ -354,7 +354,7 @@ namespace drualcman
                 }
                 catch(Exception)
                 {
-                    imgSrcs.Add("https://imaging.blob.core.windows.net/content/noimage.jpg");
+                    imgSrcs.Add("https://imaging.blob.core.windows.net/content/nopicture.jpg");
                 }
 
                 return imgSrcs;
