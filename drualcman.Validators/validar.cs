@@ -115,16 +115,50 @@ namespace drualcman
         /// Comprueba que la contraseña es fuerte.
         /// Contraseñas que contengan al menos una letra mayúscula.
         /// Contraseñas que contengan al menos una letra minúscula.
-        /// Contraseñas que contengan al menos un número o caracter especial.
-        /// Contraseñas cuya longitud sea como mínimo 8 caracteres.
-        /// Contraseñas cuya longitud máxima no debe ser arbitrariamente limitada.
+        /// Contraseñas que contengan al menos un número.
+        /// Contraseñas que contengan al menos un caracter especial.
+        /// Contraseñas cuya longitud sea como mínimo 6 caracteres.
+        /// Contraseñas cuya longitud máxima sea 30 caracteres
         /// </summary>
         /// <param name="pass">Password a validar</param>
         /// <returns></returns>        
-        public bool password(string pass)
+        public bool password(string pass) 
         {
-            return Regex.IsMatch(pass, @"(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$");
+            return password(pass, 30);
         }
+
+        /// <summary>
+        /// Comprueba que la contraseña es fuerte.
+        /// Contraseñas que contengan al menos una letra mayúscula.
+        /// Contraseñas que contengan al menos una letra minúscula.
+        /// Contraseñas que contengan al menos un número.
+        /// Contraseñas que contengan al menos un caracter especial. 
+        /// Contraseñas cuya longitud sea como mínimo 6 caracteres.
+        /// </summary>
+        /// <param name="pass">Password a validar</param>
+        /// <param name="maxChars">Maximun Chars</param>
+        public bool password(string pass, int maxChars)
+        {
+            return password(pass, 6, maxChars);
+        }
+        
+        
+        /// <summary>
+        /// Comprueba que la contraseña es fuerte.
+        /// Contraseñas que contengan al menos una letra mayúscula.
+        /// Contraseñas que contengan al menos una letra minúscula.
+        /// Contraseñas que contengan al menos un número.
+        /// Contraseñas que contengan al menos un caracter especial.
+        /// </summary>
+        /// <param name="pass">Password a validar</param>
+        /// <param name="minChars">Minimum Chars</param>
+        /// <param name="maxChars">Maximun Chars</param>
+        /// <returns></returns>
+        public bool password(string pass, int minChars, int maxChars)
+        {
+            return Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{" + minChars + "," + maxChars + "}$");
+        }
+
 
         /// <summary>
         /// Comprueba que tlf es correcto. Segun listados en la Wikipedia https://en.wikipedia.org/wiki/List_of_country_calling_codes
