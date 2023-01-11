@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.Common;
 using System.Reflection;
 
 namespace drualcman.Data.Helpers
@@ -38,7 +39,7 @@ namespace drualcman.Data.Helpers
             catch(Exception ex)
             {
                 string err = ex.Message;
-                Console.WriteLine("ex 2 {0}", err);
+                Console.WriteLine("ex 2 {0}, column: {1}, value: {2}", err, column.ColumnName, row);
                 SetValue(column.Column, Item, row);
             }
 
@@ -55,7 +56,8 @@ namespace drualcman.Data.Helpers
             }
             catch(Exception ex)
             {
-                string err = ex.Message;
+                string err = ex.Message;           
+                Console.WriteLine("ex 3 {0}, sender: {1}, value: {2}, destination: {3}", err, sender.Name, value, destination);
                 Console.WriteLine("ex 3 {0}", err);
             }
 
@@ -97,17 +99,7 @@ namespace drualcman.Data.Helpers
                         sender.SetValue(destination, Convert.ToByte(value));
                         break;
                     case "date":
-                        DateTime date;
-                        if(!DateTime.TryParse(value.ToString(), out date))
-                        {
-                            TimeSpan time;
-                            if(!TimeSpan.TryParse(value.ToString(), out time))
-                            {
-                                time = new TimeSpan(DateTime.Now.Ticks);
-                            }
-                            date = new DateTime(time.Ticks);
-                        }
-                        sender.SetValue(destination, date);
+                        sender.SetValue(destination, ConvertIntoDate(value));
                         break;
                     case "nullable":
                         sender.SetValue(destination, value);
@@ -127,6 +119,7 @@ namespace drualcman.Data.Helpers
                                     sender.SetValue(destination, Enum.Parse(sender.PropertyType, value.ToString()));
                                 }
                             }
+                            else if(sender.PropertyType == typeof(DateTime)) sender.SetValue(destination, ConvertIntoDate(value));
                             else if(sender.PropertyType == typeof(String)) sender.SetValue(destination, value.ToString());
                             else if(value.GetType().IsAssignableTo(typeof(IConvertible))) sender.SetValue(destination, Convert.ChangeType(value, sender.PropertyType));
                             else sender.SetValue(destination, value);
@@ -134,6 +127,30 @@ namespace drualcman.Data.Helpers
                         break;
                 }
             }
+        }
+
+        private DateTime ConvertIntoDate(object value)
+        {
+            DateTime date;
+            try
+            {
+                date = Convert.ToDateTime(value);
+            }
+            catch(Exception ex)
+            {
+                string err = ex.Message;
+                Console.WriteLine("ex ConvertIntoDate {0}", err);
+
+                if(!DateTime.TryParse(value.ToString(), out date))
+                {
+                    if(!TimeSpan.TryParse(value.ToString(), out TimeSpan time))
+                    {
+                        time = new TimeSpan(DateTime.Now.Ticks);
+                    }
+                    date = new DateTime(time.Ticks);
+                }
+            }
+            return date;
         }
     }
 }
