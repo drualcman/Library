@@ -491,29 +491,7 @@ namespace drualcman.Converters
                     jsonString.Append(dt.Rows[rows][cols] + addComma);
                 }
             }
-            else if(dt.Columns[cols].DataType == typeof(int))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[rows][cols], true, "{0:0}") + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(dt.Rows[rows][cols] + addComma);
-                }
-            }
             else if(dt.Columns[cols].DataType == typeof(long))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[rows][cols], true, "{0:0}") + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(dt.Rows[rows][cols] + addComma);
-                }
-            }
-            else if(dt.Columns[cols].DataType == typeof(int))
             {
                 try
                 {
@@ -536,39 +514,6 @@ namespace drualcman.Converters
                 }
             }
             else if(dt.Columns[cols].DataType == typeof(decimal))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(dt.Rows[rows][cols] + addComma);
-                }
-            }
-            else if(dt.Columns[cols].DataType == typeof(float))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(dt.Rows[rows][cols] + addComma);
-                }
-            }
-            else if(dt.Columns[cols].DataType == typeof(long))
-            {
-                try
-                {
-                    jsonString.Append(n.number2String(dt.Rows[rows][cols], true) + addComma);
-                }
-                catch
-                {
-                    jsonString.Append(dt.Rows[rows][cols] + addComma);
-                }
-            }
-            else if(dt.Columns[cols].DataType == typeof(short))
             {
                 try
                 {
