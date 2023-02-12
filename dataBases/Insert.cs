@@ -49,7 +49,7 @@ namespace drualcman
                 using SqlCommand cmd = SetInsert(table, colName, colValue);
                 if(returnScope)
                 {
-                    cmd.CommandText += "; select SCOPE_IDENTITY()";
+                    cmd.CommandText += " select SCOPE_IDENTITY()";
                     try
                     {
                         result = Convert.ToInt32(Execute(cmd));
