@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace drualcman
 {
@@ -14,7 +15,8 @@ namespace drualcman
         /// <returns></returns>
         public bool URL(string url)
         {
-            return Regex.IsMatch(url.ToLower(), @"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
+            if (!string.IsNullOrWhiteSpace(url)) return Regex.IsMatch(url.ToLower(), @"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
+            else return false;
         }
 
         /// <summary>
@@ -24,7 +26,8 @@ namespace drualcman
         /// <returns></returns>
         public bool URLN(string url)
         {
-            return Regex.IsMatch(url.ToLower(), @"^(http:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
+            if (!string.IsNullOrWhiteSpace(url)) return Regex.IsMatch(url.ToLower(), @"^(http:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
+            else return false;
         }
 
         /// <summary>
@@ -34,7 +37,8 @@ namespace drualcman
         /// <returns></returns>
         public bool URLS(string url)
         {
-            return Regex.IsMatch(url.ToLower(), @"^(https:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
+            if (!string.IsNullOrWhiteSpace(url)) return Regex.IsMatch(url.ToLower(), @"^(https:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
+            else return false;
         }
 
         /// <summary>
@@ -44,7 +48,8 @@ namespace drualcman
         /// <returns></returns>
         public bool mail(string mail)
         {
-            return Regex.IsMatch(mail.ToLower(), @"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$");
+            if (!string.IsNullOrWhiteSpace(mail)) return Regex.IsMatch(mail.ToLower(), @"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$");
+            else return false;
         }
 
         /// <summary>
@@ -56,7 +61,7 @@ namespace drualcman
         {
             bool bResutado = true;
 
-            if(string.IsNullOrEmpty(email)) bResutado = false;
+            if(string.IsNullOrWhiteSpace(email)) bResutado = false;
             else
             {
                 string c;
@@ -156,7 +161,8 @@ namespace drualcman
         /// <returns></returns>
         public bool password(string pass, int minChars, int maxChars)
         {
-            return Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{" + minChars + "," + maxChars + "}$");
+            if(string.IsNullOrWhiteSpace(pass)) return Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{" + minChars + "," + maxChars + "}$");
+            else return false;
         }
 
 
@@ -167,7 +173,8 @@ namespace drualcman
         /// <returns></returns>
         public bool tlf(string tlf)
         {
-            return Regex.IsMatch(tlf, @"^\+?\d{1,3}?[- .]?\(?(?:\d{1,4})\)?[- .]?\d{3,4}[- .]?\d{3,4}$");
+            if(string.IsNullOrWhiteSpace(tlf)) return Regex.IsMatch(tlf, @"^\+?\d{1,3}?[- .]?\(?(?:\d{1,4})\)?[- .]?\d{3,4}[- .]?\d{3,4}$");
+            else return false;
         }
 
         /// <summary>
@@ -177,7 +184,8 @@ namespace drualcman
         /// <returns></returns>
         public bool tarjeta(string number)
         {
-            return Regex.IsMatch(number, @"^((67\d{2})|(4\d{3})|(5[1-5]\d{2})|(6011))(-?\s?\d{4}){3}|(3[4,7])\ d{2}-?\s?\d{6}-?\s?\d{5}$");
+            if(string.IsNullOrWhiteSpace(number)) return Regex.IsMatch(number, @"^((67\d{2})|(4\d{3})|(5[1-5]\d{2})|(6011))(-?\s?\d{4}){3}|(3[4,7])\ d{2}-?\s?\d{6}-?\s?\d{5}$");
+            else return false;
         }
     }
 
