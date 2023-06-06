@@ -161,7 +161,7 @@ namespace drualcman
         /// <returns></returns>
         public bool password(string pass, int minChars, int maxChars)
         {
-            if(string.IsNullOrWhiteSpace(pass)) return Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{" + minChars + "," + maxChars + "}$");
+            if(!string.IsNullOrWhiteSpace(pass)) return Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{" + minChars + "," + maxChars + "}$");
             else return false;
         }
 
@@ -173,7 +173,7 @@ namespace drualcman
         /// <returns></returns>
         public bool tlf(string tlf)
         {
-            if(string.IsNullOrWhiteSpace(tlf)) return Regex.IsMatch(tlf, @"^\+?\d{1,3}?[- .]?\(?(?:\d{1,4})\)?[- .]?\d{3,4}[- .]?\d{3,4}$");
+            if(!string.IsNullOrWhiteSpace(tlf)) return Regex.IsMatch(tlf, @"^\+?\d{1,3}?[- .]?\(?(?:\d{1,4})\)?[- .]?\d{3,4}[- .]?\d{3,4}$");
             else return false;
         }
 
@@ -184,7 +184,7 @@ namespace drualcman
         /// <returns></returns>
         public bool tarjeta(string number)
         {
-            if(string.IsNullOrWhiteSpace(number)) return Regex.IsMatch(number, @"^((67\d{2})|(4\d{3})|(5[1-5]\d{2})|(6011))(-?\s?\d{4}){3}|(3[4,7])\ d{2}-?\s?\d{6}-?\s?\d{5}$");
+            if(!string.IsNullOrWhiteSpace(number)) return Regex.IsMatch(number, @"^((67\d{2})|(4\d{3})|(5[1-5]\d{2})|(6011))(-?\s?\d{4}){3}|(3[4,7])\ d{2}-?\s?\d{6}-?\s?\d{5}$");
             else return false;
         }
     }
