@@ -1,6 +1,5 @@
 ﻿using drualcman.Abstractions.Interfaces;
 using drualcman.Data;
-using System;
 using System.Text.RegularExpressions;
 
 namespace drualcman

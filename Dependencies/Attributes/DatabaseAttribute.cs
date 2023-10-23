@@ -1,5 +1,4 @@
 ﻿using drualcman.Enums;
-using System;
 
 namespace drualcman.Attributes
 {

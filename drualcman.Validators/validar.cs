@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace drualcman
 {
@@ -15,7 +14,7 @@ namespace drualcman
         /// <returns></returns>
         public bool URL(string url)
         {
-            if (!string.IsNullOrWhiteSpace(url)) return Regex.IsMatch(url.ToLower(), @"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
+            if(!string.IsNullOrWhiteSpace(url)) return Regex.IsMatch(url.ToLower(), @"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
             else return false;
         }
 
@@ -26,7 +25,7 @@ namespace drualcman
         /// <returns></returns>
         public bool URLN(string url)
         {
-            if (!string.IsNullOrWhiteSpace(url)) return Regex.IsMatch(url.ToLower(), @"^(http:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
+            if(!string.IsNullOrWhiteSpace(url)) return Regex.IsMatch(url.ToLower(), @"^(http:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
             else return false;
         }
 
@@ -37,7 +36,7 @@ namespace drualcman
         /// <returns></returns>
         public bool URLS(string url)
         {
-            if (!string.IsNullOrWhiteSpace(url)) return Regex.IsMatch(url.ToLower(), @"^(https:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
+            if(!string.IsNullOrWhiteSpace(url)) return Regex.IsMatch(url.ToLower(), @"^(https:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$");
             else return false;
         }
 
@@ -48,7 +47,7 @@ namespace drualcman
         /// <returns></returns>
         public bool mail(string mail)
         {
-            if (!string.IsNullOrWhiteSpace(mail)) return Regex.IsMatch(mail.ToLower(), @"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$");
+            if(!string.IsNullOrWhiteSpace(mail)) return Regex.IsMatch(mail.ToLower(), @"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$");
             else return false;
         }
 
@@ -127,7 +126,7 @@ namespace drualcman
         /// </summary>
         /// <param name="pass">Password a validar</param>
         /// <returns></returns>        
-        public bool password(string pass) 
+        public bool password(string pass)
         {
             return password(pass, 30);
         }
@@ -146,8 +145,8 @@ namespace drualcman
         {
             return password(pass, 6, maxChars);
         }
-        
-        
+
+
         /// <summary>
         /// Comprueba que la contraseña es fuerte.
         /// Contraseñas que contengan al menos una letra mayúscula.

@@ -1,9 +1,6 @@
 ﻿using drualcman.Attributes;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Common;
-using System.Linq;
 using System.Reflection;
 
 namespace drualcman.Data.Helpers

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading.Tasks;
 
 namespace drualcman
 {

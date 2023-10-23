@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Text;
 using System.Xml;
 
 namespace drualcman.Converters

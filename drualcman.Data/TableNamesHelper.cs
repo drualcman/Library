@@ -1,7 +1,5 @@
 ﻿using drualcman.Attributes;
 using drualcman.Enums;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace drualcman.Data

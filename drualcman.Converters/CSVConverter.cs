@@ -1,6 +1,5 @@
 ﻿using drualcman.Converters.Extensions;
 using System.Data;
-using System.Threading.Tasks;
 
 namespace drualcman.Converters
 {

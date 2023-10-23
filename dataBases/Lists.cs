@@ -2,14 +2,10 @@
 using drualcman.Data.Helpers;
 using drualcman.Enums;
 using drualcman.Helpers;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace drualcman
 {

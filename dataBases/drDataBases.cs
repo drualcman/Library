@@ -1,9 +1,5 @@
 ﻿using drualcman.Abstractions.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace drualcman
 {

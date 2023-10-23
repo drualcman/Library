@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Net.Http;
-
-/// <summary>
+﻿/// <summary>
 /// Summary description for drAspFicheros
 /// </summary>
 namespace drualcman

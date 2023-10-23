@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.Common;
 using System.Reflection;
 
 namespace drualcman.Data.Helpers
@@ -56,7 +53,7 @@ namespace drualcman.Data.Helpers
             }
             catch(Exception ex)
             {
-                string err = ex.Message;           
+                string err = ex.Message;
                 Console.WriteLine("ex 3 {0}, sender: {1}, value: {2}, destination: {3}", err, sender.Name, value, destination);
                 Console.WriteLine("ex 3 {0}", err);
             }
