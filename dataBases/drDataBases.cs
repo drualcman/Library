@@ -130,7 +130,8 @@ namespace drualcman
         {
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion;
-            this.FolderLog = folder;
+            this.FolderLog = folder;                  
+            SetLogger( new defLog(folder));
         }
 
         /// <summary>
@@ -160,8 +161,8 @@ namespace drualcman
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion;
             this.FolderLog = folderLog;
-            this.ChrControl = ControlCHR;
-            SetLogger(null);
+            this.ChrControl = ControlCHR;    
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -178,8 +179,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion;
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure;   
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -223,8 +224,8 @@ namespace drualcman
             // crear la cadena de conexion con la base de datos con la cadena de conexion completa            
             this.rutaDDBB = cadenaConexion(DDBB);
             this.FolderLog = folderLog;
-            this.ChrControl = ControlCHR;
-            SetLogger(null);
+            this.ChrControl = ControlCHR;  
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -241,8 +242,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion(DDBB);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure; 
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -260,8 +261,8 @@ namespace drualcman
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass);
             this.FolderLog = folderLog;
-            this.ChrControl = ControlCHR;
-            SetLogger(null);
+            this.ChrControl = ControlCHR;  
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -280,8 +281,8 @@ namespace drualcman
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize);
             this.FolderLog = folderLog;
-            this.ChrControl = ControlCHR;
-            SetLogger(null);
+            this.ChrControl = ControlCHR; 
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -301,8 +302,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure;  
+            SetLogger( new defLog(folderLog));
         }
 
 
@@ -324,8 +325,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure;  
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -344,8 +345,8 @@ namespace drualcman
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation);
             this.FolderLog = folderLog;
-            this.ChrControl = ControlCHR;
-            SetLogger(null);
+            this.ChrControl = ControlCHR;  
+            SetLogger( new defLog(folderLog));
         }
 
 
@@ -366,8 +367,8 @@ namespace drualcman
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation);
             this.FolderLog = folderLog;
-            this.ChrControl = ControlCHR;
-            SetLogger(null);
+            this.ChrControl = ControlCHR; 
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -388,8 +389,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure;  
+            SetLogger( new defLog(folderLog));
         }
 
 
@@ -412,8 +413,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure;   
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -433,8 +434,8 @@ namespace drualcman
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation, packet);
             this.FolderLog = folderLog;
-            this.ChrControl = ControlCHR;
-            SetLogger(null);
+            this.ChrControl = ControlCHR;   
+            SetLogger( new defLog(folderLog));
         }
 
 
@@ -456,8 +457,8 @@ namespace drualcman
             // crear la cadena de conexion con la base de datos en funcion los datos
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation, packet);
             this.FolderLog = folderLog;
-            this.ChrControl = ControlCHR;
-            SetLogger(null);
+            this.ChrControl = ControlCHR;   
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -479,8 +480,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation, packet);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure; 
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -503,8 +504,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation, packet);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure;    
+            SetLogger( new defLog(folderLog));
         }
 
         /// <summary>
@@ -527,8 +528,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, workstation, packet, persist);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure;  
+            SetLogger( new defLog(folderLog));
         }
 
 
@@ -553,8 +554,8 @@ namespace drualcman
             this.rutaDDBB = cadenaConexion(source, catalog, user, pass, poolSize, workstation, packet, persist);
             this.FolderLog = folderLog;
             this.ChrControl = ControlCHR;
-            this.dbControl = dbSecure;
-            SetLogger(null);
+            this.dbControl = dbSecure;   
+            SetLogger( new defLog(folderLog));
         }
         #endregion
 
